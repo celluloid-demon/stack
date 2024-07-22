@@ -5,13 +5,11 @@ set -e
 WORKDIR="$(dirname "$0")" && \
 cd "$WORKDIR"
 
-PROJECT=$(basename "$WORKDIR")
-
 # Syntax: hooks/docker-compose <DOCKER-COMPOSE PROJECT NAME> <OPERATION> <SUB-OPERATION>
-hooks/docker-compose $PROJECT up begin && \
+hooks/docker-compose DEFAULT up begin && \
 docker compose up --detach && \
 pid=$! && \
-hooks/docker-compose $PROJECT up end
+hooks/docker-compose DEFAULT up end
 
 wait $pid && \
-hooks/docker-compose $PROJECT down end
+hooks/docker-compose DEFAULT down end

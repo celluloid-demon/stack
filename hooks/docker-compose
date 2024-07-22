@@ -5,19 +5,27 @@ set -eE
 trap 'exit_error' ERR
 trap 'exit_zero' EXIT
 
-exit_error() {
-
-    echo "...oh no"
-
-}
-
 exit_zero() {
 
     local do_nothing=
 
 }
 
-if [ $1 = stack ]; then
+exit_error() {
+
+    echo "sad face"
+
+}
+
+# Derive name for target docker-compose project from repo name (just being fancy):
+WORKDIR="$(pwd)"
+DEFAULT_DOCKER_COMPOSE_PROJECT=$(basename "$WORKDIR")
+
+declare -A docker_compose_projects
+
+docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]=DEFAULT
+
+if [ $1 = ${docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]} ]; then
 
     if [ $2 = up ]; then
 
@@ -53,6 +61,9 @@ if [ $1 = stack ]; then
             #                           #
             #############################
 
+            # Test required vars
+            [ -z "$POLARIS_VOLUME_MUSIC" ] && echo "var not set" && exit 1
+
             # Test required directories
             [ ! -d "$POLARIS_VOLUME_MUSIC" ] && echo "$POLARIS_VOLUME_MUSIC not found, exiting" && exit 1
             [ ! -d "$POLARIS_VOLUME_CACHE" ] && echo "$POLARIS_VOLUME_CACHE not found, exiting" && exit 1
@@ -60,7 +71,7 @@ if [ $1 = stack ]; then
 
         elif [ $3 = end ]; then
 
-            local do_nothing=
+            do_nothing=
 
         fi
 
@@ -68,14 +79,16 @@ if [ $1 = stack ]; then
 
         if [ $3 = begin ]; then
 
-            local do_nothing=
+            do_nothing=
 
         elif [ $3 = end ]; then
 
-            local do_nothing=
+            do_nothing=
 
         fi
 
     fi
 
 fi
+
+true
