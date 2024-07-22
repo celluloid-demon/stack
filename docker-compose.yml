@@ -1,4 +1,14 @@
 services:
+  polaris:
+    image: connectical/polaris
+    container_name: ${POLARIS_CONTAINER_NAME}
+    volumes:
+      - ${POLARIS_VOLUME_MUSIC}:/music
+      - ${POLARIS_VOLUME_CACHE}:/var/cache/polaris
+      - ${POLARIS_VOLUME_DATA}:/var/lib/polaris
+    ports:
+      - ${POLARIS_PORT}:5050
+    restart: unless-stopped
   portainer:
     image: portainer/portainer-ce:latest
     container_name: ${PORTAINER_CONTAINER_NAME}
@@ -10,6 +20,6 @@ services:
       - portainer_data:/data
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
-
+    
 volumes:
   portainer_data:

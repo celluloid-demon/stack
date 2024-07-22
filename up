@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+
+eval   hooks/up_begin.sh && \
+docker compose up --detach && \
+eval   hooks/up_end.sh
+
+local portainer_container_id=$(docker ps -aqf "name=$PORTAINER_CONTAINER_NAME")
+
+docker container wait $portainer_container_id && \
+eval   hooks/down.sh
