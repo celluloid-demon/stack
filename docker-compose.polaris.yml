@@ -1,0 +1,11 @@
+services:
+  polaris:
+    image: connectical/polaris
+    container_name: ${POLARIS_CONTAINER_NAME}
+    volumes:
+      - ${POLARIS_VOLUME_MUSIC}:/music
+      - ${POLARIS_VOLUME_CACHE}:/var/cache/polaris
+      - ${POLARIS_VOLUME_DATA}:/var/lib/polaris
+    ports:
+      - ${POLARIS_PORT}:5050
+    restart: unless-stopped
