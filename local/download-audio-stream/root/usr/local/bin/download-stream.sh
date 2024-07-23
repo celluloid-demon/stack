@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# todo add logic to handle command line args (idea is to feed them via file in mounted /config vol, or by docker-compose / .env)
+
+# todo add init() function to spin up config files (under /config!!) if not exist
+
+# todo add logic to populate crontab from env vars
+
+# todo add logic to redirect messages to docker logs just with internal log function redirects (read: DO NOT use redirects at the script-level, use then here at the function-level)
+
 # Declare vars
 curl_pid=
 duration_min=$DURATION

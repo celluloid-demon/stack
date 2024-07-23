@@ -1,4 +1,4 @@
 include:
-  - docker-compose.download-stream.yml
-  - docker-compose.polaris.yml
+  - docker-compose.download-audio-stream.yml
+  # - docker-compose.polaris.yml
   - docker-compose.portainer.yml
