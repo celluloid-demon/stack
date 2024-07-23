@@ -55,14 +55,23 @@ if [ $1 = ${docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]} ]; then
             # Test specified uid
             # ! id $PUID 1>/dev/null && echo "User id $PUID not found, exiting" && exit 1
 
+            #####################################
+            #                                   #
+            #          DOWNLOAD-STREAM          #
+            #                                   #
+            #####################################
+
+            # Test required directories
+            [ ! -d "$DOWNLOAD_STREAM_VOLUME_OUTPUT" ] && echo "$DOWNLOAD_STREAM_VOLUME_OUTPUT not found, exiting" && exit 1
+
             #############################
             #                           #
             #          POLARIS          #
             #                           #
             #############################
 
-            # Test required vars
-            [ -z "$POLARIS_VOLUME_MUSIC" ] && echo "var not set" && exit 1
+            # Test required image
+            ! docker image ls --quiet $POLARIS_REPOSITORY && echo "build polaris" && exit 1
 
             # Test required directories
             [ ! -d "$POLARIS_VOLUME_MUSIC" ] && echo "$POLARIS_VOLUME_MUSIC not found, exiting" && exit 1

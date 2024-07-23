@@ -1,0 +1,5 @@
+#!/bin/bash
+
+image_name="download-stream-main"
+
+docker image build -t $image_name .

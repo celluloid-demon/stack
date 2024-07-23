@@ -1,0 +1,8 @@
+services:
+  download-stream:
+    image: download-stream
+    build: local/download-stream
+    container_name: ${DOWNLOAD_STREAM_CONTAINER_NAME}
+    volumes:
+      - ${DOWNLOAD_STREAM_VOLUME_OUTPUT}:/output
+    restart: unless-stopped
