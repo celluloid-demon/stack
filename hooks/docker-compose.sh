@@ -44,14 +44,16 @@ hook_docker_compose_up_begin() {
 }
 
 # Derive name for target docker-compose project from repo name (just being fancy):
-WORKDIR="$(pwd)"
-DEFAULT_DOCKER_COMPOSE_PROJECT=$(basename "$WORKDIR")
+# WORKDIR="$(pwd)"
+# DEFAULT_DOCKER_COMPOSE_PROJECT=$(basename "$WORKDIR")
 
-declare -A docker_compose_projects
+# declare -A docker_compose_projects
 
-docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]=DEFAULT
+# docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]=DEFAULT
 
-if [ $1 = ${docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]} ]; then
+# if [ $1 = ${docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]} ]; then
+
+if [ $1 = main ]; then
 
     if [ $2 = up ]; then
 
@@ -72,7 +74,7 @@ if [ $1 = ${docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]} ]; then
             ################################################
 
             # Test required directories
-            [ ! -d "$DAS_WFPK_VOLUME_OUTPUT" ] && echo "\$DAS_WFPK_VOLUME_OUTPUT not found, exiting" && exit 1
+            [ ! -d "$DAS_WFPK_VOLUME_OUTPUT" ] && echo "$DAS_WFPK_VOLUME_OUTPUT not found, exiting" && exit 1
 
             #############################
             #                           #
@@ -81,12 +83,12 @@ if [ $1 = ${docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]} ]; then
             #############################
 
             # Test required image
-            ! docker image ls --quiet $POLARIS_REPOSITORY && echo "build polaris" && exit 1
+            ! docker image ls --quiet $POLARIS_REPOSITORY && echo "polaris image missing (please build)" && exit 1
 
             # Test required directories
-            [ ! -d "$POLARIS_VOLUME_MUSIC" ] && echo "\$POLARIS_VOLUME_MUSIC not found, exiting" && exit 1
-            [ ! -d "$POLARIS_VOLUME_CACHE" ] && echo "\$POLARIS_VOLUME_CACHE not found, exiting" && exit 1
-            [ ! -d "$POLARIS_VOLUME_DATA"  ] && echo "\$POLARIS_VOLUME_DATA not found, exiting"  && exit 1
+            [ ! -d "$POLARIS_VOLUME_MUSIC" ] && echo "$POLARIS_VOLUME_MUSIC not found, exiting" && exit 1
+            [ ! -d "$POLARIS_VOLUME_CACHE" ] && echo "$POLARIS_VOLUME_CACHE not found, exiting" && exit 1
+            [ ! -d "$POLARIS_VOLUME_DATA"  ] && echo "$POLARIS_VOLUME_DATA not found, exiting"  && exit 1
 
             ##################################
             #                                #
@@ -95,9 +97,9 @@ if [ $1 = ${docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]} ]; then
             ##################################
 
             # Test required directories
-            [ ! -d "$RESILIO_VOLUME_CACHE"  ] && echo "\$RESILIO_VOLUME_CACHE not found, exiting"  && exit 1
-            [ ! -d "$RESILIO_VOLUME_CONFIG" ] && echo "\$RESILIO_VOLUME_CONFIG not found, exiting" && exit 1
-            [ ! -d "$RESILIO_VOLUME_DATA"   ] && echo "\$RESILIO_VOLUME_DATA not found, exiting"   && exit 1
+            [ ! -d "$RESILIO_VOLUME_CACHE"  ] && echo "$RESILIO_VOLUME_CACHE not found, exiting"  && exit 1
+            [ ! -d "$RESILIO_VOLUME_CONFIG" ] && echo "$RESILIO_VOLUME_CONFIG not found, exiting" && exit 1
+            [ ! -d "$RESILIO_VOLUME_DATA"   ] && echo "$RESILIO_VOLUME_DATA not found, exiting"   && exit 1
 
         elif [ $3 = end ]; then
 
@@ -149,8 +151,67 @@ elif [ $1 = arr ]; then
             #################################
 
             # Test required directories
-            [ ! -d "$QBITTORRENT_VOLUME_CONFIG"    ] && echo "\$QBITTORRENT_VOLUME_CONFIG not found, exiting"    && exit 1
-            [ ! -d "$QBITTORRENT_VOLUME_DOWNLOADS" ] && echo "\$QBITTORRENT_VOLUME_DOWNLOADS not found, exiting" && exit 1
+            [ ! -d "$QBITTORRENT_VOLUME_CONFIG"    ] && echo "$QBITTORRENT_VOLUME_CONFIG not found, exiting"    && exit 1
+            [ ! -d "$QBITTORRENT_VOLUME_DOWNLOADS" ] && echo "$QBITTORRENT_VOLUME_DOWNLOADS not found, exiting" && exit 1
+
+            ############################
+            #                          #
+            #          RADARR          #
+            #                          #
+            ############################
+
+            # Test required directories
+            [ ! -d "$RADARR_VOLUME_CONFIG" ] && echo "$RADARR_VOLUME_CONFIG not found, exiting" && exit 1
+            [ ! -d "$RADARR_VOLUME_DATA"   ] && echo "$RADARR_VOLUME_DATA not found, exiting"   && exit 1
+
+            ############################
+            #                          #
+            #          SONARR          #
+            #                          #
+            ############################
+
+            # Test required directories
+            [ ! -d "$SONARR_VOLUME_CONFIG" ] && echo "$SONARR_VOLUME_CONFIG not found, exiting" && exit 1
+            [ ! -d "$SONARR_VOLUME_DATA"   ] && echo "$SONARR_VOLUME_DATA not found, exiting"   && exit 1
+
+            ############################
+            #                          #
+            #          LIDARR          #
+            #                          #
+            ############################
+
+            # Test required directories
+            [ ! -d "$LIDARR_VOLUME_CONFIG" ] && echo "$LIDARR_VOLUME_CONFIG not found, exiting" && exit 1
+            [ ! -d "$LIDARR_VOLUME_DATA"   ] && echo "$LIDARR_VOLUME_DATA not found, exiting"   && exit 1
+
+            #############################
+            #                           #
+            #          READARR          #
+            #                           #
+            #############################
+
+            # Test required directories
+            [ ! -d "$READARR_VOLUME_CONFIG" ] && echo "$READARR_VOLUME_CONFIG not found, exiting" && exit 1
+            [ ! -d "$READARR_VOLUME_DATA"   ] && echo "$READARR_VOLUME_DATA not found, exiting"   && exit 1
+
+            ############################
+            #                          #
+            #          MYLAR3          #
+            #                          #
+            ############################
+
+            # Test required directories
+            [ ! -d "$MYLAR3_VOLUME_CONFIG" ] && echo "$MYLAR3_VOLUME_CONFIG not found, exiting" && exit 1
+            [ ! -d "$MYLAR3_VOLUME_DATA"   ] && echo "$MYLAR3_VOLUME_DATA not found, exiting"   && exit 1
+
+            ##############################
+            #                            #
+            #          PROWLARR          #
+            #                            #
+            ##############################
+
+            # Test required directories
+            [ ! -d "$PROWLARR_VOLUME_CONFIG" ] && echo "$PROWLARR_VOLUME_CONFIG not found, exiting" && exit 1
 
         elif [ $3 = end ]; then
 
@@ -174,5 +235,5 @@ elif [ $1 = arr ]; then
 
 fi
 
-# force exit code zero for any '&&' operations in host script
+# Force exit code zero for any '&&' operations in host script
 true

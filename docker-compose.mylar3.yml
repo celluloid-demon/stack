@@ -1,0 +1,15 @@
+services:
+  mylar3:
+    image: lscr.io/linuxserver/mylar3:latest
+    container_name: mylar3
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=${PUID}
+      - PGID=${GUID}
+      - TZ=${TZ}
+    # ports:
+    #   - 8090:8090
+    volumes:
+      - ${MYLAR3_VOLUME_CONFIG}:/config
+      - ${MYLAR3_VOLUME_DATA}:/data # avoid common pitfalls: https://readarr.com/#downloads-v1-docker
+    restart: unless-stopped

@@ -1,0 +1,15 @@
+services:
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    container_name: lidarr
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=${PUID}
+      - PGID=${GUID}
+      - TZ=${TZ}
+    # ports:
+    #   - 8686:8686
+    volumes:
+      - ${LIDARR_VOLUME_CONFIG}:/config
+      - ${LIDARR_VOLUME_DATA}:/data # avoid common pitfalls: https://readarr.com/#downloads-v1-docker
+    restart: unless-stopped
