@@ -42,8 +42,10 @@ echo "${CRON_SCHEDULE} /usr/local/bin/download-audio-stream"   >> ${cron_file_tm
 echo "# NOTE: Remember to end this file with an empty newline" >> ${cron_file_tmp}
 echo ""                                                        >> ${cron_file_tmp}
 
-crontab ${cron_file_tmp}
+crontab ${cron_file_tmp} && crontab -l
 rm ${cron_file_tmp}
+
+# NOTE: For people not using alpine, the crond supporting the '-d 8' parameter is not the standard cron, it is the crond command from busybox (which alpine ships with). For example from ubuntu, you can run this as 'busybox crond -f -d 8'. For older versions you have to use '... -L /dev/stdout/'.
 
 # Start crond with log level 8 in foreground, output to stderr
 crond -f -d 8
