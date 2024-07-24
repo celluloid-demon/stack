@@ -70,6 +70,15 @@ if [ $1 = ${docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]} ]; then
 
             #############################
             #                           #
+            #          GLUETUN          #
+            #                           #
+            #############################
+
+            # Test required environment vars
+            [ ! -f "${HOME}/.config/gluetun/password.env" ] && echo "missing password.env file" && exit 1
+
+            #############################
+            #                           #
             #          POLARIS          #
             #                           #
             #############################

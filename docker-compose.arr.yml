@@ -1,0 +1,17 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: ${GLUETUN_CONTAINER_NAME}
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - VPN_SERVICE_PROVIDER=protonvpn
+      - SERVER_COUNTRIES=Netherlands
+    env_file:
+      - ${HOME}/.config/gluetun/password.env
+    ports:
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
