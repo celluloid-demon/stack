@@ -4,6 +4,7 @@ services:
     build: local/download-audio-stream
     container_name: ${DAS_WFPK_CONTAINER_NAME}
     environment:
+      - CRON_COMMENT=${DAS_WFPK_CRON_COMMENT}
       - CRON_SCHEDULE=${DAS_WFPK_CRON_SCHEDULE}
       - DURATION=${DAS_WFPK_DURATION}
       - OUTPUT_FILE_BASENAME=${DAS_WFPK_OUTPUT_FILE_BASENAME}

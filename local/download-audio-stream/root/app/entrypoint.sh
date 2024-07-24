@@ -38,9 +38,9 @@ docker_log_error() {
 # Make tmp file to populate crontab
 cron_file_tmp=$(mktemp)
 
-echo "${CRON_SCHEDULE} /usr/local/bin/download-audio-stream"   >> ${cron_file_tmp}
-echo "# NOTE: Remember to end this file with an empty newline" >> ${cron_file_tmp}
-echo ""                                                        >> ${cron_file_tmp}
+echo "${CRON_SCHEDULE} /usr/local/bin/download-audio-stream # ${CRON_COMMENT}" >> ${cron_file_tmp}
+echo "# NOTE: Remember to end this file with an empty newline"                 >> ${cron_file_tmp}
+echo ""                                                                        >> ${cron_file_tmp}
 
 crontab ${cron_file_tmp} && crontab -l
 rm ${cron_file_tmp}
