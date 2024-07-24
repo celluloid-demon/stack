@@ -14,7 +14,7 @@ services:
     ports:
       - 6881:6881
       - 6881:6881/udp
-      - ${QBITTORRENT_WEBUI_PORT}:8080 # qbittorrent
+      - 8080:8080 # qbittorrent
     restart: unless-stopped
 
   qbittorrent:
