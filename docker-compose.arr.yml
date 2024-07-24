@@ -14,4 +14,23 @@ services:
     ports:
       - 6881:6881
       - 6881:6881/udp
+      - ${QBITTORRENT_WEBUI_PORT}:8080 # qbittorrent
+    restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent
+    container_name: ${QBITTORRENT_CONTAINER_NAME}
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=${QBITTORRENT_PUID}
+      - PGID=${QBITTORRENT_GUID}
+      - TZ=${QBITTORRENT_TZ_IDENTIFIER}
+      - WEBUI_PORT=8080
+    # ports:
+    #   - 8080:8080
+    volumes:
+      - ${QBITTORRENT_VOLUME_CONFIG}:/config
+      - ${QBITTORRENT_VOLUME_DOWNLOADS}:/downloads
+    depends_on:
+      - gluetun
     restart: unless-stopped

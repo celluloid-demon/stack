@@ -91,6 +91,16 @@ if [ $1 = ${docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]} ]; then
             [ ! -d "$POLARIS_VOLUME_CACHE" ] && echo "\$POLARIS_VOLUME_CACHE not found, exiting" && exit 1
             [ ! -d "$POLARIS_VOLUME_DATA"  ] && echo "\$POLARIS_VOLUME_DATA not found, exiting"  && exit 1
 
+            #################################
+            #                               #
+            #          QBITTORRENT          #
+            #                               #
+            #################################
+
+            # Test required directories
+            [ ! -d "$QBITTORRENT_VOLUME_CONFIG"    ] && echo "\$QBITTORRENT_VOLUME_CONFIG not found, exiting"    && exit 1
+            [ ! -d "$QBITTORRENT_VOLUME_DOWNLOADS" ] && echo "\$QBITTORRENT_VOLUME_DOWNLOADS not found, exiting" && exit 1
+
             ##################################
             #                                #
             #          RESILIO-SYNC          #
