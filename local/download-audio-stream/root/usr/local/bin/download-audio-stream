@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Usage: download-audio-stream -d <BASENAME> -d <DURATION> -u <URL>
-
 set -eE
 
 trap 'exit_error' ERR
@@ -31,21 +29,14 @@ docker_log_error() {
 
 }
 
-# todo add init() function to spin up config files (under /config!!) if not exist
-
-# todo add logic to populate crontab from env vars
-
-# todo add logic to redirect messages to docker logs just with internal log function redirects (read: DO NOT use redirects at the script-level, use then here at the function-level)
-
-OUTPUT_DIR=/output
-
 # Declare vars
 curl_pid=
 duration_min=$DURATION
 duration_sec=
-retry_delay=5
-output_path="/output"
+output_file=
 output_file_basename="$OUTPUT_FILE_BASENAME"
+output_dir="/output"
+retry_delay=5
 stream_url="$STREAM_URL"
 
 # Check and restart curl process if needed
@@ -54,32 +45,18 @@ check_and_restart_curl() {
 	if ! kill -0 $curl_pid 2>/dev/null; then
 
 		# Increment version for each new output file
-		output_file="${output_file_basename}_$(date +%Y%m%d%H%M%S).mp3"
-		curl --fail -o $output_path/$output_file $stream_url &
+		output_file="${output_file_basename}_$(date +%Y_%m_%d_%H%M%S).mp3"
+		curl --fail -o "${output_dir}/${output_file}" "$stream_url" &
 		curl_pid=$!
+		docker_log "Started ${0}."
 
 	fi
 
 }
 
-# Main logic
 main() {
 
-	# Check for dependencies (curl) and exit on error if missing
-	if ! command -v curl &> /dev/null; then
-
-		echo "Error: 'curl' command not found. Please install curl before running this script."
-		exit 1
-
-	fi
-
-	# Exit on error if no radio stream url specified
-	if [ -z "$STREAM_URL" ]; then
-
-		echo "Error: '\$STREAM_URL' not set, terminating."
-		exit 1
-
-	fi
+	docker_log "Starting ${0}."
 
 	# Start time
 	start_time=$(date +%s)
@@ -93,14 +70,19 @@ main() {
 	# Attempt to download the stream with retries for 3 hours
 	while [ $(date +%s) -lt $end_time ]; do
 
-		# Sleep before the next attempt
 		check_and_restart_curl
+
+		# Sleep before the next attempt
 		sleep $retry_delay
 
 	done
 
-	# Terminate the curl process
+	docker_log "Stopping ${0}."
+
+	# On duration end, terminate the curl process
 	kill $curl_pid
+
+	docker_log "Stopped ${0}."
 
 }
 
