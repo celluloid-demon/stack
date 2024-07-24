@@ -59,14 +59,14 @@ if [ $1 = ${docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]} ]; then
             # Test specified uid
             # ! id $PUID 1>/dev/null && echo "User id $PUID not found, exiting" && exit 1
 
-            #####################################
-            #                                   #
-            #          DOWNLOAD-STREAM          #
-            #                                   #
-            #####################################
+            ################################################
+            #                                              #
+            #          DOWNLOAD-AUDIO-STREAM-WFPK          #
+            #                                              #
+            ################################################
 
             # Test required directories
-            [ ! -d "$DOWNLOAD_STREAM_VOLUME_OUTPUT" ] && echo "$DOWNLOAD_STREAM_VOLUME_OUTPUT not found, exiting" && exit 1
+            [ ! -d "$DAS_WFPK_VOLUME_OUTPUT" ] && echo "\$DAS_WFPK_VOLUME_OUTPUT not found, exiting" && exit 1
 
             #############################
             #                           #
@@ -78,9 +78,9 @@ if [ $1 = ${docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]} ]; then
             ! docker image ls --quiet $POLARIS_REPOSITORY && echo "build polaris" && exit 1
 
             # Test required directories
-            [ ! -d "$POLARIS_VOLUME_MUSIC" ] && echo "$POLARIS_VOLUME_MUSIC not found, exiting" && exit 1
-            [ ! -d "$POLARIS_VOLUME_CACHE" ] && echo "$POLARIS_VOLUME_CACHE not found, exiting" && exit 1
-            [ ! -d "$POLARIS_VOLUME_DATA"  ] && echo "$POLARIS_VOLUME_DATA not found, exiting"  && exit 1
+            [ ! -d "$POLARIS_VOLUME_MUSIC" ] && echo "\$POLARIS_VOLUME_MUSIC not found, exiting" && exit 1
+            [ ! -d "$POLARIS_VOLUME_CACHE" ] && echo "\$POLARIS_VOLUME_CACHE not found, exiting" && exit 1
+            [ ! -d "$POLARIS_VOLUME_DATA"  ] && echo "\$POLARIS_VOLUME_DATA not found, exiting"  && exit 1
 
         elif [ $3 = end ]; then
 
@@ -104,4 +104,5 @@ if [ $1 = ${docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]} ]; then
 
 fi
 
+# force exit code zero for any '&&' operations in host script
 true

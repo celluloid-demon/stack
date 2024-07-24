@@ -1,12 +1,43 @@
 #!/bin/bash
 
-# todo add logic to handle command line args (idea is to feed them via file in mounted /config vol, or by docker-compose / .env)
+# Usage: download-audio-stream -d <BASENAME> -d <DURATION> -u <URL>
+
+set -eE
+
+trap 'exit_error' ERR
+trap 'exit_zero' EXIT
+
+exit_zero() {
+
+    local do_nothing=
+
+}
+
+exit_error() {
+
+    docker_log_error "...oh no"
+
+}
+
+docker_log() {
+
+    echo "$1" > /proc/1/fd/1 # docker stdin
+
+}
+
+docker_log_error() {
+
+    echo "$1" > /proc/1/fd/2 # docker stderr
+
+}
 
 # todo add init() function to spin up config files (under /config!!) if not exist
 
 # todo add logic to populate crontab from env vars
 
 # todo add logic to redirect messages to docker logs just with internal log function redirects (read: DO NOT use redirects at the script-level, use then here at the function-level)
+
+OUTPUT_DIR=/output
 
 # Declare vars
 curl_pid=

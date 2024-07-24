@@ -1,3 +1,0 @@
-* * * * * echo "hello world" > /proc/1/fd/1 2> /proc/1/fd/2
-# NOTE: '> /proc/1/fd/1 2> /proc/1/fd/2' will redirect command output to docker logs
-# NOTE: Remember to end this file with an empty newline
