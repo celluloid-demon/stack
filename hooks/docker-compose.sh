@@ -82,6 +82,17 @@ if [ $1 = ${docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]} ]; then
             [ ! -d "$POLARIS_VOLUME_CACHE" ] && echo "\$POLARIS_VOLUME_CACHE not found, exiting" && exit 1
             [ ! -d "$POLARIS_VOLUME_DATA"  ] && echo "\$POLARIS_VOLUME_DATA not found, exiting"  && exit 1
 
+            ##################################
+            #                                #
+            #          RESILIO-SYNC          #
+            #                                #
+            ##################################
+
+            # Test required directories
+            [ ! -d "$RESILIO_VOLUME_CACHE"  ] && echo "\$RESILIO_VOLUME_CACHE not found, exiting"  && exit 1
+            [ ! -d "$RESILIO_VOLUME_CONFIG" ] && echo "\$RESILIO_VOLUME_CONFIG not found, exiting" && exit 1
+            [ ! -d "$RESILIO_VOLUME_DATA"   ] && echo "\$RESILIO_VOLUME_DATA not found, exiting"   && exit 1
+
         elif [ $3 = end ]; then
 
             do_nothing=
