@@ -1,6 +1,5 @@
 include:
-  - docker-compose.arr.yml
-  # - docker-compose.download-audio-stream-wfpk.yml
-  # - docker-compose.polaris.yml
+  - docker-compose.download-audio-stream-wfpk.yml
+  - docker-compose.polaris.yml
   - docker-compose.portainer.yml
-  # - docker-compose.resilio-sync.yml
+  - docker-compose.resilio-sync.yml
