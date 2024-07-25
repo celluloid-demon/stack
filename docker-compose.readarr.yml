@@ -2,13 +2,15 @@ services:
   readarr:
     image: lscr.io/linuxserver/readarr:develop
     container_name: readarr
-    network_mode: "service:gluetun"
+    depends_on:
+      - gluetun
     environment:
       - PUID=${PUID}
       - PGID=${GUID}
       - TZ=${TZ}
     # ports:
     #   - 8787:8787
+    network_mode: "service:gluetun"
     volumes:
       - ${READARR_VOLUME_CONFIG}:/config
       - ${READARR_VOLUME_DATA}:/data # avoid common pitfalls: https://readarr.com/#downloads-v1-docker

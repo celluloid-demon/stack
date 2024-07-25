@@ -1,8 +1,12 @@
-# Read: For everything else besides the docker-compose command.
+#!/bin/bash
+
+# Usage: hooks/docker-compose.sh <DOCKER-COMPOSE PROJECT NAME> <OPERATION> <SUB-OPERATION>
+
+# Description: For everything else besides the docker-compose command.
 
 set -eE
 
-trap 'exit_error' ERR
+trap 'exit_error $LINENO' ERR
 trap 'exit_zero' EXIT
 
 exit_zero() {
@@ -15,223 +19,268 @@ exit_zero() {
 
 exit_error() {
 
-    echo "sad face"
+    echo "...oh no $1"
 
     # todo add conditionals based on event / operation 
 
 }
 
-hook_docker_compose_up_begin() {
+# Test required directories
+test_dir() {
 
-    # Test docker installation
-    ! which docker 1>/dev/null && echo "Please install docker." && exit 1
+    [ ! -d "$1" ] && echo "$1 not found, exiting" && exit 1
 
-    # Test environment vars
-    if [ -f .env ]; then
-
-        . .env
-
-    else
-
-        echo "Did you forget to symlink the appropriate .env file for your local machine?"
-        exit 1
-
-    fi
-
-    # Test specified uid
-    # ! id $PUID 1>/dev/null && echo "User id $PUID not found, exiting" && exit 1
+    true
 
 }
 
-# Derive name for target docker-compose project from repo name (just being fancy):
-# WORKDIR="$(pwd)"
-# DEFAULT_DOCKER_COMPOSE_PROJECT=$(basename "$WORKDIR")
+test_file() {
 
-# declare -A docker_compose_projects
+    [ ! -f "$1" ] && echo "$1 not found, exiting" && exit 1
 
-# docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]=DEFAULT
+    true
 
-# if [ $1 = ${docker_compose_projects["$DEFAULT_DOCKER_COMPOSE_PROJECT"]} ]; then
+}
 
+test_command() {
+
+    ! which $1 1>/dev/null && echo "please install $1" && exit 1
+
+    true
+
+}
+
+test_image() {
+
+    ! docker image ls --quiet $1 > /dev/null && echo "$1 image missing (please build)" && exit 1
+
+    true
+
+}
+
+test_owner() {
+
+    # 1: file
+    # 2: uid
+    # 3: gid
+
+    [ "$(stat -c "%u:%g" $1)" != "$2:$3" ] && echo "$1 wrong ownership" && exit 1
+
+    true
+
+}
+
+load_env() {
+
+    test_file .env
+
+    . .env
+
+}
+
+doctor_docker() {
+
+    test_command docker
+
+}
+
+doctor_das_wfpk() {
+
+    test_dir "$DAS_WFPK_VOLUME_OUTPUT"
+
+}
+
+doctor_polaris() {
+
+    test_image $POLARIS_REPOSITORY
+
+    test_dir "$POLARIS_VOLUME_MUSIC"
+    test_dir "$POLARIS_VOLUME_CACHE"
+    test_dir "$POLARIS_VOLUME_DATA"
+
+    # "Take note that you must create before the cache directory
+    # /my/polaris/cache and data directory /my/polaris/data and set ownership
+    # to UID/GID 100 in both, otherwise the main proccess will crash."
+    
+    # Source: https://github.com/ogarcia/docker-polaris
+
+    test_owner "$POLARIS_VOLUME_CACHE" 100 100
+    test_owner "$POLARIS_VOLUME_DATA"  100 100
+
+}
+
+doctor_resilio_sync() {
+
+    test_dir "$RESILIO_VOLUME_CACHE"
+    test_dir "$RESILIO_VOLUME_CONFIG"
+    test_dir "$RESILIO_VOLUME_DATA"
+
+}
+
+doctor_gluetun() {
+
+    # Test OpenVPN login credentials for gluetun
+    test_file "${HOME}/.config/gluetun/password.env"
+
+}
+
+doctor_qbittorrent() {
+
+    test_dir "$QBITTORRENT_VOLUME_CONFIG"
+    test_dir "$QBITTORRENT_VOLUME_DOWNLOADS"
+
+}
+
+doctor_radarr() {
+
+    test_dir "$RADARR_VOLUME_CONFIG"
+    test_dir "$RADARR_VOLUME_DATA"
+
+}
+
+doctor_sonarr() {
+
+    test_dir "$SONARR_VOLUME_CONFIG"
+    test_dir "$SONARR_VOLUME_DATA"
+
+}
+
+doctor_lidarr() {
+
+    test_dir "$LIDARR_VOLUME_CONFIG"
+    test_dir "$LIDARR_VOLUME_DATA"
+
+}
+
+doctor_readarr() {
+
+    test_dir "$READARR_VOLUME_CONFIG"
+    test_dir "$READARR_VOLUME_DATA"
+
+}
+
+doctor_mylar3() {
+
+    test_dir "$MYLAR3_VOLUME_CONFIG"
+    test_dir "$MYLAR3_VOLUME_DATA"
+
+}
+
+doctor_prowlarr() {
+
+    test_dir "$PROWLARR_VOLUME_CONFIG"
+
+}
+
+load_env
+
+# <DOCKER-COMPOSE PROJECT NAME>
 if [ $1 = main ]; then
 
+    # <OPERATION>
     if [ $2 = up ]; then
 
+        # <SUB-OPERATION>
         if [ $3 = begin ]; then
 
-            ####################################
-            #                                  #
-            #          DOCKER-COMPOSE          #
-            #                                  #
-            ####################################
+            doctor_docker
+            doctor_das_wfpk
+            doctor_polaris
+            doctor_resilio_sync
 
-            hook_docker_compose_up_begin
-
-            ################################################
-            #                                              #
-            #          DOWNLOAD-AUDIO-STREAM-WFPK          #
-            #                                              #
-            ################################################
-
-            # Test required directories
-            [ ! -d "$DAS_WFPK_VOLUME_OUTPUT" ] && echo "$DAS_WFPK_VOLUME_OUTPUT not found, exiting" && exit 1
-
-            #############################
-            #                           #
-            #          POLARIS          #
-            #                           #
-            #############################
-
-            # Test required image
-            ! docker image ls --quiet $POLARIS_REPOSITORY && echo "polaris image missing (please build)" && exit 1
-
-            # Test required directories
-            [ ! -d "$POLARIS_VOLUME_MUSIC" ] && echo "$POLARIS_VOLUME_MUSIC not found, exiting" && exit 1
-            [ ! -d "$POLARIS_VOLUME_CACHE" ] && echo "$POLARIS_VOLUME_CACHE not found, exiting" && exit 1
-            [ ! -d "$POLARIS_VOLUME_DATA"  ] && echo "$POLARIS_VOLUME_DATA not found, exiting"  && exit 1
-
-            ##################################
-            #                                #
-            #          RESILIO-SYNC          #
-            #                                #
-            ##################################
-
-            # Test required directories
-            [ ! -d "$RESILIO_VOLUME_CACHE"  ] && echo "$RESILIO_VOLUME_CACHE not found, exiting"  && exit 1
-            [ ! -d "$RESILIO_VOLUME_CONFIG" ] && echo "$RESILIO_VOLUME_CONFIG not found, exiting" && exit 1
-            [ ! -d "$RESILIO_VOLUME_DATA"   ] && echo "$RESILIO_VOLUME_DATA not found, exiting"   && exit 1
-
+        # <SUB-OPERATION>
         elif [ $3 = end ]; then
 
             do_nothing=
 
+        else
+
+            echo "$3 not recognized" && exit 1
+
         fi
 
+    # <OPERATION>
     elif [ $2 = down ]; then
 
+        # <SUB-OPERATION>
         if [ $3 = begin ]; then
 
             do_nothing=
 
+        # <SUB-OPERATION>
         elif [ $3 = end ]; then
 
             do_nothing=
 
+        else
+
+            echo "$3 not recognized" && exit 1
+
         fi
+
+    else
+
+        echo "$2 not recognized" && exit 1
 
     fi
 
+# <DOCKER-COMPOSE PROJECT NAME>
 elif [ $1 = arr ]; then
 
+    # <OPERATION>
     if [ $2 = up ]; then
 
+        # <SUB-OPERATION>
         if [ $3 = begin ]; then
 
-            ####################################
-            #                                  #
-            #          DOCKER-COMPOSE          #
-            #                                  #
-            ####################################
+            doctor_docker
+            doctor_gluetun
+            doctor_qbittorrent
+            doctor_radarr
+            doctor_lidarr
+            doctor_readarr
+            doctor_mylar3
+            doctor_prowlarr
 
-            hook_docker_compose_up_begin
-
-            #############################
-            #                           #
-            #          GLUETUN          #
-            #                           #
-            #############################
-
-            # Test required environment vars
-            [ ! -f "${HOME}/.config/gluetun/password.env" ] && echo "missing password.env file" && exit 1
-
-            #################################
-            #                               #
-            #          QBITTORRENT          #
-            #                               #
-            #################################
-
-            # Test required directories
-            [ ! -d "$QBITTORRENT_VOLUME_CONFIG"    ] && echo "$QBITTORRENT_VOLUME_CONFIG not found, exiting"    && exit 1
-            [ ! -d "$QBITTORRENT_VOLUME_DOWNLOADS" ] && echo "$QBITTORRENT_VOLUME_DOWNLOADS not found, exiting" && exit 1
-
-            ############################
-            #                          #
-            #          RADARR          #
-            #                          #
-            ############################
-
-            # Test required directories
-            [ ! -d "$RADARR_VOLUME_CONFIG" ] && echo "$RADARR_VOLUME_CONFIG not found, exiting" && exit 1
-            [ ! -d "$RADARR_VOLUME_DATA"   ] && echo "$RADARR_VOLUME_DATA not found, exiting"   && exit 1
-
-            ############################
-            #                          #
-            #          SONARR          #
-            #                          #
-            ############################
-
-            # Test required directories
-            [ ! -d "$SONARR_VOLUME_CONFIG" ] && echo "$SONARR_VOLUME_CONFIG not found, exiting" && exit 1
-            [ ! -d "$SONARR_VOLUME_DATA"   ] && echo "$SONARR_VOLUME_DATA not found, exiting"   && exit 1
-
-            ############################
-            #                          #
-            #          LIDARR          #
-            #                          #
-            ############################
-
-            # Test required directories
-            [ ! -d "$LIDARR_VOLUME_CONFIG" ] && echo "$LIDARR_VOLUME_CONFIG not found, exiting" && exit 1
-            [ ! -d "$LIDARR_VOLUME_DATA"   ] && echo "$LIDARR_VOLUME_DATA not found, exiting"   && exit 1
-
-            #############################
-            #                           #
-            #          READARR          #
-            #                           #
-            #############################
-
-            # Test required directories
-            [ ! -d "$READARR_VOLUME_CONFIG" ] && echo "$READARR_VOLUME_CONFIG not found, exiting" && exit 1
-            [ ! -d "$READARR_VOLUME_DATA"   ] && echo "$READARR_VOLUME_DATA not found, exiting"   && exit 1
-
-            ############################
-            #                          #
-            #          MYLAR3          #
-            #                          #
-            ############################
-
-            # Test required directories
-            [ ! -d "$MYLAR3_VOLUME_CONFIG" ] && echo "$MYLAR3_VOLUME_CONFIG not found, exiting" && exit 1
-            [ ! -d "$MYLAR3_VOLUME_DATA"   ] && echo "$MYLAR3_VOLUME_DATA not found, exiting"   && exit 1
-
-            ##############################
-            #                            #
-            #          PROWLARR          #
-            #                            #
-            ##############################
-
-            # Test required directories
-            [ ! -d "$PROWLARR_VOLUME_CONFIG" ] && echo "$PROWLARR_VOLUME_CONFIG not found, exiting" && exit 1
-
+        # <SUB-OPERATION>
         elif [ $3 = end ]; then
 
             do_nothing=
 
+        else
+
+            echo "$3 not recognized" && exit 1
+
         fi
 
+    # <OPERATION>
     elif [ $2 = down ]; then
 
+        # <SUB-OPERATION>
         if [ $3 = begin ]; then
 
             do_nothing=
 
+        # <SUB-OPERATION>
         elif [ $3 = end ]; then
 
             do_nothing=
 
+        else
+
+            echo "$3 not recognized" && exit 1
+
         fi
 
+    else
+
+        echo "$2 not recognized" && exit 1
+
     fi
+
+else
+
+    echo "$1 not recognized" && exit 1
 
 fi
 

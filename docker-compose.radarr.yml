@@ -2,13 +2,15 @@ services:
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
-    network_mode: "service:gluetun"
+    depends_on:
+      - gluetun
     environment:
       - PUID=${PUID}
       - PGID=${GUID}
       - TZ=${TZ}
     # ports:
     #   - 7878:7878
+    network_mode: "service:gluetun"
     volumes:
       - ${RADARR_VOLUME_CONFIG}:/config
       - ${RADARR_VOLUME_DATA}:/data # avoid common pitfalls: https://readarr.com/#downloads-v1-docker
