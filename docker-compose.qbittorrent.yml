@@ -14,5 +14,5 @@ services:
     network_mode: "service:gluetun"
     volumes:
       - ${QBITTORRENT_VOLUME_CONFIG}:/config
-      - ${QBITTORRENT_VOLUME_DOWNLOADS}:/downloads
+      - ${QBITTORRENT_VOLUME_DOWNLOADS}:/data/downloads # see: https://wiki.servarr.com/sonarr/system#docker-bad-remote-path-mapping
     restart: unless-stopped
