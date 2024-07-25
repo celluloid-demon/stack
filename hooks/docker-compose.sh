@@ -172,6 +172,14 @@ doctor_prowlarr() {
 
 }
 
+doctor_jellyfin() {
+
+    test_dir "$JELLYFIN_VOLUME_CONFIG"
+    test_dir "$JELLYFIN_VOLUME_MOVIES"
+    test_dir "$JELLYFIN_VOLUME_TVSHOWS"
+
+}
+
 load_env
 
 # <DOCKER-COMPOSE PROJECT NAME>
@@ -185,6 +193,7 @@ if [ $1 = main ]; then
 
             doctor_docker
             doctor_das_wfpk
+            doctor_jellyfin
             doctor_polaris
             doctor_resilio_sync
 
