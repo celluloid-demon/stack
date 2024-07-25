@@ -4,3 +4,4 @@ include:
   - docker-compose.polaris.yml
   - docker-compose.portainer.yml
   - docker-compose.resilio-sync.yml
+  - docker-compose.vikunja.yml

@@ -180,6 +180,14 @@ doctor_jellyfin() {
 
 }
 
+doctor_vikunja() {
+
+    test_file "$VIKUNJA_ENV_PASSWORDS"
+    test_dir  "$VIKUNJA_VOLUME_FILES"
+    test_dir  "$VIKUNJA_DB_VOLUME_MYSQL"
+
+}
+
 load_env
 
 # <DOCKER-COMPOSE PROJECT NAME>
@@ -196,6 +204,7 @@ if [ $1 = main ]; then
             doctor_jellyfin
             doctor_polaris
             doctor_resilio_sync
+            doctor_vikunja
 
         # <SUB-OPERATION>
         elif [ $3 = end ]; then
