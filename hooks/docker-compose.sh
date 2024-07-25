@@ -235,12 +235,13 @@ elif [ $1 = arr ]; then
 
             doctor_docker
             doctor_gluetun
-            doctor_qbittorrent
-            doctor_radarr
             doctor_lidarr
-            doctor_readarr
             doctor_mylar3
             doctor_prowlarr
+            doctor_qbittorrent
+            doctor_radarr
+            doctor_readarr
+            doctor_sonarr
 
         # <SUB-OPERATION>
         elif [ $3 = end ]; then
