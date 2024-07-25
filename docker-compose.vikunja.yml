@@ -7,7 +7,7 @@ services:
         condition: service_healthy
     environment:
       # VIKUNJA_SERVICE_PUBLICURL: http://<the public ip or host where Vikunja is reachable>
-      VIKUNJA_DATABASE_HOST: db
+      VIKUNJA_DATABASE_HOST: vikunja-db
       # VIKUNJA_DATABASE_PASSWORD: changeme
       VIKUNJA_DATABASE_TYPE: mysql
       VIKUNJA_DATABASE_USER: vikunja
