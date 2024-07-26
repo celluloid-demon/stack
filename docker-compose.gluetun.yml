@@ -15,6 +15,7 @@ services:
     ports:
       - 6881:6881
       - 6881:6881/udp
+      - 8191:8191 # flaresolverr
       - 8686:8686 # lidarr
       - 8090:8090 # mylar3
       - 9696:9696 # prowlarr

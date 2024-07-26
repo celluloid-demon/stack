@@ -1,4 +1,5 @@
 include:
+  - docker-compose.flaresolverr.yml
   - docker-compose.gluetun.yml
   - docker-compose.qbittorrent.yml
   - docker-compose.radarr.yml
