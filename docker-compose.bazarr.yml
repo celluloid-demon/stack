@@ -1,0 +1,16 @@
+services:
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    depends_on:
+      - gluetun
+    environment:
+      - PUID=${PUID}
+      - PGID=${GUID}
+      - TZ=${TZ}
+    # ports:
+    #   - 6767:6767
+    network_mode: "service:gluetun"
+    volumes:
+      - ${BAZARR_VOLUME_CONFIG}:/config
+      - ${BAZARR_VOLUME_DATA}:/data # avoid common pitfalls: https://readarr.com/#downloads-v1-docker

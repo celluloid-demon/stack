@@ -188,6 +188,20 @@ doctor_vikunja() {
 
 }
 
+doctor_bazarr() {
+
+    test_dir "$BAZARR_VOLUME_CONFIG"
+    test_dir "$BAZARR_VOLUME_DATA"
+
+}
+
+doctor_notifiarr() {
+
+    test_dir "$NOTIFIARR_VOLUME_CONFIG"
+    test_file "$NOTIFIARR_ENV_PASSWORDS"
+
+}
+
 load_env
 
 # <DOCKER-COMPOSE PROJECT NAME>
@@ -252,9 +266,11 @@ elif [ $1 = arr ]; then
         if [ $3 = begin ]; then
 
             doctor_docker
+            doctor_bazarr
             doctor_gluetun
             doctor_lidarr
             doctor_mylar3
+            doctor_notifiarr
             doctor_prowlarr
             doctor_qbittorrent
             doctor_radarr
