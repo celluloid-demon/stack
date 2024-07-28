@@ -5,6 +5,8 @@ services:
     # depends_on:
     #   - gluetun
     environment:
+      - PUID=${PUID} # NOTE: appears not to respect
+      - PGID=${GUID} # NOTE: appears not to respect
       - TZ=${TZ}
     env_file:
       - ${NOTIFIARR_ENV_PASSWORDS}
