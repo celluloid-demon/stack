@@ -18,7 +18,7 @@ services:
       - 6768:6767 # bazarr
       - 8192:8191 # flaresolverr
       - 9697:9696 # prowlarr
-      - 8081:8080 # qbittorrent
+      - ${QBA_PORT}:${QBA_PORT} # qbittorrent
       - 7879:7878 # radarr
       - 8990:8989 # sonarr
     restart: unless-stopped
