@@ -231,8 +231,15 @@ doctor_bazarr() {
 
 doctor_notifiarr() {
 
-    test_dir "$NOTIFIARR_VOLUME_CONFIG"
+    test_dir  "$NOTIFIARR_VOLUME_CONFIG"
     test_file "$NOTIFIARR_ENV_PASSWORDS"
+
+}
+
+doctor_notifiarr_alt() {
+
+    test_dir  "$NOTIFIARR_ALT_VOLUME_CONFIG"
+    test_file "$NOTIFIARR_ALT_ENV_PASSWORDS"
 
 }
 
@@ -358,6 +365,7 @@ elif [ $1 = arrr ]; then
 
             doctor_docker
             doctor_gluetun_alt
+            doctor_notifiarr_alt
             doctor_prowlarr_alt
             doctor_qbittorrent_alt
             doctor_radarr_alt
