@@ -1,0 +1,17 @@
+services:
+  radarr-alt:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr-alt
+    depends_on:
+      - gluetun-alt
+    environment:
+      - PUID=${PUID}
+      - PGID=${GUID}
+      - TZ=${TZ}
+    # ports:
+    #   - 7878:7878
+    network_mode: "service:gluetun-alt"
+    volumes:
+      - ${RADARR_ALT_VOLUME_CONFIG}:/config
+      - ${RADARR_ALT_VOLUME_DATA}:/data # avoid common pitfalls: https://readarr.com/#downloads-v1-docker
+    restart: unless-stopped

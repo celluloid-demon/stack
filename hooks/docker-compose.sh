@@ -124,10 +124,24 @@ doctor_gluetun() {
 
 }
 
+doctor_gluetun_alt() {
+
+    # Test OpenVPN login credentials for gluetun
+    test_file "${HOME}/.config/gluetun/password.env"
+
+}
+
 doctor_qbittorrent() {
 
     test_dir "$QBITTORRENT_VOLUME_CONFIG"
     test_dir "$QBITTORRENT_VOLUME_DOWNLOADS"
+
+}
+
+doctor_qbittorrent_alt() {
+
+    test_dir "$QBITTORRENT_ALT_VOLUME_CONFIG"
+    test_dir "$QBITTORRENT_ALT_VOLUME_DOWNLOADS"
 
 }
 
@@ -138,10 +152,24 @@ doctor_radarr() {
 
 }
 
+doctor_radarr_alt() {
+
+    test_dir "$RADARR_ALT_VOLUME_CONFIG"
+    test_dir "$RADARR_ALT_VOLUME_DATA"
+
+}
+
 doctor_sonarr() {
 
     test_dir "$SONARR_VOLUME_CONFIG"
     test_dir "$SONARR_VOLUME_DATA"
+
+}
+
+doctor_sonarr_alt() {
+
+    test_dir "$SONARR_ALT_VOLUME_CONFIG"
+    test_dir "$SONARR_ALT_VOLUME_DATA"
 
 }
 
@@ -169,6 +197,12 @@ doctor_mylar3() {
 doctor_prowlarr() {
 
     test_dir "$PROWLARR_VOLUME_CONFIG"
+
+}
+
+doctor_prowlarr_alt() {
+
+    test_dir "$PROWLARR_ALT_VOLUME_CONFIG"
 
 }
 
@@ -276,6 +310,58 @@ elif [ $1 = arr ]; then
             doctor_radarr
             doctor_readarr
             doctor_sonarr
+
+        # <SUB-OPERATION>
+        elif [ $3 = end ]; then
+
+            do_nothing=
+
+        else
+
+            echo "$3 not recognized" && exit 1
+
+        fi
+
+    # <OPERATION>
+    elif [ $2 = down ]; then
+
+        # <SUB-OPERATION>
+        if [ $3 = begin ]; then
+
+            do_nothing=
+
+        # <SUB-OPERATION>
+        elif [ $3 = end ]; then
+
+            do_nothing=
+
+        else
+
+            echo "$3 not recognized" && exit 1
+
+        fi
+
+    else
+
+        echo "$2 not recognized" && exit 1
+
+    fi
+
+# <DOCKER-COMPOSE PROJECT NAME>
+elif [ $1 = arrr ]; then
+
+    # <OPERATION>
+    if [ $2 = up ]; then
+
+        # <SUB-OPERATION>
+        if [ $3 = begin ]; then
+
+            doctor_docker
+            doctor_gluetun_alt
+            doctor_prowlarr_alt
+            doctor_qbittorrent_alt
+            doctor_radarr_alt
+            doctor_sonarr_alt
 
         # <SUB-OPERATION>
         elif [ $3 = end ]; then

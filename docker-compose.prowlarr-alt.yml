@@ -1,0 +1,16 @@
+services:
+  prowlarr-alt:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr-alt
+    depends_on:
+      - gluetun-alt
+    environment:
+      - PUID=${PUID}
+      - PGID=${GUID}
+      - TZ=${TZ}
+    # ports:
+    #   - 9696:9696
+    network_mode: "service:gluetun-alt"
+    volumes:
+      - ${PROWLARR_ALT_VOLUME_CONFIG}:/config
+    restart: unless-stopped
