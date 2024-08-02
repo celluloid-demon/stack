@@ -10,7 +10,7 @@ services:
       - TZ=${TZ}
     env_file:
       - ${NOTIFIARR_ALT_ENV_PASSWORDS}
-    hostname: notifiarr
+    hostname: notifiarr-alt
     ports:
       - 5455:5454
     # network_mode: "service:gluetun"

@@ -298,7 +298,7 @@ if [ $1 = main ]; then
     fi
 
 # <DOCKER-COMPOSE PROJECT NAME>
-elif [ $1 = arr ]; then
+elif [ $1 = starr ]; then
 
     # <OPERATION>
     if [ $2 = up ]; then
@@ -311,7 +311,7 @@ elif [ $1 = arr ]; then
             doctor_gluetun
             doctor_lidarr
             doctor_mylar3
-            doctor_notifiarr
+            # doctor_notifiarr
             doctor_prowlarr
             doctor_qbittorrent
             doctor_radarr

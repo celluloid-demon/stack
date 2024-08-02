@@ -8,5 +8,4 @@ include:
   - docker-compose.lidarr.yml
   - docker-compose.readarr.yml
   - docker-compose.mylar3.yml
-  - docker-compose.notifiarr.yml
   - docker-compose.prowlarr.yml
