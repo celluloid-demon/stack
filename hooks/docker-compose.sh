@@ -214,6 +214,13 @@ doctor_jellyfin() {
 
 }
 
+doctor_jellyfin_music() {
+
+    test_dir "$JFM_VOLUME_CONFIG"
+    test_dir "$JFM_VOLUME_MUSIC"
+
+}
+
 doctor_vikunja() {
 
     test_file "$VIKUNJA_ENV_PASSWORDS"
@@ -257,6 +264,7 @@ if [ $1 = main ]; then
             doctor_docker
             doctor_das_wfpk
             doctor_jellyfin
+            doctor_jellyfin_music
             doctor_polaris
             doctor_resilio_sync
             doctor_vikunja

@@ -1,6 +1,7 @@
 include:
   - docker-compose.download-audio-stream-wfpk.yml
   - docker-compose.jellyfin.yml
+  - docker-compose.jellyfin-music.yml
   - docker-compose.polaris.yml
   - docker-compose.resilio-sync.yml
   - docker-compose.vikunja.yml

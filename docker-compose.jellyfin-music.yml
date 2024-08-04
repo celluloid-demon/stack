@@ -1,0 +1,17 @@
+services:
+  jellyfin-music:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin-music
+    environment:
+      - PUID=${PUID}
+      - PGID=${GUID}
+      - TZ=${TZ}
+    ports:
+      - 8097:8096
+      - 8921:8920 #optional
+      - 7360:7359/udp #optional
+      - 1901:1900/udp #optional
+    volumes:
+      - ${JFM_VOLUME_CONFIG}:/config
+      - ${JFM_VOLUME_MUSIC}:/data/music
+    restart: unless-stopped
