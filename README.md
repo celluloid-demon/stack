@@ -1,4 +1,4 @@
 stack
 =====
 
-My main service stack for personal containers.
+Most of my homelab services are defined here.
