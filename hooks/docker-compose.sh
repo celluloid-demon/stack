@@ -250,6 +250,15 @@ doctor_notifiarr_alt() {
 
 }
 
+doctor_audiobookshelf() {
+
+    test_dir "$ABS_VOLUME_CONFIG"
+    test_dir "$ABS_VOLUME_METADATA"
+    test_dir "$ABS_VOLUME_AUDIOBOOKS"
+    test_dir "$ABS_VOLUME_PODCASTS"
+
+}
+
 load_env
 
 # <DOCKER-COMPOSE PROJECT NAME>
@@ -262,6 +271,7 @@ if [ $1 = main ]; then
         if [ $3 = begin ]; then
 
             doctor_docker
+            doctor_audiobookshelf
             doctor_das_wfpk
             doctor_jellyfin
             doctor_jellyfin_music
