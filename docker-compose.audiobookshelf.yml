@@ -3,8 +3,6 @@ services:
     image: ghcr.io/advplyr/audiobookshelf:latest
     container_name: audiobookshelf
     environment:
-      # - PUID=${PUID}
-      # - PGID=${GUID}
       - user=${PUID}:${GUID}
       - TZ=${TZ}
     ports:
