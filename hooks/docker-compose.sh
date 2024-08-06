@@ -259,6 +259,12 @@ doctor_audiobookshelf() {
 
 }
 
+doctor_homeassistant() {
+
+    test_dir "$HASS_VOLUME_CONFIG"
+
+}
+
 load_env
 
 # <DOCKER-COMPOSE PROJECT NAME>
@@ -273,6 +279,7 @@ if [ $1 = main ]; then
             doctor_docker
             doctor_audiobookshelf
             doctor_das_wfpk
+            doctor_homeassistant
             doctor_jellyfin
             doctor_jellyfin_music
             doctor_polaris
