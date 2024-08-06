@@ -15,6 +15,6 @@ services:
     # ports:
     #   - 8123:8123 # optional (discarded in host network mode)
     volumes:
-      # - /var/run/dbus:/var/run/dbus:ro # for accessing bluetooth see: https://docs.linuxserver.io/images/docker-homeassistant/#accessing-bluetooth-device
+      - /var/run/dbus:/var/run/dbus:ro # for accessing bluetooth see: https://docs.linuxserver.io/images/docker-homeassistant/#accessing-bluetooth-device
       - ${HASS_VOLUME_CONFIG}:/config
     restart: unless-stopped
