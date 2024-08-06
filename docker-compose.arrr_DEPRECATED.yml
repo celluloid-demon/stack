@@ -1,9 +1,0 @@
-include:
-  - docker-compose.bazarr-alt.yml
-  - docker-compose.flaresolverr-alt.yml
-  - docker-compose.gluetun-alt.yml
-  # - docker-compose.notifiarr-alt.yml
-  - docker-compose.qbittorrent-alt.yml
-  - docker-compose.radarr-alt.yml
-  - docker-compose.sonarr-alt.yml
-  - docker-compose.prowlarr-alt.yml
