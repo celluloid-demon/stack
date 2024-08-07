@@ -28,7 +28,7 @@ exit_error() {
 # Test required directories
 test_dir() {
 
-    [ ! -d "$1" ] && echo "$1 not found, exiting" && exit 1
+    [ ! -d "$1" ] && echo "$1 (dir) not found, exiting" && exit 1
 
     true
 
@@ -36,7 +36,7 @@ test_dir() {
 
 test_file() {
 
-    [ ! -f "$1" ] && echo "$1 not found, exiting" && exit 1
+    [ ! -f "$1" ] && echo "$1 (file) not found, exiting" && exit 1
 
     true
 
@@ -265,6 +265,17 @@ doctor_homeassistant() {
 
 }
 
+doctor_odoo() {
+
+    test_file "$ODOO_ENV_FILE"
+
+    test_dir "$ODOO_VOLUME_ADDONS"
+    test_dir "$ODOO_VOLUME_CONFIG"
+    test_dir "$ODOO_VOLUME_PG_DATA"
+    test_dir "$ODOO_VOLUME_WEB_DATA"
+
+}
+
 load_env
 
 # <DOCKER-COMPOSE PROJECT NAME>
@@ -276,7 +287,7 @@ if [ $1 = main ]; then
         # <SUB-OPERATION>
         if [ $3 = begin ]; then
 
-            doctor_docker
+            doctor_docker # required
             doctor_audiobookshelf
             doctor_das_wfpk
             doctor_homeassistant
@@ -323,7 +334,7 @@ if [ $1 = main ]; then
     fi
 
 # <DOCKER-COMPOSE PROJECT NAME>
-elif [ $1 = starr ]; then
+elif [ $1 = odoo ]; then
 
     # <OPERATION>
     if [ $2 = up ]; then
@@ -331,17 +342,8 @@ elif [ $1 = starr ]; then
         # <SUB-OPERATION>
         if [ $3 = begin ]; then
 
-            doctor_docker
-            doctor_bazarr
-            doctor_gluetun
-            doctor_lidarr
-            doctor_mylar3
-            # doctor_notifiarr
-            doctor_prowlarr
-            doctor_qbittorrent
-            doctor_radarr
-            doctor_readarr
-            doctor_sonarr
+            doctor_docker # required
+            doctor_odoo
 
         # <SUB-OPERATION>
         elif [ $3 = end ]; then
@@ -380,7 +382,7 @@ elif [ $1 = starr ]; then
     fi
 
 # <DOCKER-COMPOSE PROJECT NAME>
-elif [ $1 = arrr ]; then
+elif [ $1 = starr ]; then
 
     # <OPERATION>
     if [ $2 = up ]; then
@@ -388,13 +390,16 @@ elif [ $1 = arrr ]; then
         # <SUB-OPERATION>
         if [ $3 = begin ]; then
 
-            doctor_docker
-            doctor_gluetun_alt
-            doctor_notifiarr_alt
-            doctor_prowlarr_alt
-            doctor_qbittorrent_alt
-            doctor_radarr_alt
-            doctor_sonarr_alt
+            doctor_docker # required
+            doctor_bazarr
+            doctor_gluetun
+            doctor_lidarr
+            doctor_mylar3
+            doctor_prowlarr
+            doctor_qbittorrent
+            doctor_radarr
+            doctor_readarr
+            doctor_sonarr
 
         # <SUB-OPERATION>
         elif [ $3 = end ]; then
@@ -441,7 +446,7 @@ elif [ $1 = portainer ]; then
         # <SUB-OPERATION>
         if [ $3 = begin ]; then
 
-            doctor_docker
+            doctor_docker # required
 
         # <SUB-OPERATION>
         elif [ $3 = end ]; then

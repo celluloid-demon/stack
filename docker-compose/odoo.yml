@@ -1,0 +1,33 @@
+services:
+  odoo:
+    image: odoo:17.0
+    container_name: odoo
+    depends_on:
+      - odoo-db
+    environment:
+      - HOST=odoo-db
+      # - USER=myuser
+      # - PASSWORD=mypassword
+      - TZ=${TZ}
+    env_file:
+      - ${ODOO_ENV_FILE}
+    ports:
+      - 8069:8069
+    volumes:
+      - ${ODOO_VOLUME_CONFIG}:/etc/odoo
+      - ${ODOO_VOLUME_WEB_DATA}:/var/lib/odoo
+      - ${ODOO_VOLUME_ADDONS}:/mnt/extra-addons
+    restart: unless-stopped
+
+  odoo-db:
+    image: postgres:15
+    container_name: odoo-db
+    environment:
+      - POSTGRES_DB=postgres
+      # - POSTGRES_USER=myuser
+      # - POSTGRES_PASSWORD=mypassword
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    env_file:
+      - ${ODOO_ENV_FILE}
+    volumes:
+      - ${ODOO_VOLUME_PG_DATA}:/var/lib/postgresql/data/pgdata
