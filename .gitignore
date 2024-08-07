@@ -83,6 +83,9 @@ $RECYCLE.BIN/
 #                          #
 ############################
 
+*.deb
 .env
+*.log
+*-log
 password.env
 docker-polaris
