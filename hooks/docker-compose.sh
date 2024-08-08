@@ -314,7 +314,6 @@ if [ $1 = main ]; then
             doctor_jellyfin_music
             doctor_polaris
             doctor_resilio_sync
-            doctor_timetagger
             doctor_vikunja
 
         # <SUB-OPERATION>
@@ -483,6 +482,59 @@ elif [ $1 = starr ]; then
             doctor_radarr
             doctor_readarr
             doctor_sonarr
+
+        # <SUB-OPERATION>
+        elif [ $3 = end ]; then
+
+            do_nothing=
+
+        else
+
+            echo "$3 not recognized" && exit 1
+
+        fi
+
+    # <OPERATION>
+    elif [ $2 = down ]; then
+
+        # <SUB-OPERATION>
+        if [ $3 = begin ]; then
+
+            do_nothing=
+
+        # <SUB-OPERATION>
+        elif [ $3 = end ]; then
+
+            do_nothing=
+
+        else
+
+            echo "$3 not recognized" && exit 1
+
+        fi
+
+    else
+
+        echo "$2 not recognized" && exit 1
+
+    fi
+
+################################
+#                              #
+#          TIMETAGGER          #
+#                              #
+################################
+
+elif [ $1 = timetagger ]; then
+
+    # <OPERATION>
+    if [ $2 = up ]; then
+
+        # <SUB-OPERATION>
+        if [ $3 = begin ]; then
+
+            doctor_docker # required
+            doctor_timetagger
 
         # <SUB-OPERATION>
         elif [ $3 = end ]; then

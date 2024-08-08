@@ -4,7 +4,7 @@ include:
   - docker-compose/homeassistant.yml
   - docker-compose/jellyfin.yml
   - docker-compose/jellyfin-music.yml
+  - docker-compose/mealie.yml
   - docker-compose/polaris.yml
   - docker-compose/resilio-sync.yml
-  - docker-compose/timetagger.yml
   - docker-compose/vikunja.yml
