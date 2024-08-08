@@ -276,9 +276,23 @@ doctor_odoo() {
 
 }
 
+doctor_immich() {
+
+    test_file "$IMMICH_ENV_FILE"
+
+    test_dir "$IMMICH_VOLUME_UPLOAD"
+    test_dir "$IMMICH_VOLUME_DB_DATA"
+
+}
+
 load_env
 
-# <DOCKER-COMPOSE PROJECT NAME>
+##########################
+#                        #
+#          MAIN          #
+#                        #
+##########################
+
 if [ $1 = main ]; then
 
     # <OPERATION>
@@ -333,7 +347,65 @@ if [ $1 = main ]; then
 
     fi
 
-# <DOCKER-COMPOSE PROJECT NAME>
+############################
+#                          #
+#          IMMICH          #
+#                          #
+############################
+
+elif [ $1 = immich ]; then
+
+    # <OPERATION>
+    if [ $2 = up ]; then
+
+        # <SUB-OPERATION>
+        if [ $3 = begin ]; then
+
+            doctor_docker # required
+            doctor_immich
+
+        # <SUB-OPERATION>
+        elif [ $3 = end ]; then
+
+            do_nothing=
+
+        else
+
+            echo "$3 not recognized" && exit 1
+
+        fi
+
+    # <OPERATION>
+    elif [ $2 = down ]; then
+
+        # <SUB-OPERATION>
+        if [ $3 = begin ]; then
+
+            do_nothing=
+
+        # <SUB-OPERATION>
+        elif [ $3 = end ]; then
+
+            do_nothing=
+
+        else
+
+            echo "$3 not recognized" && exit 1
+
+        fi
+
+    else
+
+        echo "$2 not recognized" && exit 1
+
+    fi
+
+##########################
+#                        #
+#          ODOO          #
+#                        #
+##########################
+
 elif [ $1 = odoo ]; then
 
     # <OPERATION>
@@ -381,7 +453,12 @@ elif [ $1 = odoo ]; then
 
     fi
 
-# <DOCKER-COMPOSE PROJECT NAME>
+###########################
+#                         #
+#          STARR          #
+#                         #
+###########################
+
 elif [ $1 = starr ]; then
 
     # <OPERATION>
@@ -437,7 +514,12 @@ elif [ $1 = starr ]; then
 
     fi
 
-# <DOCKER-COMPOSE PROJECT NAME>
+###############################
+#                             #
+#          PORTAINER          #
+#                             #
+###############################
+
 elif [ $1 = portainer ]; then
 
     # <OPERATION>
