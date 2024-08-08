@@ -278,10 +278,8 @@ doctor_odoo() {
 
 doctor_immich() {
 
-    test_file "$IMMICH_ENV_FILE"
-
-    test_dir "$IMMICH_VOLUME_UPLOAD"
-    test_dir "$IMMICH_VOLUME_DB_DATA"
+    test_dir "$UPLOAD_LOCATION"
+    test_dir "$DB_DATA_LOCATION"
 
 }
 
