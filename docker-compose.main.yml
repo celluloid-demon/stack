@@ -6,4 +6,5 @@ include:
   - docker-compose/jellyfin-music.yml
   - docker-compose/polaris.yml
   - docker-compose/resilio-sync.yml
+  - docker-compose/timetagger.yml
   - docker-compose/vikunja.yml

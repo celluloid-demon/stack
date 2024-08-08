@@ -283,6 +283,13 @@ doctor_immich() {
 
 }
 
+doctor_timetagger() {
+
+    test_file "$TIMETAGGER_ENV_FILE"
+    test_dir  "$TIMETAGGER_VOLUME_DATA"
+
+}
+
 load_env
 
 ##########################
@@ -307,6 +314,7 @@ if [ $1 = main ]; then
             doctor_jellyfin_music
             doctor_polaris
             doctor_resilio_sync
+            doctor_timetagger
             doctor_vikunja
 
         # <SUB-OPERATION>
