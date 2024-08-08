@@ -1,0 +1,5 @@
+include:
+  - docker-compose/immich.yml
+  - docker-compose/immich-db.yml
+  - docker-compose/immich-ml.yml
+  - docker-compose/immich-redis.yml
