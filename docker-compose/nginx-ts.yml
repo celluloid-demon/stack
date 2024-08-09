@@ -1,0 +1,29 @@
+services:
+  nginx-ts:
+    image: tailscale/tailscale:latest
+    container_name: nginx-ts
+    cap_add:
+      - net_admin
+      - sys_module
+    environment:
+      # TS_AUTHKEY: Connect this container to your tailnet
+      # - TS_AUTHKEY=tskey-client-notAReal-OAuthClientSecret1Atawk
+      - TS_EXTRA_ARGS=--advertise-tags=tag:container
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=false
+      - TZ=${TZ}
+    env_file:
+      - ${TAILSCALE_ENV_FILE}
+    hostname: ${NGINX_TS_HOSTNAME}
+    volumes:
+      - ${NGINX_TS_VOLUME_NGINX_STATE}:/var/lib/tailscale
+      - /dev/net/tun:/dev/net/tun
+    restart: unless-stopped
+
+  # Example container service on tailnet
+  nginx:
+    image: nginx
+    container_name: nginx
+    depends_on:
+      - nginx-ts
+    network_mode: service:nginx-ts
