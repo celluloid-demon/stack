@@ -297,15 +297,9 @@ doctor_mealie() {
 
 }
 
-doctor_tailscale() {
+doctor_tailscale_common() {
 
     test_file "$TAILSCALE_ENV_FILE"
-
-}
-
-doctor_nginx_ts() {
-
-    test_dir "$NGINX_TS_VOLUME_NGINX_STATE"
 
 }
 
@@ -590,13 +584,13 @@ elif [ $1 = starr ]; then
 
     fi
 
-##########################################
-#                                        #
-#          NGINX-TS (TAILSCALE)          #
-#                                        #
-##########################################
+############################################
+#                                          #
+#          NGINX-TEST (TAILSCALE)          #
+#                                          #
+############################################
 
-elif [ $1 = nginx-ts ]; then
+elif [ $1 = nginx-test ]; then
 
     # <OPERATION>
     if [ $2 = up ]; then
@@ -605,8 +599,7 @@ elif [ $1 = nginx-ts ]; then
         if [ $3 = begin ]; then
 
             doctor_docker # required
-            doctor_tailscale # required
-            doctor_nginx_ts
+            doctor_tailscale_common # required
 
         # <SUB-OPERATION>
         elif [ $3 = end ]; then

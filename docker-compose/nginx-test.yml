@@ -1,0 +1,8 @@
+services:
+  # Example container service on tailnet
+  nginx:
+    image: nginx
+    container_name: nginx
+    depends_on:
+      - tailscale-agent
+    network_mode: service:tailscale-agent

@@ -1,15 +1,7 @@
 services:
-  # Example container service on tailnet
-  nginx:
-    image: nginx
-    container_name: nginx
-    depends_on:
-      - nginx-ts
-    network_mode: service:nginx-ts
-
-  nginx-ts:
+  tailscale-agent:
     image: tailscale/tailscale:latest
-    container_name: nginx-ts
+    container_name: tailscale-agent
     cap_add:
       - net_admin
       - sys_module
@@ -22,8 +14,11 @@ services:
       - TZ=${TZ}
     env_file:
       - ${TAILSCALE_ENV_FILE}
-    hostname: ${NGINX_TS_HOSTNAME}
+    # hostname: ${NGINX_TS_HOSTNAME} # This is how your container will appear in your tailnet's machine list (commenting this line out, we're trying for dynamically-generated hostnames)
     volumes:
-      - ${NGINX_TS_VOLUME_NGINX_STATE}:/var/lib/tailscale
+      - tailscale-state:/var/lib/tailscale
       - /dev/net/tun:/dev/net/tun
     restart: unless-stopped
+
+volumes:
+  tailscale-state:
