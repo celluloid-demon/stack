@@ -6,3 +6,4 @@ include:
   - docker-compose/jellyfin-music.yml
   - docker-compose/polaris.yml
   - docker-compose/resilio-sync.yml
+  - docker-compose/syncthing.yml

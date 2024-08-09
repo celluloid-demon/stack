@@ -297,6 +297,13 @@ doctor_mealie() {
 
 }
 
+doctor_syncthing() {
+
+    test_dir "$SYNCTHING_VOLUME_CONFIG"
+    test_dir "$DATA1_HOST"
+
+}
+
 load_env
 
 ##############################
@@ -321,6 +328,7 @@ if [ $1 = main ]; then
             doctor_jellyfin_music
             doctor_polaris
             doctor_resilio_sync
+            doctor_syncthing
 
         # <SUB-OPERATION>
         elif [ $3 = end ]; then
