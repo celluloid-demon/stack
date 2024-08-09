@@ -290,13 +290,20 @@ doctor_timetagger() {
 
 }
 
+doctor_mealie() {
+
+    test_dir "$MEALIE_VOLUME_DATA"
+    test_dir "$MEALIE_VOLUME_PGDATA"
+
+}
+
 load_env
 
-##########################
-#                        #
-#          MAIN          #
-#                        #
-##########################
+##############################
+#                            #
+#          MAIN / _          #
+#                            #
+##############################
 
 if [ $1 = main ]; then
 
@@ -314,7 +321,6 @@ if [ $1 = main ]; then
             doctor_jellyfin_music
             doctor_polaris
             doctor_resilio_sync
-            doctor_vikunja
 
         # <SUB-OPERATION>
         elif [ $3 = end ]; then
@@ -368,6 +374,59 @@ elif [ $1 = immich ]; then
 
             doctor_docker # required
             doctor_immich
+
+        # <SUB-OPERATION>
+        elif [ $3 = end ]; then
+
+            do_nothing=
+
+        else
+
+            echo "$3 not recognized" && exit 1
+
+        fi
+
+    # <OPERATION>
+    elif [ $2 = down ]; then
+
+        # <SUB-OPERATION>
+        if [ $3 = begin ]; then
+
+            do_nothing=
+
+        # <SUB-OPERATION>
+        elif [ $3 = end ]; then
+
+            do_nothing=
+
+        else
+
+            echo "$3 not recognized" && exit 1
+
+        fi
+
+    else
+
+        echo "$2 not recognized" && exit 1
+
+    fi
+
+############################
+#                          #
+#          MEALIE          #
+#                          #
+############################
+
+elif [ $1 = mealie ]; then
+
+    # <OPERATION>
+    if [ $2 = up ]; then
+
+        # <SUB-OPERATION>
+        if [ $3 = begin ]; then
+
+            doctor_docker # required
+            doctor_mealie
 
         # <SUB-OPERATION>
         elif [ $3 = end ]; then
@@ -535,6 +594,59 @@ elif [ $1 = timetagger ]; then
 
             doctor_docker # required
             doctor_timetagger
+
+        # <SUB-OPERATION>
+        elif [ $3 = end ]; then
+
+            do_nothing=
+
+        else
+
+            echo "$3 not recognized" && exit 1
+
+        fi
+
+    # <OPERATION>
+    elif [ $2 = down ]; then
+
+        # <SUB-OPERATION>
+        if [ $3 = begin ]; then
+
+            do_nothing=
+
+        # <SUB-OPERATION>
+        elif [ $3 = end ]; then
+
+            do_nothing=
+
+        else
+
+            echo "$3 not recognized" && exit 1
+
+        fi
+
+    else
+
+        echo "$2 not recognized" && exit 1
+
+    fi
+
+#############################
+#                           #
+#          VIKUNJA          #
+#                           #
+#############################
+
+elif [ $1 = vikunja ]; then
+
+    # <OPERATION>
+    if [ $2 = up ]; then
+
+        # <SUB-OPERATION>
+        if [ $3 = begin ]; then
+
+            doctor_docker # required
+            doctor_vikunja
 
         # <SUB-OPERATION>
         elif [ $3 = end ]; then

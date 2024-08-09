@@ -2,7 +2,10 @@
 
 set -e
 
-stack=${1:-"main"}
+stack=${1:-'main'}
+
+# Aliases
+[ $stack = '_' ] && stack='main'
 
 WORKDIR="$(dirname "$0")" && \
 cd "$WORKDIR"
