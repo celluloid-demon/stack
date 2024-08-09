@@ -1,4 +1,12 @@
 services:
+  # Example container service on tailnet
+  nginx:
+    image: nginx
+    container_name: nginx
+    depends_on:
+      - nginx-ts
+    network_mode: service:nginx-ts
+
   nginx-ts:
     image: tailscale/tailscale:latest
     container_name: nginx-ts
@@ -19,11 +27,3 @@ services:
       - ${NGINX_TS_VOLUME_NGINX_STATE}:/var/lib/tailscale
       - /dev/net/tun:/dev/net/tun
     restart: unless-stopped
-
-  # Example container service on tailnet
-  nginx:
-    image: nginx
-    container_name: nginx
-    depends_on:
-      - nginx-ts
-    network_mode: service:nginx-ts
