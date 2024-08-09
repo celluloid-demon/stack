@@ -297,12 +297,6 @@ doctor_mealie() {
 
 }
 
-doctor_tailscale_common() {
-
-    test_file "$TAILSCALE_ENV_FILE"
-
-}
-
 load_env
 
 ##############################
@@ -547,59 +541,6 @@ elif [ $1 = starr ]; then
             doctor_radarr
             doctor_readarr
             doctor_sonarr
-
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
-
-            do_nothing=
-
-        else
-
-            echo "$3 not recognized" && exit 1
-
-        fi
-
-    # <OPERATION>
-    elif [ $2 = down ]; then
-
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
-
-            do_nothing=
-
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
-
-            do_nothing=
-
-        else
-
-            echo "$3 not recognized" && exit 1
-
-        fi
-
-    else
-
-        echo "$2 not recognized" && exit 1
-
-    fi
-
-############################################
-#                                          #
-#          NGINX-TEST (TAILSCALE)          #
-#                                          #
-############################################
-
-elif [ $1 = nginx-test ]; then
-
-    # <OPERATION>
-    if [ $2 = up ]; then
-
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
-
-            doctor_docker # required
-            doctor_tailscale_common # required
 
         # <SUB-OPERATION>
         elif [ $3 = end ]; then

@@ -1,2 +1,3 @@
 include:
   - docker-compose/vikunja.yml
+  - docker-compose/tailscale.common.yml

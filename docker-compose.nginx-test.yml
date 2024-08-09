@@ -1,3 +1,0 @@
-include:
-  - docker-compose/nginx-test.yml
-  - docker-compose/tailscale.common.yml

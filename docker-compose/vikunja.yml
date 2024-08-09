@@ -3,8 +3,10 @@ services:
     image: vikunja/vikunja
     container_name: vikunja
     depends_on:
-      vikunja-db:
-        condition: service_healthy
+      - tailscale-agent
+      - vikunja-db
+      # vikunja-db:
+      #   condition: service_healthy
     environment:
       # VIKUNJA_SERVICE_PUBLICURL: http://<the public ip or host where Vikunja is reachable>
       VIKUNJA_DATABASE_HOST: vikunja-db
@@ -15,8 +17,9 @@ services:
       # VIKUNJA_SERVICE_JWTSECRET: <a super secure random secret>
     env_file:
       - ${VIKUNJA_ENV_PASSWORDS}
-    ports:
-      - 3456:3456
+    network_mode: service:tailscale-agent
+    # ports:
+    #   - 3456:3456 # (commenting this line out, we're trying for ports to be dynamically set for us by tailscale agent container)
     volumes:
       - ${VIKUNJA_VOLUME_FILES}:/app/vikunja/files
     restart: unless-stopped
@@ -25,6 +28,8 @@ services:
     image: mariadb:10
     container_name: vikunja-db
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    depends_on:
+      - tailscale-agent
     environment:
       # MYSQL_ROOT_PASSWORD: supersecret
       MYSQL_USER: vikunja
@@ -32,6 +37,7 @@ services:
       MYSQL_DATABASE: vikunja
     env_file:
       - ${VIKUNJA_ENV_PASSWORDS}
+    network_mode: service:tailscale-agent
     volumes:
       - ${VIKUNJA_DB_VOLUME_MYSQL}:/var/lib/mysql
     restart: unless-stopped

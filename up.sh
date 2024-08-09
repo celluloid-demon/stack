@@ -5,7 +5,11 @@ set -e
 stack=${1:-'main'}
 
 # Aliases
-[ $stack = '_' ] && stack='main'
+[ $stack = '_'  ] && stack='main'
+[ $stack = 'ts' ] && stack='tailscale'
+
+# Tailscale entrypoint
+[ $stack = 'tailscale' ] && sudo tailscale up && exit 0
 
 WORKDIR="$(dirname "$0")" && \
 cd "$WORKDIR"
