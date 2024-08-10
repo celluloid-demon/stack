@@ -1,0 +1,9 @@
+[Unit]
+Description="Run rsync (wrapper) script hourly"
+
+[Timer]
+OnCalendar=*-*-* *:00:00
+Unit=rsync.service
+
+[Install]
+WantedBy=multi-user.target

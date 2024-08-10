@@ -90,3 +90,6 @@ $RECYCLE.BIN/
 password.env
 docker-compose._.yml
 docker-polaris
+
+# flash/rsync-wrapper
+working_folder/*
