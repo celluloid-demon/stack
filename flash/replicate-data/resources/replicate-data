@@ -41,56 +41,21 @@ SWITCH_run=1
 
 declare -a job=(
     
-    APPLICATIONS
-    FILES
-    HOMEASSISTANT
-    ISO
-    MEDIA
-    ODOO
-    RESILIO_SYNC
-    SHARED_FILES
-    SSH
-    SSH_FOR_WINDOWS
-    VAULT
-    VIKUNJA
-    WINDOWS_FILES
+    DS0_TEST
     
     )
 
+# todo test hardlink replication on backup destination
 declare -A source=(
 
-    [APPLICATIONS]="${REMOTE}:/tank0/ds0/@applications"
-    [FILES]="${REMOTE}:/tank0/ds0/@files"
-    [HOMEASSISTANT]="${REMOTE}:/tank0/ds0/@homeassistant"
-    [ISO]="${REMOTE}:/tank0/ds0/@iso"
-    [MEDIA]="${REMOTE}:/tank0/ds0/@media"
-    [ODOO]="${REMOTE}:/tank0/ds0/@odoo.root"
-    [RESILIO_SYNC]="${REMOTE}:/tank0/ds0/@resilio-sync"
-    [SHARED_FILES]="${REMOTE}:/tank0/ds0/@shared-files"
-    [SSH]="${REMOTE}:/tank0/ds0/@ssh"
-    [SSH_FOR_WINDOWS]="${REMOTE}:/tank0/ds0/@ssh-for-windows"
-    [VAULT]="${REMOTE}:/tank0/ds0/@vault"
-    [VIKUNJA]="${REMOTE}:/tank0/ds0/@vikunja"
-    [WINDOWS_FILES]="${REMOTE}:/tank0/ds0/@windows-files"
+    [DS0_TEST]="/tank0/ds0/@media"
 
 )
 
-# NOTE: /mnt/e = tank1
+# NOTE: E:\ = tank1
 declare -A destination=(
 
-    [APPLICATIONS]="/mnt/e/ds0/@applications"
-    [FILES]="/mnt/e/ds0/@files"
-    [HOMEASSISTANT]="/mnt/e/ds0/@homeassistant"
-    [ISO]="/mnt/e/ds0/@iso"
-    [MEDIA]="/mnt/e/ds0/@media"
-    [ODOO]="/mnt/e/ds0/@odoo.root"
-    [RESILIO_SYNC]="/mnt/e/ds0/@resilio-sync"
-    [SHARED_FILES]="/mnt/e/ds0/@shared-files"
-    [SSH]="/mnt/e/ds0/@ssh"
-    [SSH_FOR_WINDOWS]="/mnt/e/ds0/@ssh-for-windows"
-    [VAULT]="/mnt/e/ds0/@vault"
-    [VIKUNJA]="/mnt/e/ds0/@vikunja"
-    [WINDOWS_FILES]="/mnt/e/ds0/@windows-files"
+    [DS0_TEST]="${REMOTE}:E:\\ds0\\@media"
 
 )
 
