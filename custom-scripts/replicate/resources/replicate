@@ -65,6 +65,13 @@ declare -A destination=(
 #                                          #
 ############################################
 
+# todo this should really take two positional args from command line, source
+# and destination, so spinning up commands from openmediavault cron is trivial
+# and inherently self-documenting
+
+# todo or just make this a 'zfs send ...' wrapper script with positional args
+# like above and rename as 'replicate-zfs-vol'
+
 run_rsync() {
 
     rsync \

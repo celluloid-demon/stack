@@ -3,6 +3,8 @@
 # Exit on error
 set -eE
 
+# todo give positional args so it will either "flash" just the replicate-zfs-vol bin or that plus the systemd timers (which you might not need if running manually or scheduling with a gui)
+
 # Declare constants
 
 SCRIPT_FOLDER="$(dirname "$0")"
