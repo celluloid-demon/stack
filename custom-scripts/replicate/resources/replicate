@@ -66,11 +66,15 @@ declare -A destination=(
 ############################################
 
 # todo this should really take two positional args from command line, source
-# and destination, so spinning up commands from openmediavault cron is trivial
+# and destination (read: which will be the SAMBA MOUNT CREATED IN OPENMEDIAVAULT GUI THAT YOU MADE IN WINDOWS FOR YOUR BTRFS VOLUME FOR HARDLINK SUPPORT), so spinning up commands from openmediavault cron is trivial
 # and inherently self-documenting
 
 # todo or just make this a 'zfs send ...' wrapper script with positional args
 # like above and rename as 'replicate-zfs-vol'
+
+# bonus: "Because ZFS is sending the filesystem instead of individual files, the hard links are preserved... rsync does have an option to preserve hard links but it brings rsync to a virtual halt on large data sets." - a very nice reddit user
+
+# todo oh wait yeah the zfs thing is good but it should be spun off into its own script, rsync is still useful for replicating with hardlinks to something that ***ISN'T*** zfs (like your local btrfs vol that's btrfs because that's what you have a windows driver for)
 
 run_rsync() {
 
