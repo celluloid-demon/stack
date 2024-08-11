@@ -33,10 +33,6 @@ LOG_ERROR="${LOG_FOLDER}/ERROR.log"
 
 SWITCH_run=1
 
-# Generate tmp file for defaults
-
-TMP=$(mktemp)
-
 ##############################################
 #                                            #
 #          BEGIN USER CONFIGURATION          #
@@ -45,24 +41,21 @@ TMP=$(mktemp)
 
 declare -a job=(
     
-    ARG
+    DS0_TEST
     
     )
 
 # todo test hardlink replication on backup destination
-# [ARG]="/tank0/ds0/@media"
 declare -A source=(
 
-    [ARG]="${1}"
+    [DS0_TEST]="/tank0/ds0/@media"
 
 )
 
 # NOTE: E:\ = tank1
-# WARNING: WINDOWS-PATH BACKSLASHES _MUST_ BE ESCAPED USING '\'
-# [ARG]="${REMOTE}:E:\\ds0\\@media"
 declare -A destination=(
 
-    [ARG]="${2}"
+    [DS0_TEST]="${REMOTE}:E:\\ds0\\@media"
 
 )
 
@@ -87,45 +80,6 @@ declare -A destination=(
 
 # then use that script to backup your filepacks one by one to your external drive (btrfs + hardlinks), THEN reverse-replicate to new zvols on raspberry pi after 4tb drive-wipe
 
-# Test required directories
-test_dir() {
-
-    # (deprecated)
-    # [ ! -d "$1" ] && echo "$1 (dir) not found, exiting" && exit 1
-
-    # WARNING: We still want to test for remote dirs since Windows can't have
-    # public shares on public library wifi (ssh is the fallback).
-
-    # If not local dir, parse as ssh remote and run test again
-    if [ ! -d "$1" ]; then
-
-        local _user=${1%%@*}
-        local _hostname=${1#*@}
-        local _hostname=${_hostname%:*}
-        local _path=${1#*:}
-
-        [ ! -n "$_user"     ] && echo "ssh username \"$_user\" expected but not provided, exiting"     && exit 1
-        [ ! -n "$_hostname" ] && echo "ssh hostname \"$_hostname\" expected but not provided, exiting" && exit 1
-        [ ! -n "$_path"     ] && echo "ssh path \"$_path\" expected but not provided, exiting"         && exit 1
-
-        # Attempt to resolve directory path
-        ! ssh "${_user}@${_hostname}" "test -d '$_path'" && echo "$1 did not resolve as local or remote path, exiting" && exit 1
-
-    fi
-
-    true
-
-}
-
-test_arg() {
-
-    # (test for non-zero value in string)
-    [ ! -n "$1" ] && echo "var not supplied, exiting" && exit 1
-
-    true
-
-}
-
 run_rsync() {
 
     rsync \
@@ -145,16 +99,6 @@ run_rsync() {
             --partial \
             "$1" \
             "$2"
-
-}
-
-# NOTE: With Windows filesystems in the mix, this is to ensure that target
-# destination is always a unix filesystem (and therefor has chgrp and hardlink
-# support for rsync)
-test_dest() {
-
-    # Perform test sync
-    run_rsync "$TMP" "${2}/"
 
 }
 
@@ -214,18 +158,6 @@ main() {
             echo "Source:      ${source[$i]}"
             echo "Destination: ${destination[$i]}"
 
-            # Test for required positional parameters
-            test_arg "${source[$i]}"
-            test_arg "${destination[$i]}"
-
-            # Test for required directories
-            test_dir "${source[$i]}"
-            test_dir "${destination[$i]}"
-
-            # Test for required features (chgrp, hardlinks, etc)
-            # todo
-
-            # Perform replication task
             run_rsync "${source[$i]}/" "${destination[$i]}/"
 
         done
