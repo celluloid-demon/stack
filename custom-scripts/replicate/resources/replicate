@@ -33,15 +33,11 @@ LOG_ERROR="${LOG_FOLDER}/ERROR.log"
 
 SWITCH_run=1
 
-# Generate tmp file for defaults
-
-TMP=$(mktemp)
-
-##############################################
-#                                            #
-#          BEGIN USER CONFIGURATION          #
-#                                            #
-##############################################
+# todo implement explicit zfs / rsync mode (can set default here I guess)... prob just run a case/esac statement to parse this
+# Valid settings:
+#   zfs
+#   rsync
+MODE=${1:-zfs}
 
 declare -a job=(
     
@@ -53,7 +49,7 @@ declare -a job=(
 # [ARG]="/tank0/ds0/@media"
 declare -A source=(
 
-    [ARG]="${1}"
+    [ARG]="${2}"
 
 )
 
@@ -62,15 +58,9 @@ declare -A source=(
 # [ARG]="${REMOTE}:E:\\ds0\\@media"
 declare -A destination=(
 
-    [ARG]="${2}"
+    [ARG]="${3}"
 
 )
-
-############################################
-#                                          #
-#          END USER CONFIGURATION          #
-#                                          #
-############################################
 
 # todo this should really take two positional args from command line, source
 # and destination (read: which will be the SAMBA MOUNT CREATED IN OPENMEDIAVAULT GUI THAT YOU MADE IN WINDOWS FOR YOUR BTRFS VOLUME FOR HARDLINK SUPPORT), so spinning up commands from openmediavault cron is trivial
@@ -150,11 +140,21 @@ run_rsync() {
 
 # NOTE: With Windows filesystems in the mix, this is to ensure that target
 # destination is always a unix filesystem (and therefor has chgrp and hardlink
-# support for rsync)
-test_dest() {
+# support for rsync-mode)
+test_fs_feature() {
 
-    # Perform test sync
-    run_rsync "$TMP" "${2}/"
+    local _tmp=$(mktemp)
+
+    # Attempt test replication
+    run_rsync "$_tmp" "${1}/"
+
+}
+
+test_zfs() {
+
+    ! which zfs && echo "zfs missing on ${1}, exiting" && exit 1
+
+    true
 
 }
 
@@ -222,8 +222,11 @@ main() {
             test_dir "${source[$i]}"
             test_dir "${destination[$i]}"
 
-            # Test for required features (chgrp, hardlinks, etc)
-            # todo
+            # Test for zfs
+            test_zfs "${destination[$i]}"
+
+            # Test for required filesystem features (chgrp, hardlinks, etc)
+            test_fs_feature "${destination[$i]}"
 
             # Perform replication task
             run_rsync "${source[$i]}/" "${destination[$i]}/"
