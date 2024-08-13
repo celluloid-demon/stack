@@ -103,6 +103,7 @@ test_dir() {
         local _user=${1%%@*}
         local _hostname=${1#*@}
         local _hostname=${_hostname%:*}
+        local _hostname=${_hostname%:*} # once more in case there's a windows-style drive letter (C:\) in path
         local _path=${1#*:}
 
         [ ! -n "$_user"     ] && echo "ssh username \"$_user\" expected but not provided, exiting"     && exit 1
@@ -110,7 +111,7 @@ test_dir() {
         [ ! -n "$_path"     ] && echo "ssh path \"$_path\" expected but not provided, exiting"         && exit 1
 
         # Attempt to resolve directory path
-        ! ssh "${_user}@${_hostname}" "test -d '$_path'" && \
+        ! ssh "${_user}@${_hostname}" "[ -d '$_path' ]" && \
         echo "\"$1\" did not resolve as local or remote path, exiting" && \
         exit 1
 
@@ -215,7 +216,7 @@ exit_non_zero() {
 
     echo "$message"
     
-    write_log_error "$message"
+    # write_log_error "$message"
 
     [ -d "$LOCKFILE" ] && rmdir "$LOCKFILE"
 
@@ -256,8 +257,9 @@ main() {
             test_arg "${destination[$i]}"
 
             # Test for required directories
-            test_dir "${source[$i]}"      && [ $FLAG_fs_is_remote -eq 1 ] && FLAG_source_fs_is_remote=1
-            test_dir "${destination[$i]}" && [ $FLAG_fs_is_remote -eq 1 ] && FLAG_destination_fs_is_remote=1
+            # todo even necessary? rsync/zfs-send should catch these with their own errors...
+            # test_dir "${source[$i]}"      && [ $FLAG_fs_is_remote -eq 1 ] && FLAG_source_fs_is_remote=1
+            # test_dir "${destination[$i]}" && [ $FLAG_fs_is_remote -eq 1 ] && FLAG_destination_fs_is_remote=1
 
             # Test for zfs
             if [ $mode[$i] = zfs ]; then
