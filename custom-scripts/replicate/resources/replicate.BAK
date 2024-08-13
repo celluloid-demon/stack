@@ -2,7 +2,7 @@
 
 # Exit on error, functions inherit parent scope for traps (-E same as `set -o errexit -o errtrace`)
 
-set -eE
+# set -eE
 
 # Standard signal / pseudo-signal cheat sheet:
 
@@ -33,37 +33,45 @@ LOG_ERROR="${LOG_FOLDER}/ERROR.log"
 
 SWITCH_run=1
 
-##############################################
-#                                            #
-#          BEGIN USER CONFIGURATION          #
-#                                            #
-##############################################
+MODE=${1:-zfs}
+
+# Initialize flags with default values
+
+FLAG_fs_is_remote=0
+FLAG_source_fs_is_remote=0
+FLAG_destination_fs_is_remote=0
 
 declare -a job=(
     
-    DS0_TEST
+    ARG
     
     )
 
+# Valid settings:
+#   zfs
+#   rsync
+declare -A mode=(
+
+    [ARG]="${1}"
+
+)
+
 # todo test hardlink replication on backup destination
+# [ARG]="/tank0/ds0/@media"
 declare -A source=(
 
-    [DS0_TEST]="/tank0/ds0/@media"
+    [ARG]="${2}"
 
 )
 
 # NOTE: E:\ = tank1
+# WARNING: WINDOWS-PATH BACKSLASHES _MUST_ BE ESCAPED USING '\'
+# [ARG]="${REMOTE}:E:\\ds0\\@media"
 declare -A destination=(
 
-    [DS0_TEST]="${REMOTE}:E:\\ds0\\@media"
+    [ARG]="${3}"
 
 )
-
-############################################
-#                                          #
-#          END USER CONFIGURATION          #
-#                                          #
-############################################
 
 # todo this should really take two positional args from command line, source
 # and destination (read: which will be the SAMBA MOUNT CREATED IN OPENMEDIAVAULT GUI THAT YOU MADE IN WINDOWS FOR YOUR BTRFS VOLUME FOR HARDLINK SUPPORT), so spinning up commands from openmediavault cron is trivial
@@ -79,6 +87,50 @@ declare -A destination=(
 # todo or.......... just have rsync w/ hardlinks as a _fallback_ mode if destination isn't a zfs vol (zfs mode can be default, rsync mode can be another positional option)
 
 # then use that script to backup your filepacks one by one to your external drive (btrfs + hardlinks), THEN reverse-replicate to new zvols on raspberry pi after 4tb drive-wipe
+
+# Test required directories
+test_dir() {
+
+    # (deprecated)
+    # [ ! -d "$1" ] && echo "$1 (dir) not found, exiting" && exit 1
+
+    # WARNING: We still want to test for remote dirs since Windows can't have
+    # public shares on public library wifi (ssh is the fallback).
+
+    # If not local dir, parse as ssh remote and run test again
+    if [ ! -d "$1" ]; then
+
+        local _user=${1%%@*}
+        local _hostname=${1#*@}
+        local _hostname=${_hostname%:*}
+        local _hostname=${_hostname%:*} # once more in case there's a windows-style drive letter (C:\) in path
+        local _path=${1#*:}
+
+        [ ! -n "$_user"     ] && echo "ssh username \"$_user\" expected but not provided, exiting"     && exit 1
+        [ ! -n "$_hostname" ] && echo "ssh hostname \"$_hostname\" expected but not provided, exiting" && exit 1
+        [ ! -n "$_path"     ] && echo "ssh path \"$_path\" expected but not provided, exiting"         && exit 1
+
+        # Attempt to resolve directory path
+        ! ssh "${_user}@${_hostname}" "[ -d '$_path' ]" && \
+        echo "\"$1\" did not resolve as local or remote path, exiting" && \
+        exit 1
+
+        FLAG_fs_is_remote=1
+
+    fi
+
+    true
+
+}
+
+test_arg() {
+
+    # (test for non-zero value in string)
+    [ ! -n "$1" ] && echo "var not supplied, exiting" && exit 1
+
+    true
+
+}
 
 run_rsync() {
 
@@ -97,8 +149,48 @@ run_rsync() {
             --hard-links \
             --info=progress2 \
             --partial \
-            "$1" \
-            "$2"
+            "${1}" \
+            "${2}"
+
+}
+
+run_zfs_send() {
+
+    # todo
+    local _placeholder=
+
+}
+
+# NOTE: With Windows filesystems in the mix, this is to ensure that target
+# destination is always a unix filesystem (and therefor has chgrp and hardlink
+# support for any replicated datasets / subvols / filepacks)
+test_fs_feature() {
+
+    local _tmp=$(mktemp)
+
+    # Attempt test replication
+    run_rsync "$_tmp" "${1}/"
+
+}
+
+test_zfs() {
+
+    # Dir is a local path
+    [ $FLAG_fs_is_remote -eq 0 ] && ! which zfs && echo "zfs missing on ${1}, exiting" && exit 1
+
+    # Dir is an ssh remote path
+    if [ $FLAG_fs_is_remote -eq 1 ]; then
+
+        local _user=${1%%@*}
+        local _hostname=${1#*@}
+        local _hostname=${_hostname%:*}
+        local _path=${1#*:}
+
+        ! ssh "${_user}@${_hostname}" "which zfs" && echo "zfs missing on ${1}, exiting" && exit 1
+
+    fi
+
+    true
 
 }
 
@@ -124,7 +216,7 @@ exit_non_zero() {
 
     echo "$message"
     
-    write_log_error "$message"
+    # write_log_error "$message"
 
     [ -d "$LOCKFILE" ] && rmdir "$LOCKFILE"
 
@@ -145,7 +237,6 @@ exit_zero() {
 main() {
 
     # Try to acquire the lock
-
     if mkdir "$LOCKFILE"; then
 
         # Lock acquired, perform rsync backups
@@ -155,10 +246,43 @@ main() {
             # (NOTE: The reason you're not backing up windows files with robocopy is because you want checksums.)
 
             echo
+            echo "Mode:        ${mode[$i]}"
             echo "Source:      ${source[$i]}"
             echo "Destination: ${destination[$i]}"
 
-            run_rsync "${source[$i]}/" "${destination[$i]}/"
+            # Test for required positional parameters
+            test_arg "${mode[$i]}"
+            test_arg "${source[$i]}"
+            test_arg "${destination[$i]}"
+
+            # Test for required directories
+            # todo even necessary? rsync/zfs-send should catch these with their own errors...
+            test_dir "${source[$i]}"      && [ $FLAG_fs_is_remote -eq 1 ] && FLAG_source_fs_is_remote=1
+            test_dir "${destination[$i]}" && [ $FLAG_fs_is_remote -eq 1 ] && FLAG_destination_fs_is_remote=1
+
+            # Test for zfs
+            if [ $mode[$i] = zfs ]; then
+
+                $FLAG_fs_is_remote=0
+
+                [ $FLAG_source_fs_is_remote -eq 1 ] && $FLAG_fs_is_remote=1
+                
+                test_zfs "${source[$i]}"
+
+                $FLAG_fs_is_remote=0
+
+                [ $FLAG_destination_fs_is_remote -eq 1 ] && $FLAG_fs_is_remote=1
+                
+                test_zfs "${destination[$i]}"
+
+            fi
+
+            # Test for required filesystem features (chgrp, hardlinks, etc)
+            test_fs_feature "${destination[$i]}"
+
+            # Perform replication task
+            [ $mode[$i] = zfs   ] && run_zfs_send "${source[$i]}/" "${destination[$i]}/"
+            [ $mode[$i] = rsync ] && run_rsync    "${source[$i]}/" "${destination[$i]}/"
 
         done
 

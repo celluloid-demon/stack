@@ -1,0 +1,133 @@
+#!/bin/bash
+
+# Exit on error, functions inherit parent scope for traps (-E same as `set -o errexit -o errtrace`)
+set -eE
+
+# Standard signal / pseudo-signal cheat sheet:
+
+#   DEBUG:      This signal triggers right before a command is to be run.
+#   ERR:        When a command ends in a non-zero status triggers this trap. Be aware that commands in if statements, loops, or strung-together commands may not trigger this signal.
+#   EXIT:       The EXIT trap is used to specify actions that should be done before the script exits (zero as well as non-zero).
+#   RETURN:     The RETURN signal is triggered after a function or sourced script exits.
+#   SIGINT:     Interrupt from keyboard (ctrl + c)
+#   SIGTERM:    Termination signal
+
+# NOTE: You need single quotes to prevent $LINENO from being expanded when the trap line is first parsed.
+
+# NOTE: Thanks to -E / -o errtrace, this still triggers the trap, even if a failure occurs *inside a function / loop*. With -e (but without -E), when a command fails inside a function, bash *instantly* exits, directly from the function scope - and since there is no ERR trap in effect there (because it wasn't inherited from the parent scope), your trap is not called. Source: https://stackoverflow.com/questions/35800082/how-to-trap-err-when-using-set-e-in-bash
+
+# Trap signals
+trap 'exit_zero' 0 SIGINT SIGTERM
+trap 'exit_non_zero $LINENO' 1 ERR
+trap 'exit_common' EXIT
+
+# Declare constants
+LOCKFILE='/tmp/rsync-wrapper.lock'
+
+run_rsync() {
+
+    # NOTE: If rsync daemon on a Windows machine is installed through cygwin,
+    # it will bring up cygwin's shell and provide unix-style paths (more
+    # comfortable).
+
+    # NOTE: Exclude windows clutter
+    rsync \
+            --append \
+            --archive \
+            --exclude '$RECYCLE.BIN' \
+            --exclude ".snapshots" \
+            --exclude "System Volume Information" \
+            --exclude ".Trash"* \
+            --hard-links \
+            --info=progress2 \
+            --partial \
+            "$1" \
+            "$2"
+
+}
+
+test_dir() {
+
+    # If not local dir, parse as ssh remote and run test again
+    if [ ! -d "$1" ]; then
+
+        local _user=${1%%@*}
+        local _hostname=${1#*@}
+        local _hostname=${_hostname%:*}
+        local _path=${1#*:}
+
+        [ ! -n "$_user"     ] && echo "ssh username \"$_user\" expected but not provided, exiting"     && exit 1
+        [ ! -n "$_hostname" ] && echo "ssh hostname \"$_hostname\" expected but not provided, exiting" && exit 1
+        [ ! -n "$_path"     ] && echo "ssh path \"$_path\" expected but not provided, exiting"         && exit 1
+
+        if ! ssh "${_user}@${_hostname}" "[ -d '$_path' ]"; then
+
+            echo "\"$1\" did not resolve as local or remote path, exiting"
+            exit 1
+
+        fi
+
+    fi
+
+    true
+
+}
+
+exit_common() {
+
+    # Release the lock "file"
+    [ -d "$LOCKFILE" ] && rmdir "$LOCKFILE"
+
+}
+
+exit_zero() {
+
+    local _do_nothing=
+
+}
+
+exit_non_zero() {
+
+    local _message="Error on line $1"
+
+    echo "$_message"
+
+}
+
+test_param() {
+
+    # (test for non-zero value in string)
+    [ ! -n "$1" ] && echo "Missing parameter, exiting" && exit 1
+
+    true
+
+}
+
+main() {
+
+    # Try to acquire the lock
+    if mkdir "$LOCKFILE"; then
+
+        local _source="$1"
+        local _destination="$2"
+
+        # Test required positional parameters
+        test_param "$_source"
+        test_param "$_destination"
+
+        # Test required directories
+        test_dir "$_source"
+        test_dir "$_destination"
+
+        # WARNING: Rsync will automatically create destination path if it does not already exist.
+        run_rsync "${_source}/" "${_destination}/"
+
+        echo
+        echo "  Completed successfully!"
+        echo
+
+    fi
+
+}
+
+main "$@"
