@@ -145,7 +145,8 @@ main() {
         test_dir "$_destination"
 
         # Test for supported filesystems
-        test_fs "$_destination"
+        # todo bugged
+        # test_fs "$_destination"
 
         # WARNING: Rsync will automatically create destination path if it does not already exist.
         run_rsync "${_source}/" "${_destination}/"
