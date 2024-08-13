@@ -22,7 +22,7 @@ trap 'exit_non_zero $LINENO' 1 ERR
 trap 'exit_common' EXIT
 
 # Declare constants
-LOCKFILE='/tmp/rsync-wrapper.lock'
+LOCKFILE='/tmp/replicate-with-rsync.lock'
 
 run_rsync() {
 
