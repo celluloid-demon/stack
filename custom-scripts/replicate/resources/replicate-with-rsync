@@ -30,6 +30,16 @@ run_rsync() {
     # it will bring up cygwin's shell and provide unix-style paths (more
     # comfortable).
 
+    # WARNING: For best rsync performance, give rsync access to the remote
+    # system over ssh, rather than just the fs over sftp.
+
+    # "If possible, try using --delete-before or --no-inc-recursive. With the
+    # default incremental recursion mode, rsync is often too happy to
+    # retransmit hardlinked files multiple times. (This is not a bug, the
+    # default mode is simply optimized for different use case.)"
+    
+    # Source: https://superuser.com/questions/1744442/rsync-with-hard-links-very-slow-compared-to-rclone
+
     # NOTE: Exclude windows clutter
     rsync \
             --append \
@@ -39,7 +49,9 @@ run_rsync() {
             --exclude "System Volume Information" \
             --exclude ".Trash"* \
             --hard-links \
+            --human-readable \
             --info=progress2 \
+            --no-inc-recursive \
             --partial \
             "$1" \
             "$2"
