@@ -33,17 +33,28 @@ LOG_ERROR="${LOG_FOLDER}/ERROR.log"
 
 SWITCH_run=1
 
-# todo implement explicit zfs / rsync mode (can set default here I guess)... prob just run a case/esac statement to parse this
-# Valid settings:
-#   zfs
-#   rsync
 MODE=${1:-zfs}
+
+# Initialize flags with default values
+
+FLAG_fs_is_remote=0
+FLAG_source_fs_is_remote=0
+FLAG_destination_fs_is_remote=0
 
 declare -a job=(
     
     ARG
     
     )
+
+# Valid settings:
+#   zfs
+#   rsync
+declare -A mode=(
+
+    [ARG]="${1}"
+
+)
 
 # todo test hardlink replication on backup destination
 # [ARG]="/tank0/ds0/@media"
@@ -99,7 +110,11 @@ test_dir() {
         [ ! -n "$_path"     ] && echo "ssh path \"$_path\" expected but not provided, exiting"         && exit 1
 
         # Attempt to resolve directory path
-        ! ssh "${_user}@${_hostname}" "test -d '$_path'" && echo "$1 did not resolve as local or remote path, exiting" && exit 1
+        ! ssh "${_user}@${_hostname}" "test -d '$_path'" && \
+        echo "\"$1\" did not resolve as local or remote path, exiting" && \
+        exit 1
+
+        FLAG_fs_is_remote=1
 
     fi
 
@@ -133,14 +148,21 @@ run_rsync() {
             --hard-links \
             --info=progress2 \
             --partial \
-            "$1" \
-            "$2"
+            "${1}" \
+            "${2}"
+
+}
+
+run_zfs_send() {
+
+    # todo
+    local _placeholder=
 
 }
 
 # NOTE: With Windows filesystems in the mix, this is to ensure that target
 # destination is always a unix filesystem (and therefor has chgrp and hardlink
-# support for rsync-mode)
+# support for any replicated datasets / subvols / filepacks)
 test_fs_feature() {
 
     local _tmp=$(mktemp)
@@ -152,7 +174,20 @@ test_fs_feature() {
 
 test_zfs() {
 
-    ! which zfs && echo "zfs missing on ${1}, exiting" && exit 1
+    # Dir is a local path
+    [ $FLAG_fs_is_remote -eq 0 ] && ! which zfs && echo "zfs missing on ${1}, exiting" && exit 1
+
+    # Dir is an ssh remote path
+    if [ $FLAG_fs_is_remote -eq 1 ]; then
+
+        local _user=${1%%@*}
+        local _hostname=${1#*@}
+        local _hostname=${_hostname%:*}
+        local _path=${1#*:}
+
+        ! ssh "${_user}@${_hostname}" "which zfs" && echo "zfs missing on ${1}, exiting" && exit 1
+
+    fi
 
     true
 
@@ -211,25 +246,42 @@ main() {
             # (NOTE: The reason you're not backing up windows files with robocopy is because you want checksums.)
 
             echo
+            echo "Mode:        ${mode[$i]}"
             echo "Source:      ${source[$i]}"
             echo "Destination: ${destination[$i]}"
 
             # Test for required positional parameters
+            test_arg "${mode[$i]}"
             test_arg "${source[$i]}"
             test_arg "${destination[$i]}"
 
             # Test for required directories
-            test_dir "${source[$i]}"
-            test_dir "${destination[$i]}"
+            test_dir "${source[$i]}"      && [ $FLAG_fs_is_remote -eq 1 ] && FLAG_source_fs_is_remote=1
+            test_dir "${destination[$i]}" && [ $FLAG_fs_is_remote -eq 1 ] && FLAG_destination_fs_is_remote=1
 
             # Test for zfs
-            test_zfs "${destination[$i]}"
+            if [ $mode[$i] = zfs ]; then
+
+                $FLAG_fs_is_remote=0
+
+                [ $FLAG_source_fs_is_remote -eq 1 ] && $FLAG_fs_is_remote=1
+                
+                test_zfs "${source[$i]}"
+
+                $FLAG_fs_is_remote=0
+
+                [ $FLAG_destination_fs_is_remote -eq 1 ] && $FLAG_fs_is_remote=1
+                
+                test_zfs "${destination[$i]}"
+
+            fi
 
             # Test for required filesystem features (chgrp, hardlinks, etc)
             test_fs_feature "${destination[$i]}"
 
             # Perform replication task
-            run_rsync "${source[$i]}/" "${destination[$i]}/"
+            [ $mode[$i] = zfs   ] && run_zfs_send "${source[$i]}/" "${destination[$i]}/"
+            [ $mode[$i] = rsync ] && run_rsync    "${source[$i]}/" "${destination[$i]}/"
 
         done
 
