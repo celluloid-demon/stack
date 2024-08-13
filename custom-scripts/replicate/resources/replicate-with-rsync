@@ -73,6 +73,31 @@ test_dir() {
 
 }
 
+# NOTE: With Windows filesystems in the mix, this is to ensure that target
+# destination is always a unix filesystem (and therefor has chgrp and hardlink
+# support for any replicated datasets / subvols / filepacks)
+test_fs() {
+
+    # NOTE: Purposefully excluding nfs until better understood how transfering hardlink info works
+    local -r _SUPPORTED_FSTYPE=("ext4" "btrfs")
+
+    local _fstype="$(df --output=fstype "$1" | tail -1)"
+
+    case "$_fstype" in
+
+        "${_SUPPORTED_FSTYPE[@]}")
+            return 0
+            ;;
+
+        *)
+            echo "Unsupported filesystem type \"$_fstype\" at \"$1\", exiting"
+            exit 1
+            ;;
+
+    esac
+
+}
+
 exit_common() {
 
     # Release the lock "file"
@@ -118,6 +143,9 @@ main() {
         # Test required directories
         test_dir "$_source"
         test_dir "$_destination"
+
+        # Test for supported filesystems
+        test_fs "$_destination"
 
         # WARNING: Rsync will automatically create destination path if it does not already exist.
         run_rsync "${_source}/" "${_destination}/"
