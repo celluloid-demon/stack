@@ -29,7 +29,7 @@ run_rsync() {
     # WARNING: For best rsync performance, give rsync access to the remote
     # system over ssh, rather than just the fs over sftp.
 
-    # NOTE: Exclude windows clutter
+    # NOTE: Exclude Windows clutter, btrfs snapshots
     rsync \
             --append \
             --archive \
@@ -47,8 +47,8 @@ run_rsync() {
 
 run_rsync_with_hardlinks() {
 
-    # NOTE: VERY slow initial sync, but subsequent incremental syncs perform
-    # fine.
+    # NOTE: VERY slow initial sync for 1tb+ datasets, but subsequent
+    # incremental syncs perform fine.
 
     # WARNING: In tests, append option runs into permission errors, possible
     # related to destination being behind windows btrfs driver.
@@ -60,7 +60,7 @@ run_rsync_with_hardlinks() {
     
     # Source: https://superuser.com/questions/1744442/rsync-with-hard-links-very-slow-compared-to-rclone
 
-    # NOTE: Exclude windows clutter
+    # NOTE: Exclude Windows clutter, btrfs snapshots
     rsync \
             --archive \
             --exclude '$RECYCLE.BIN' \
