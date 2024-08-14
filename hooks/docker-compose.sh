@@ -311,6 +311,12 @@ doctor_stirling_pdf() {
 
 }
 
+doctor_isponsorblocktv() {
+    
+    test_dir "$ISBTV_VOLUME_DATA"
+
+}
+
 load_env
 
 ##############################
@@ -331,6 +337,7 @@ if [ $1 = main ]; then
             doctor_audiobookshelf
             doctor_das_wfpk
             doctor_homeassistant
+            doctor_isponsorblocktv
             doctor_jellyfin
             doctor_jellyfin_music
             doctor_polaris
