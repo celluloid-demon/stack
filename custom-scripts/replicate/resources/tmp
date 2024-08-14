@@ -3,7 +3,6 @@
 REMOTE="Jonathan@lenovo-legion"
 
 # todo logic to ensure script is run as root
-
 ./replicate-with-rsync 0 "/tank0/ds0/@cache"           "${REMOTE}:/cygdrive/e/ds0/@cache"
 ./replicate-with-rsync 0 "/tank0/ds0/@files"           "${REMOTE}:/cygdrive/e/ds0/@files"
 ./replicate-with-rsync 0 "/tank0/ds0/@homeassistant"   "${REMOTE}:/cygdrive/e/ds0/@homeassistant"
@@ -20,3 +19,6 @@ REMOTE="Jonathan@lenovo-legion"
 ./replicate-with-rsync 0 "/tank0/ds0/@vault"           "${REMOTE}:/cygdrive/e/ds0/@vault"
 ./replicate-with-rsync 0 "/tank0/ds0/@vikunja"         "${REMOTE}:/cygdrive/e/ds0/@vikunja"
 ./replicate-with-rsync 0 "/tank0/ds0/@windows-files"   "${REMOTE}:/cygdrive/e/ds0/@windows-files"
+
+# Replication tasks that require hardlink support (slow):
+./replicate-with-rsync 1 "/tank0/ds0/@media"           "${REMOTE}:/cygdrive/e/ds0/@media"

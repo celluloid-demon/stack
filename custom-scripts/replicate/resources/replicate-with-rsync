@@ -45,6 +45,24 @@ run_rsync() {
 
 }
 
+run_rsync_no_partial() {
+
+    # WARNING: Test to try and resolve interrupted syncs with Windows remote.
+
+    # NOTE: Exclude Windows clutter, btrfs snapshots
+    rsync \
+            --archive \
+            --exclude '$RECYCLE.BIN' \
+            --exclude ".snapshots" \
+            --exclude "System Volume Information" \
+            --exclude ".Trash"* \
+            --human-readable \
+            --info=progress2 \
+            "$1" \
+            "$2"
+
+}
+
 run_rsync_with_hardlinks() {
 
     # NOTE: VERY slow initial sync for 1tb+ datasets, but subsequent
@@ -189,7 +207,7 @@ main() {
         #   1 - Preserve hard links (slower on larger datasets).
 
         # WARNING: Rsync will automatically create destination path if it does not already exist.
-        [ $_preset -eq 0 ] && run_rsync                "${_source}/" "${_destination}/"
+        [ $_preset -eq 0 ] && run_rsync_no_partial     "${_source}/" "${_destination}/"
         [ $_preset -eq 1 ] && run_rsync_with_hardlinks "${_source}/" "${_destination}/"
 
         echo
