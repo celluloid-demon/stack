@@ -24,24 +24,10 @@ trap 'exit_common' EXIT
 # Declare constants
 LOCKFILE='/tmp/replicate-with-rsync.lock'
 
-run_rsync_with_append() {
-
-    # WARNING: Append option runs into permission errors when destination is
-    # behind windows btrfs driver.
-
-    # NOTE: If rsync daemon on a Windows machine is installed through cygwin,
-    # it will bring up cygwin's shell and provide unix-style paths (more
-    # comfortable).
+run_rsync() {
 
     # WARNING: For best rsync performance, give rsync access to the remote
     # system over ssh, rather than just the fs over sftp.
-
-    # "If possible, try using --delete-before or --no-inc-recursive. With the
-    # default incremental recursion mode, rsync is often too happy to
-    # retransmit hardlinked files multiple times. (This is not a bug, the
-    # default mode is simply optimized for different use case.)"
-    
-    # Source: https://superuser.com/questions/1744442/rsync-with-hard-links-very-slow-compared-to-rclone
 
     # NOTE: Exclude windows clutter
     rsync \
@@ -51,17 +37,28 @@ run_rsync_with_append() {
             --exclude ".snapshots" \
             --exclude "System Volume Information" \
             --exclude ".Trash"* \
-            --hard-links \
             --human-readable \
             --info=progress2 \
-            --no-inc-recursive \
             --partial \
             "$1" \
             "$2"
 
 }
 
-run_rsync() {
+run_rsync_with_hardlinks() {
+
+    # NOTE: VERY slow initial sync, but subsequent incremental syncs perform
+    # fine.
+
+    # WARNING: In tests, append option runs into permission errors, possible
+    # related to destination being behind windows btrfs driver.
+
+    # "If possible, try using --delete-before or --no-inc-recursive. With the
+    # default incremental recursion mode, rsync is often too happy to
+    # retransmit hardlinked files multiple times. (This is not a bug, the
+    # default mode is simply optimized for different use case.)"
+    
+    # Source: https://superuser.com/questions/1744442/rsync-with-hard-links-very-slow-compared-to-rclone
 
     # NOTE: Exclude windows clutter
     rsync \
@@ -182,7 +179,8 @@ main() {
         # test_fs "$_destination"
 
         # WARNING: Rsync will automatically create destination path if it does not already exist.
-        run_rsync "${_source}/" "${_destination}/"
+        # run_rsync "${_source}/" "${_destination}/"
+        run_rsync_with_hardlinks "${_source}/" "${_destination}/"
 
         echo
         echo "  Completed successfully!"
