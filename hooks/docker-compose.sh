@@ -304,6 +304,13 @@ doctor_syncthing() {
 
 }
 
+doctor_stirling_pdf() {
+
+    test_dir "$SP_VOLUME_TESSDATA"
+    test_dir "$SP_VOLUME_EXTRA_CONFIGS"
+
+}
+
 load_env
 
 ##############################
@@ -328,6 +335,7 @@ if [ $1 = main ]; then
             doctor_jellyfin_music
             doctor_polaris
             doctor_resilio_sync
+            doctor_stirling_pdf
             doctor_syncthing
 
         # <SUB-OPERATION>
