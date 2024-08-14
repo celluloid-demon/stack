@@ -24,7 +24,10 @@ trap 'exit_common' EXIT
 # Declare constants
 LOCKFILE='/tmp/replicate-with-rsync.lock'
 
-run_rsync() {
+run_rsync_with_append() {
+
+    # WARNING: Append option runs into permission errors when destination is
+    # behind windows btrfs driver.
 
     # NOTE: If rsync daemon on a Windows machine is installed through cygwin,
     # it will bring up cygwin's shell and provide unix-style paths (more
@@ -53,6 +56,24 @@ run_rsync() {
             --info=progress2 \
             --no-inc-recursive \
             --partial \
+            "$1" \
+            "$2"
+
+}
+
+run_rsync() {
+
+    # NOTE: Exclude windows clutter
+    rsync \
+            --archive \
+            --exclude '$RECYCLE.BIN' \
+            --exclude ".snapshots" \
+            --exclude "System Volume Information" \
+            --exclude ".Trash"* \
+            --hard-links \
+            --human-readable \
+            --info=progress2 \
+            --no-inc-recursive \
             "$1" \
             "$2"
 
