@@ -2,6 +2,8 @@
 
 REMOTE="Jonathan@lenovo-legion"
 
+# todo logic to ensure script is run as root
+
 ./replicate-with-rsync 0 "/tank0/ds0/@cache"           "${REMOTE}:/cygdrive/e/ds0/@cache"
 ./replicate-with-rsync 0 "/tank0/ds0/@files"           "${REMOTE}:/cygdrive/e/ds0/@files"
 ./replicate-with-rsync 0 "/tank0/ds0/@homeassistant"   "${REMOTE}:/cygdrive/e/ds0/@homeassistant"

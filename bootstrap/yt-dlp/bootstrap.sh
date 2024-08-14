@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Installs yt-dlp, idempotently.
+
 URL="https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp"
 
 mkdir -p "${HOME}/.local/bin/"

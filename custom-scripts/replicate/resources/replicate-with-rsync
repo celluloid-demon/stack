@@ -172,6 +172,10 @@ main() {
         test_param "$_source"
         test_param "$_destination"
 
+        echo
+        echo "Source:      ${_source}"
+        echo "Destination: ${_destination}"
+
         # Test required directories
         test_dir "$_source"
         test_dir "$_destination"
