@@ -163,10 +163,12 @@ main() {
     # Try to acquire the lock
     if mkdir "$LOCKFILE"; then
 
-        local _source="$1"
-        local _destination="$2"
+        local _with_hard_links="$1"
+        local _source="$2"
+        local _destination="$3"
 
         # Test required positional parameters
+        test_param "$_with_hard_links"
         test_param "$_source"
         test_param "$_destination"
 
@@ -179,8 +181,8 @@ main() {
         # test_fs "$_destination"
 
         # WARNING: Rsync will automatically create destination path if it does not already exist.
-        # run_rsync "${_source}/" "${_destination}/"
-        run_rsync_with_hardlinks "${_source}/" "${_destination}/"
+        [ $_with_hard_links -eq 0 ] && run_rsync                "${_source}/" "${_destination}/"
+        [ $_with_hard_links -eq 1 ] && run_rsync_with_hardlinks "${_source}/" "${_destination}/"
 
         echo
         echo "  Completed successfully!"
