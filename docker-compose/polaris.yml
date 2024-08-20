@@ -1,6 +1,6 @@
 services:
   polaris:
-    image: connectical/polaris
+    image: ogarcia/polaris
     container_name: polaris
     environment:
       - TZ=${TZ}

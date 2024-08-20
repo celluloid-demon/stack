@@ -47,7 +47,21 @@ run_rsync() {
 
 run_rsync_no_partial() {
 
-    # WARNING: Test to try and resolve interrupted syncs with Windows remote.
+    # WARNING: This preset/function is a test to try and resolve interrupted
+    # syncs with Windows remote.
+
+    local _source="$1"
+    local _destination="$2"
+    # local _exclude="$3"
+
+    # echo "Preset: no-partial"
+    # echo "hello: $_exclude"
+
+    # Build optarg string for rsync if $_exclude has a value (is non-zero).
+    # [ -z $_exclude ] && _exclude="--exclude \"${_exclude}\""
+
+    # todo debug
+    # echo "_exclude: $_exclude"
 
     # NOTE: Exclude Windows clutter, btrfs snapshots
     rsync \
@@ -58,8 +72,8 @@ run_rsync_no_partial() {
             --exclude ".Trash"* \
             --human-readable \
             --info=progress2 \
-            "$1" \
-            "$2"
+            "$_source" \
+            "$_destination"
 
 }
 
@@ -78,6 +92,9 @@ run_rsync_with_hardlinks() {
     
     # Source: https://superuser.com/questions/1744442/rsync-with-hard-links-very-slow-compared-to-rclone
 
+    local _source="$1"
+    local _destination="$2"
+
     # NOTE: Exclude Windows clutter, btrfs snapshots
     rsync \
             --archive \
@@ -89,8 +106,8 @@ run_rsync_with_hardlinks() {
             --human-readable \
             --info=progress2 \
             --no-inc-recursive \
-            "$1" \
-            "$2"
+            "$_source" \
+            "$_destination"
 
 }
 

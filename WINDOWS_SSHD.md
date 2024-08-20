@@ -1,6 +1,8 @@
 Windows
 =======
 
+_**WARNING:** !!Cygwin-based ssh server fails to authenticate if server's ~/.ssh symlinks to outside of cygwin's "drive" !!_
+
 Source: https://gist.github.com/roxlu/5038729
 
 Installing CYGWIN with SSH

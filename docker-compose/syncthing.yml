@@ -9,7 +9,8 @@ services:
     hostname: syncthing #optional
     volumes:
       - ${SYNCTHING_VOLUME_CONFIG}:/config
-      - ${DATA1_HOST}:${DATA1_CONTAINER} # avoid having to define shares both in syncthing web gui AND here
+      - ${HOST_DATA_1}:${CONTAINER_DATA_1} # avoid having to define shares both in syncthing web gui AND here
+      - ${HOST_DATA_2}:${CONTAINER_DATA_2}
       # - ${DATA1_HOST}:${DATA1_CONTAINER}
       # - ${DATA1_HOST}:${DATA1_CONTAINER}
     ports:

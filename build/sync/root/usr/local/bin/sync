@@ -1,0 +1,89 @@
+#!/bin/bash
+
+set -eE
+
+trap 'exit_error' ERR
+trap 'exit_zero' EXIT
+
+exit_zero() {
+
+    local do_nothing=
+
+}
+
+exit_error() {
+
+    docker_log_error "...oh no"
+
+}
+
+docker_log() {
+
+    echo "$1" > /proc/1/fd/1 # docker stdin
+
+}
+
+docker_log_error() {
+
+    echo "$1" > /proc/1/fd/2 # docker stderr
+
+}
+
+# Declare vars
+curl_pid=
+duration_min=$DURATION
+duration_sec=
+output_file=
+output_file_basename="$OUTPUT_FILE_BASENAME"
+output_dir="/output"
+retry_delay=5
+stream_url="$STREAM_URL"
+
+# Check and restart curl process if needed
+check_and_restart_curl() {
+
+	if ! kill -0 $curl_pid 2>/dev/null; then
+
+		# Increment version for each new output file
+		output_file="${output_file_basename}_$(date +%Y_%m_%d_%H%M%S).mp3"
+		curl --fail -o "${output_dir}/${output_file}" "$stream_url" &
+		curl_pid=$!
+		docker_log "Started ${0}."
+
+	fi
+
+}
+
+main() {
+
+	docker_log "Starting ${0}."
+
+	# Start time
+	start_time=$(date +%s)
+
+	# Convert duration from minutes to seconds
+	duration_sec=$((duration_min * 60))
+
+	# End time
+	end_time=$((start_time + duration_sec))  # 3 hours in seconds
+
+	# Attempt to download the stream with retries for 3 hours
+	while [ $(date +%s) -lt $end_time ]; do
+
+		check_and_restart_curl
+
+		# Sleep before the next attempt
+		sleep $retry_delay
+
+	done
+
+	docker_log "Stopping ${0}."
+
+	# On duration end, terminate the curl process
+	kill $curl_pid
+
+	docker_log "Stopped ${0}."
+
+}
+
+main

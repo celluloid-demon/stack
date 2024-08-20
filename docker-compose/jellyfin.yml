@@ -15,4 +15,5 @@ services:
       - ${JELLYFIN_VOLUME_CONFIG}:/config
       - ${JELLYFIN_VOLUME_MOVIES}:/data/movies
       - ${JELLYFIN_VOLUME_TVSHOWS}:/data/tvshows
+      - ${JELLYFIN_VOLUME_SHORTS}:/data/shorts
     restart: unless-stopped

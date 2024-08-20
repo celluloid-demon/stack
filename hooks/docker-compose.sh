@@ -211,6 +211,7 @@ doctor_jellyfin() {
     test_dir "$JELLYFIN_VOLUME_CONFIG"
     test_dir "$JELLYFIN_VOLUME_MOVIES"
     test_dir "$JELLYFIN_VOLUME_TVSHOWS"
+    test_dir "$JELLYFIN_VOLUME_SHORTS"
 
 }
 
@@ -300,7 +301,8 @@ doctor_mealie() {
 doctor_syncthing() {
 
     test_dir "$SYNCTHING_VOLUME_CONFIG"
-    test_dir "$DATA1_HOST"
+    test_dir "$HOST_DATA_1"
+    test_dir "$HOST_DATA_2"
 
 }
 
