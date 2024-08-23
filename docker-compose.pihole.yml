@@ -11,12 +11,13 @@ services:
       # - "80:80/tcp" # omv listens on port 80
     environment:
       TZ: ${TZ}
-      DNSMASQ_LISTENING: all # (if running in docker's default bridge network mode)
-      # WEBPASSWORD: 'set a secure password here or it will be random'
-    # Volumes store your data between container upgrades
+      DNSMASQ_LISTENING: all # needed if running in docker's default bridge network mode
+      # WEBPASSWORD: pihole # set a secure password here or it will be random
+    env_file:
+      - ${PIHOLE_ENV_FILE}
     volumes:
-      - './etc-pihole:/etc/pihole'
-      - './etc-dnsmasq.d:/etc/dnsmasq.d'
+      - ${PIHOLE_VOLUME_CONFIG_PIHOLE}:/etc/pihole
+      - ${PIHOLE_VOLUME_CONFIG_DNSMASQ}:/etc/dnsmasq.d
     #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
     cap_add:
       - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed

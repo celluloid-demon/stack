@@ -319,6 +319,14 @@ doctor_isponsorblocktv() {
 
 }
 
+doctor_pihole() {
+
+    test_file "$PIHOLE_ENV_FILE"
+    test_dir  "$PIHOLE_VOLUME_CONFIG_PIHOLE"
+    test_dir  "$PIHOLE_VOLUME_CONFIG_DNSMASQ"
+
+}
+
 load_env
 
 ##############################
@@ -505,6 +513,59 @@ elif [ $1 = odoo ]; then
 
             doctor_docker # required
             doctor_odoo
+
+        # <SUB-OPERATION>
+        elif [ $3 = end ]; then
+
+            do_nothing=
+
+        else
+
+            echo "$3 not recognized" && exit 1
+
+        fi
+
+    # <OPERATION>
+    elif [ $2 = down ]; then
+
+        # <SUB-OPERATION>
+        if [ $3 = begin ]; then
+
+            do_nothing=
+
+        # <SUB-OPERATION>
+        elif [ $3 = end ]; then
+
+            do_nothing=
+
+        else
+
+            echo "$3 not recognized" && exit 1
+
+        fi
+
+    else
+
+        echo "$2 not recognized" && exit 1
+
+    fi
+
+############################
+#                          #
+#          PIHOLE          #
+#                          #
+############################
+
+elif [ $1 = pihole ]; then
+
+    # <OPERATION>
+    if [ $2 = up ]; then
+
+        # <SUB-OPERATION>
+        if [ $3 = begin ]; then
+
+            doctor_docker # required
+            doctor_pihole
 
         # <SUB-OPERATION>
         elif [ $3 = end ]; then
