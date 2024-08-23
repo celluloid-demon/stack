@@ -14,7 +14,7 @@ services:
       - ${PIHOLE_ENV_FILE}
     networks:
       net:
-        ipv4_address: 192.168.1.221 # NOTE: access the pihole web gui at <ip_address>/admin
+        ipv4_address: ${PIHOLE_IP_ADDRESS} # NOTE: access the pihole web gui at <ip_address>/admin
     # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
     ports:
       - "53:53/tcp"
