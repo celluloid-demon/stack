@@ -6,11 +6,11 @@ services:
       - PUID=${PUID}
       - PGID=${GUID}
       - TZ=${TZ}
+    ports:
+      - 8888:8888
+      - 55555:55555
     volumes:
       - ${RESILIO_VOLUME_CONFIG}:/config
       - ${RESILIO_VOLUME_DATA}:/sync
       - ${RESILIO_VOLUME_CACHE}:/downloads
-    ports:
-      - 8888:8888
-      - 55555:55555
     restart: unless-stopped

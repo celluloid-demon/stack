@@ -4,10 +4,10 @@ services:
     container_name: polaris
     environment:
       - TZ=${TZ}
+    ports:
+      - 5050:5050
     volumes:
       - ${POLARIS_VOLUME_MUSIC}:/music
       - ${POLARIS_VOLUME_CACHE}:/var/cache/polaris
       - ${POLARIS_VOLUME_DATA}:/var/lib/polaris
-    ports:
-      - 5050:5050
     restart: unless-stopped
