@@ -80,7 +80,16 @@ load_env() {
 
 doctor_docker() {
 
+    # Docker engine
     test_command docker
+
+    # Docker network
+    if ! docker network ls | grep -q "$DOCKER_NETWORK_MACVLAN"; then
+
+        echo "Docker network \"$DOCKER_NETWORK_MACVLAN\" not set, exiting"
+        exit 1
+
+    fi
 
 }
 
