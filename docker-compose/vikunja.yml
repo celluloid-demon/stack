@@ -16,8 +16,8 @@ services:
       # VIKUNJA_SERVICE_JWTSECRET: <a super secure random secret>
     env_file:
       - ${VIKUNJA_ENV_PASSWORDS}
-    # ports:
-    #   - 3456:3456 # (commenting this line out, we're trying for ports to be dynamically set for us by tailscale agent container)
+    ports:
+      - 3456:3456
     volumes:
       - ${VIKUNJA_VOLUME_FILES}:/app/vikunja/files
     restart: unless-stopped
