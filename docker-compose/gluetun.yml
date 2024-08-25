@@ -11,7 +11,7 @@ services:
       - SERVER_COUNTRIES=Netherlands
       - TZ=${TZ}
     env_file:
-      - ${HOME}/.config/gluetun/password.env
+      - ${GLUETUN_ENV_FILE}
     ports:
       - 6881:6881
       - 6881:6881/udp

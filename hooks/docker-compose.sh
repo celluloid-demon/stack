@@ -129,7 +129,7 @@ doctor_resilio_sync() {
 doctor_gluetun() {
 
     # Test OpenVPN login credentials for gluetun
-    test_file "${HOME}/.config/gluetun/password.env"
+    test_file "${GLUETUN_ENV_FILE}"
 
 }
 
