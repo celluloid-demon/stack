@@ -2,27 +2,14 @@ services:
   portainer:
     image: portainer/portainer-ce:latest
     container_name: portainer
-    networks:
-      net:
-        ipv4_address: ${PORTAINER_IP_ADDRESS}
     ports:
       - 9000:9000 # web gui
       - 8000:8000
-      - 9443:9443
+      - 443:9443
     volumes:
       - portainer_data:/data
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
 
-networks:
-  net:
-    driver: macvlan
-    driver_opts:
-      parent: end0 # somethign something omv-managed network interfaces... :)
-    ipam:
-      config:
-        - subnet: 192.168.1.0/24 # your router's address range
-          gateway: 192.168.1.1   # NOTE: lack of dash is significant
-    
 volumes:
   portainer_data:

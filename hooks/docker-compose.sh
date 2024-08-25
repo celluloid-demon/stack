@@ -83,13 +83,13 @@ doctor_docker() {
     # Docker engine
     test_command docker
 
-    # Docker network
-    if ! docker network ls | grep -q "$DOCKER_NETWORK_MACVLAN"; then
+    # Docker network (macvlan, if you're using it)
+    # if ! docker network ls | grep -q "$DOCKER_NETWORK_MACVLAN"; then
 
-        echo "Docker network \"$DOCKER_NETWORK_MACVLAN\" not set, exiting"
-        exit 1
+    #     echo "Docker network \"$DOCKER_NETWORK_MACVLAN\" not set, exiting"
+    #     exit 1
 
-    fi
+    # fi
 
 }
 
