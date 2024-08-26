@@ -10,4 +10,5 @@ services:
       - ${POLARIS_VOLUME_MUSIC}:/music
       - ${POLARIS_VOLUME_CACHE}:/var/cache/polaris
       - ${POLARIS_VOLUME_DATA}:/var/lib/polaris
+      - ${POLARIS_VOLUME_WFPK}:/music.radio.wfpk
     restart: unless-stopped

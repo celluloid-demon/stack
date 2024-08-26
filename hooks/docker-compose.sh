@@ -106,6 +106,7 @@ doctor_polaris() {
     test_dir "$POLARIS_VOLUME_MUSIC"
     test_dir "$POLARIS_VOLUME_CACHE"
     test_dir "$POLARIS_VOLUME_DATA"
+    test_dir "$POLARIS_VOLUME_WFPK"
 
     # "Take note that you must create before the cache directory
     # /my/polaris/cache and data directory /my/polaris/data and set ownership
