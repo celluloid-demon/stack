@@ -1,6 +1,6 @@
 services:
   vikunja:
-    image: vikunja/vikunja
+    image: vikunja/vikunja:0.24.2
     container_name: vikunja
     depends_on:
       - vikunja-db

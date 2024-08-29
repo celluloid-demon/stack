@@ -1,6 +1,6 @@
 services:
   stirling-pdf:
-    image: frooodle/s-pdf:latest
+    image: frooodle/s-pdf:0.28.3
     container_name: stirling-pdf
     environment:
       - DOCKER_ENABLE_SECURITY=false

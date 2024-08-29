@@ -1,6 +1,6 @@
 services:
   readarr:
-    image: lscr.io/linuxserver/readarr:develop
+    image: lscr.io/linuxserver/readarr:develop-0.3.32.2587-ls122
     container_name: readarr
     depends_on:
       - gluetun
