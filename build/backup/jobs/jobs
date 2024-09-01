@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# todo you can have a file you run where it runs the jobs once every hour,
+# but then each line is only allowed to get executed so many times per day as
+# specified
+
+sync 1 /pool/ds.3dprinter                                  Jonathan@lenovo-legion:/cygdrive/e/ds.3dprinter
+sync 2 /pool/ds.raspberry-pi                               Jonathan@lenovo-legion:/cygdrive/e/ds.raspberry-pi
+sync 1 Jonathan@lenovo-legion:/cygdrive/d/ds.lenovo-legion /pool/ds.lenovo-legion

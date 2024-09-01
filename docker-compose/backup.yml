@@ -1,0 +1,16 @@
+services:
+  backup:
+    image: backup
+    build: local/backup
+    container_name: backup
+    environment:
+      - TZ=${TZ}
+    env_file:
+      ${BACKUP_ENV_FILE} # contains ssh client info
+    ports:
+      - 22:22
+    volumes:
+      - ${BACKUP_VOLUME_BIN}:/usr/local/bin # contents get run once every hour
+    restart: unless-stopped
+
+# todo check out how linux server io handles ssh container, might be able to use that as build base

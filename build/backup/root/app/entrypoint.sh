@@ -39,7 +39,9 @@ docker_log_error() {
 # Make tmp file to populate crontab
 cron_file_tmp=$(mktemp)
 
-echo "${CRON_SCHEDULE} /usr/local/bin/sync-wrapper # ${CRON_COMMENT}" >> ${cron_file_tmp}
+# todo collate n-entries in loop?
+echo "${CRON_SCHEDULE} ${CRON_EXEC} # ${CRON_COMMENT}" >> ${cron_file_tmp}
+
 echo "# NOTE: Remember to end this file with an empty newline"        >> ${cron_file_tmp}
 echo ""                                                               >> ${cron_file_tmp}
 

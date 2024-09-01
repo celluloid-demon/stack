@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# NOTE: As a file on a mounted volume, this gets run as a second entrypoint
+# within docker container, but you can still edit easily from host.
+
+USER=''
+HOST=''
+
+###########################################
+#                                         #
+#          DEFINE HOST JOBS HERE          #
+#                                         #
+###########################################
+
+job='' # include full path
+
+# todo add alpine ssh configuration to command line here
+ssh "${USER}:${HOST}" "$job"

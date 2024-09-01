@@ -9,6 +9,11 @@ set -eE
 trap 'exit_error $LINENO' ERR
 trap 'exit_zero' EXIT
 
+# Declare constants
+readonly STACK=$1 # docker-compose project name
+readonly OPERATION=$2
+readonly SUB_OPERATION=$3
+
 exit_zero() {
 
     local do_nothing=
@@ -65,6 +70,11 @@ test_owner() {
     # 3: gid
 
     [ "$(stat -c "%u:%g" $1)" != "$2:$3" ] && echo "$1 wrong ownership" && exit 1
+
+    # todo would be real nice if this would interactively prompt user and ask
+    # if they want to fix permissions (assuming this script is NOT run as
+    # root, the user will be directed to copy + paste a sudo oneliner to fix
+    # the issue, with reminder to run calling script again)
 
     true
 
@@ -337,7 +347,47 @@ doctor_pihole() {
 
 }
 
+doctor_backup() {
+
+    test_file "$BACKUP_ENV_FILE"
+    test_dir  "$BACKUP_VOLUME_BIN"
+
+}
+
+test_param() {
+
+    local    _param=$1
+    local -a _valid_params=( $2 )
+
+    if [[ ! "${_valid_params[*]}" =~ "$_param" ]]; then
+
+        echo "Invalid parameter \"$_param\""
+        exit 1
+
+    fi
+
+}
+
+doctor_hooks() {
+
+    # NOTE: Easier just to test for the docker-compose file for first
+    # positional parameter.
+
+    test_file  "./docker-compose.${STACK}.yml"
+    test_param "$OPERATION"     "up    down"
+    test_param "$SUB_OPERATION" "begin end"
+
+}
+
+###########################
+#                         #
+#          SETUP          #
+#                         #
+###########################
+
 load_env
+doctor_docker
+doctor_hooks
 
 ##############################
 #                            #
@@ -345,61 +395,34 @@ load_env
 #                            #
 ##############################
 
-if [ $1 = main ]; then
+stack=main
 
-    # <OPERATION>
-    if [ $2 = up ]; then
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
+    doctor_audiobookshelf
+    doctor_das_wfpk
+    doctor_homeassistant
+    doctor_isponsorblocktv
+    doctor_jellyfin
+    doctor_jellyfin_music
+    doctor_polaris
+    doctor_resilio_sync
+    doctor_stirling_pdf
+    doctor_syncthing
 
-            doctor_docker # required
-            doctor_audiobookshelf
-            doctor_das_wfpk
-            doctor_homeassistant
-            doctor_isponsorblocktv
-            doctor_jellyfin
-            doctor_jellyfin_music
-            doctor_polaris
-            doctor_resilio_sync
-            doctor_stirling_pdf
-            doctor_syncthing
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
+    do_nothing=
 
-            do_nothing=
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        else
+    do_nothing=
 
-            echo "$3 not recognized" && exit 1
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        fi
+    do_nothing=
 
-    # <OPERATION>
-    elif [ $2 = down ]; then
-
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
-
-            do_nothing=
-
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
-
-            do_nothing=
-
-        else
-
-            echo "$3 not recognized" && exit 1
-
-        fi
-
-    else
-
-        echo "$2 not recognized" && exit 1
-
-    fi
+fi
 
 ############################
 #                          #
@@ -407,52 +430,25 @@ if [ $1 = main ]; then
 #                          #
 ############################
 
-elif [ $1 = immich ]; then
+stack=immich
 
-    # <OPERATION>
-    if [ $2 = up ]; then
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
+    doctor_immich
 
-            doctor_docker # required
-            doctor_immich
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
+    do_nothing=
 
-            do_nothing=
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        else
+    do_nothing=
 
-            echo "$3 not recognized" && exit 1
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        fi
+    do_nothing=
 
-    # <OPERATION>
-    elif [ $2 = down ]; then
-
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
-
-            do_nothing=
-
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
-
-            do_nothing=
-
-        else
-
-            echo "$3 not recognized" && exit 1
-
-        fi
-
-    else
-
-        echo "$2 not recognized" && exit 1
-
-    fi
+fi
 
 ############################
 #                          #
@@ -460,52 +456,25 @@ elif [ $1 = immich ]; then
 #                          #
 ############################
 
-elif [ $1 = mealie ]; then
+stack=mealie
 
-    # <OPERATION>
-    if [ $2 = up ]; then
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
+    doctor_mealie
 
-            doctor_docker # required
-            doctor_mealie
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
+    do_nothing=
 
-            do_nothing=
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        else
+    do_nothing=
 
-            echo "$3 not recognized" && exit 1
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        fi
+    do_nothing=
 
-    # <OPERATION>
-    elif [ $2 = down ]; then
-
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
-
-            do_nothing=
-
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
-
-            do_nothing=
-
-        else
-
-            echo "$3 not recognized" && exit 1
-
-        fi
-
-    else
-
-        echo "$2 not recognized" && exit 1
-
-    fi
+fi
 
 ##########################
 #                        #
@@ -513,52 +482,25 @@ elif [ $1 = mealie ]; then
 #                        #
 ##########################
 
-elif [ $1 = odoo ]; then
+stack=odoo
 
-    # <OPERATION>
-    if [ $2 = up ]; then
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
+    doctor_odoo
 
-            doctor_docker # required
-            doctor_odoo
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
+    do_nothing=
 
-            do_nothing=
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        else
+    do_nothing=
 
-            echo "$3 not recognized" && exit 1
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        fi
+    do_nothing=
 
-    # <OPERATION>
-    elif [ $2 = down ]; then
-
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
-
-            do_nothing=
-
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
-
-            do_nothing=
-
-        else
-
-            echo "$3 not recognized" && exit 1
-
-        fi
-
-    else
-
-        echo "$2 not recognized" && exit 1
-
-    fi
+fi
 
 ############################
 #                          #
@@ -566,52 +508,25 @@ elif [ $1 = odoo ]; then
 #                          #
 ############################
 
-elif [ $1 = pihole ]; then
+stack=pihole
 
-    # <OPERATION>
-    if [ $2 = up ]; then
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
+    doctor_pihole
 
-            doctor_docker # required
-            doctor_pihole
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
+    do_nothing=
 
-            do_nothing=
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        else
+    do_nothing=
 
-            echo "$3 not recognized" && exit 1
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        fi
+    do_nothing=
 
-    # <OPERATION>
-    elif [ $2 = down ]; then
-
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
-
-            do_nothing=
-
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
-
-            do_nothing=
-
-        else
-
-            echo "$3 not recognized" && exit 1
-
-        fi
-
-    else
-
-        echo "$2 not recognized" && exit 1
-
-    fi
+fi
 
 ###########################
 #                         #
@@ -619,60 +534,33 @@ elif [ $1 = pihole ]; then
 #                         #
 ###########################
 
-elif [ $1 = starr ]; then
+stack=starr
 
-    # <OPERATION>
-    if [ $2 = up ]; then
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
+    doctor_bazarr
+    doctor_gluetun
+    doctor_lidarr
+    doctor_mylar3
+    doctor_prowlarr
+    doctor_qbittorrent
+    doctor_radarr
+    doctor_readarr
+    doctor_sonarr
 
-            doctor_docker # required
-            doctor_bazarr
-            doctor_gluetun
-            doctor_lidarr
-            doctor_mylar3
-            doctor_prowlarr
-            doctor_qbittorrent
-            doctor_radarr
-            doctor_readarr
-            doctor_sonarr
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
+    do_nothing=
 
-            do_nothing=
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        else
+    do_nothing=
 
-            echo "$3 not recognized" && exit 1
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        fi
+    do_nothing=
 
-    # <OPERATION>
-    elif [ $2 = down ]; then
-
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
-
-            do_nothing=
-
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
-
-            do_nothing=
-
-        else
-
-            echo "$3 not recognized" && exit 1
-
-        fi
-
-    else
-
-        echo "$2 not recognized" && exit 1
-
-    fi
+fi
 
 ################################
 #                              #
@@ -680,52 +568,25 @@ elif [ $1 = starr ]; then
 #                              #
 ################################
 
-elif [ $1 = timetagger ]; then
+stack=timetagger
 
-    # <OPERATION>
-    if [ $2 = up ]; then
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
+    doctor_timetagger
 
-            doctor_docker # required
-            doctor_timetagger
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
+    do_nothing=
 
-            do_nothing=
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        else
+    do_nothing=
 
-            echo "$3 not recognized" && exit 1
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        fi
+    do_nothing=
 
-    # <OPERATION>
-    elif [ $2 = down ]; then
-
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
-
-            do_nothing=
-
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
-
-            do_nothing=
-
-        else
-
-            echo "$3 not recognized" && exit 1
-
-        fi
-
-    else
-
-        echo "$2 not recognized" && exit 1
-
-    fi
+fi
 
 #############################
 #                           #
@@ -733,52 +594,25 @@ elif [ $1 = timetagger ]; then
 #                           #
 #############################
 
-elif [ $1 = vikunja ]; then
+stack=vikunja
 
-    # <OPERATION>
-    if [ $2 = up ]; then
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
+    doctor_vikunja
 
-            doctor_docker # required
-            doctor_vikunja
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
+    do_nothing=
 
-            do_nothing=
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        else
+    do_nothing=
 
-            echo "$3 not recognized" && exit 1
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        fi
+    do_nothing=
 
-    # <OPERATION>
-    elif [ $2 = down ]; then
-
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
-
-            do_nothing=
-
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
-
-            do_nothing=
-
-        else
-
-            echo "$3 not recognized" && exit 1
-
-        fi
-
-    else
-
-        echo "$2 not recognized" && exit 1
-
-    fi
+fi
 
 ###############################
 #                             #
@@ -786,57 +620,31 @@ elif [ $1 = vikunja ]; then
 #                             #
 ###############################
 
-elif [ $1 = portainer ]; then
+stack=portainer
 
-    # <OPERATION>
-    if [ $2 = up ]; then
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
+    do_nothing=
 
-            doctor_docker # required
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
+    do_nothing=
 
-            do_nothing=
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-        else
+    do_nothing=
 
-            echo "$3 not recognized" && exit 1
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
 
-        fi
-
-    # <OPERATION>
-    elif [ $2 = down ]; then
-
-        # <SUB-OPERATION>
-        if [ $3 = begin ]; then
-
-            do_nothing=
-
-        # <SUB-OPERATION>
-        elif [ $3 = end ]; then
-
-            do_nothing=
-
-        else
-
-            echo "$3 not recognized" && exit 1
-
-        fi
-
-    else
-
-        echo "$2 not recognized" && exit 1
-
-    fi
-
-else
-
-    echo "$1 not recognized" && exit 1
+    do_nothing=
 
 fi
+
+#########################
+#                       #
+#          END          #
+#                       #
+#########################
 
 # Force exit code zero for any '&&' operations in host script
 true

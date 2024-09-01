@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Defaults
+# BIN='/usr/local/bin'
+BIN='.' # todo testing
+
+# Remote: dns
+DNS_HOST='dns'  # as it appears in root@<host>:~/.ssh/config
+DNS_USER='root'
+
+# Remote: lenovo-legion (cygwin sshd)
+LL_HOST='lenovo-legion'
+LL_USER='Jonathan' # NOTE: Cygwin username capitalized
+
+# Hourly backup tasks: dns
+# ${BIN}/replicate -r 0 -s "${DNS_USER}@${DNS_HOST}:/home/jonathan/data" -d "/pool/ds.dns/data"
+
+# Hourly backup tasks: lenovo-legion
+# ${BIN}/replicate -r 0 -s "${LL_USER}@${LL_HOST}:/cygdrive/c/Users/Jonathan/Desktop/Shared Files"  -d "/pool/ds.lenovo-legion/shared-files"
+# ${BIN}/replicate -r 0 -s "${LL_USER}@${LL_HOST}:/cygdrive/c/Users/Jonathan/Desktop/Windows Files" -d "/pool/ds.lenovo-legion/windows-files"
+# ${BIN}/replicate -r 0 -s "${LL_USER}@${LL_HOST}:/cygdrive/d/ds.lenovo-legion/files"               -d "/pool/ds.lenovo-legion/files"
+# ${BIN}/replicate -r 0 -s "${LL_USER}@${LL_HOST}:/cygdrive/f/ds.lenovo-legion/iso"                 -d "/pool/ds.lenovo-legion/iso"
+# ${BIN}/replicate -r 0 -s "${LL_USER}@${LL_HOST}:/cygdrive/f/ds.lenovo-legion/vault"               -d "/pool/ds.lenovo-legion/vault"
+
+# Hourly backup tasks: (host)
+${BIN}/replicate -r 0 -s "/pool/ds.3dprinter"          -d "${LL_USER}@${LL_HOST}:/cygdrive/f/ds.3dprinter"
+# ${BIN}/replicate -r 0 -s "/pool/ds.raspberry-pi"       -d "${LL_USER}@${LL_HOST}:/cygdrive/f/ds.raspberry-pi"
+# ${BIN}/replicate -r 1 -s "/pool/ds.raspberry-pi/media" -d "${LL_USER}@${LL_HOST}:/cygdrive/f/ds.raspberry-pi/media"
+
+# NOTE: The above is a second pass on 'media' using preset #1 for hardlink
+# preservation (slow, but works on cygwin ssh server with btrfs target
+# filesystem and windows 11 driver! useful for windows jellyfin server +
+# transcoding gpu setup).

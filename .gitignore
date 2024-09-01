@@ -89,5 +89,6 @@ $RECYCLE.BIN/
 *-log
 docker-compose._.yml
 docker-polaris
+local/bin
 password.env
 tmp

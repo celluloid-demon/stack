@@ -20,5 +20,6 @@ docker compose --file docker-compose.${stack}.yml --project-name ${stack} up --d
 pid=$! && \
 hooks/docker-compose.sh ${stack} up end
 
-wait $pid && \
-hooks/docker-compose.sh ${stack} down end
+# todo this don't quite work lol
+# wait $pid && \
+# hooks/docker-compose.sh ${stack} down end

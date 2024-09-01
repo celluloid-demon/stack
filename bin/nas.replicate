@@ -22,7 +22,11 @@ trap 'exit_non_zero $LINENO' 1 ERR
 trap 'exit_common' EXIT
 
 # Declare constants
-LOCKFILE='/tmp/replicate-with-rsync.lock'
+LOCKFILE='/tmp/replicate.lock'
+
+# Initialize internal flags with default values
+FLAG_source_is_remote=0
+FLAG_destination_is_remote=0
 
 run_rsync() {
 
@@ -35,6 +39,8 @@ run_rsync() {
             --archive \
             --exclude '$RECYCLE.BIN' \
             --exclude ".snapshots" \
+            --exclude ".stfolder" \
+            --exclude ".sync" \
             --exclude "System Volume Information" \
             --exclude ".Trash"* \
             --human-readable \
@@ -52,22 +58,14 @@ run_rsync_no_partial() {
 
     local _source="$1"
     local _destination="$2"
-    # local _exclude="$3"
 
-    # echo "Preset: no-partial"
-    # echo "hello: $_exclude"
-
-    # Build optarg string for rsync if $_exclude has a value (is non-zero).
-    # [ -z $_exclude ] && _exclude="--exclude \"${_exclude}\""
-
-    # todo debug
-    # echo "_exclude: $_exclude"
-
-    # NOTE: Exclude Windows clutter, btrfs snapshots
+    # NOTE: Exclude Windows clutter, local btrfs snapshots (a la windows btrfs driver)
     rsync \
             --archive \
             --exclude '$RECYCLE.BIN' \
             --exclude ".snapshots" \
+            --exclude ".stfolder" \
+            --exclude ".sync" \
             --exclude "System Volume Information" \
             --exclude ".Trash"* \
             --human-readable \
@@ -113,19 +111,14 @@ run_rsync_with_hardlinks() {
 
 test_dir() {
 
-    # If not local dir, parse as ssh remote and run test again
+    # Read: If check fails as local dir, test as remote path
     if [ ! -d "$1" ]; then
 
-        local _user=${1%%@*}
-        local _hostname=${1#*@}
-        local _hostname=${_hostname%:*}
-        local _path=${1#*:}
+        local _user="$(get_ssh_user "$1")"
+        local _host="$(get_ssh_host "$1")"
+        local _path="$(get_ssh_path "$1")"
 
-        [ ! -n "$_user"     ] && echo "ssh username \"$_user\" expected but not provided, exiting"     && exit 1
-        [ ! -n "$_hostname" ] && echo "ssh hostname \"$_hostname\" expected but not provided, exiting" && exit 1
-        [ ! -n "$_path"     ] && echo "ssh path \"$_path\" expected but not provided, exiting"         && exit 1
-
-        if ! ssh "${_user}@${_hostname}" "[ -d '$_path' ]"; then
+        if ! ssh "${_user}@${_host}" "[ -d '$_path' ]"; then
 
             echo "\"$1\" did not resolve as local or remote path, exiting"
             exit 1
@@ -143,19 +136,33 @@ test_dir() {
 # support for any replicated datasets / subvols / filepacks)
 test_fs() {
 
-    # NOTE: Purposefully excluding nfs until better understood how transfering hardlink info works
-    local -r _SUPPORTED_FSTYPE=("ext4" "btrfs")
+    local    _PATH="$1"
+    local -r _SUPPORTED_FSTYPE=("ext4" "btrfs") # NOTE: Purposefully excluding nfs until better understood how transfering hardlink info works
 
-    local _fstype="$(df --output=fstype "$1" | tail -1)"
+    local _SSH_USER="$(get_ssh_user "$_PATH")"
+    local _SSH_HOST="$(get_ssh_host "$_PATH")"
+    local _SSH_PATH="$(get_ssh_path "$_PATH")"
 
-    case "$_fstype" in
+    # Test as remote path
+    if [ -n $_SSH_USER ] && [ -n $_SSH_HOST ] && [ -n "$_SSH_PATH" ]; then
+
+        local _FSTYPE=$(ssh -l "$_SSH_USER" "$_SSH_HOST" "df --output=fstype $_SSH_PATH" | tail -1)
+
+    # Test as local path
+    else
+
+        local _FSTYPE=$(df --output=fstype "$_PATH" | tail -1)
+
+    fi
+
+    case "$_FSTYPE" in
 
         "${_SUPPORTED_FSTYPE[@]}")
             return 0
             ;;
 
         *)
-            echo "Unsupported filesystem type \"$_fstype\" at \"$1\", exiting"
+            echo "Unsupported filesystem type \"$_FSTYPE\" at \"$_PATH\", exiting"
             exit 1
             ;;
 
@@ -184,12 +191,73 @@ exit_non_zero() {
 
 }
 
-test_param() {
+test_optarg() {
 
     # (test for non-zero value in string)
-    [ ! -n "$1" ] && echo "Missing parameter, exiting" && exit 1
+    [ ! -n "$1" ] && echo "Missing optarg, exiting" && exit 1
 
     true
+
+}
+
+parse_options() {
+
+    # Set defaults
+    PRESET=0
+
+    local opt
+
+    while getopts ":s:d:r:" opt; do
+
+        case $opt in
+
+            s)
+                SOURCE="$OPTARG"
+                ;;
+
+            d)
+                DESTINATION="$OPTARG"
+                ;;
+
+            r)
+                PRESET=$OPTARG
+                ;;
+
+            \?)
+                echo "Invalid option: -$OPTARG"
+                exit 1
+                ;;
+
+        esac
+
+    done
+
+    shift $((OPTIND-1))
+
+}
+
+get_ssh_user() {
+
+    _user="${1%%@*}"
+    
+    echo $_user
+
+}
+
+get_ssh_host() {
+
+    _host="${1#*@}"
+    _host="${_host%:*}"
+
+    echo $_host
+
+}
+
+get_ssh_path() {
+
+    _path="${1#*:}"
+
+    echo "$_path"
 
 }
 
@@ -198,34 +266,34 @@ main() {
     # Try to acquire the lock
     if mkdir "$LOCKFILE"; then
 
-        local _preset="$1"
-        local _source="$2"
-        local _destination="$3"
+        parse_options "$@"
 
-        # Test required positional parameters
-        test_param "$_preset"
-        test_param "$_source"
-        test_param "$_destination"
+        # Test minimum required optargs
+        test_optarg "$SOURCE"
+        test_optarg "$DESTINATION"
 
         echo
-        echo "Source:      ${_source}"
-        echo "Destination: ${_destination}"
+        echo "Source:      ${SOURCE}"
+        echo "Destination: ${DESTINATION}"
 
         # Test required directories
-        test_dir "$_source"
-        test_dir "$_destination"
+        test_dir "$SOURCE"
+        test_dir "$DESTINATION"
 
         # Test for supported filesystems
-        # todo bugged
-        # test_fs "$_destination"
+        # todo testing if this is bugged
+        # test_fs "$SOURCE"
+        # test_fs "$DESTINATION"
 
         # Presets:
         #   0 - Performance (ignore hard links).
         #   1 - Preserve hard links (slower on larger datasets).
 
-        # WARNING: Rsync will automatically create destination path if it does not already exist.
-        [ $_preset -eq 0 ] && run_rsync_no_partial     "${_source}/" "${_destination}/"
-        [ $_preset -eq 1 ] && run_rsync_with_hardlinks "${_source}/" "${_destination}/"
+        # WARNING: Rsync will automatically create destination path if it does not already exist!
+        [ $PRESET -eq 0 ] && run_rsync_no_partial     "${SOURCE}/" "${DESTINATION}/"
+        [ $PRESET -eq 1 ] && run_rsync_with_hardlinks "${SOURCE}/" "${DESTINATION}/"
+
+        # todo change above to case statement?
 
         echo
         echo "  Completed successfully!"
