@@ -1,7 +1,7 @@
 services:
-  jellyfin:
+  jellyfin-metadata:
     image: lscr.io/linuxserver/jellyfin:10.9.9
-    container_name: jellyfin
+    container_name: jellyfin-metadata
     environment:
       - PUID=${PUID}
       - PGID=${GUID}

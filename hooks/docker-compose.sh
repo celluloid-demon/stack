@@ -226,7 +226,7 @@ doctor_prowlarr_alt() {
 
 }
 
-doctor_jellyfin() {
+doctor_jellyfin_metadata() {
 
     test_dir "$JELLYFIN_VOLUME_CONFIG"
     test_dir "$JELLYFIN_VOLUME_MOVIES"
@@ -403,7 +403,6 @@ if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ];
     doctor_das_wfpk
     doctor_homeassistant
     doctor_isponsorblocktv
-    doctor_jellyfin
     doctor_jellyfin_music
     doctor_polaris
     doctor_resilio_sync
@@ -435,6 +434,32 @@ stack=immich
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
     doctor_immich
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+fi
+
+#######################################
+#                                     #
+#          JELLYFIN-METADATA          #
+#                                     #
+#######################################
+
+stack=jellyfin-metadata
+
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    doctor_jellyfin_metadata
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 

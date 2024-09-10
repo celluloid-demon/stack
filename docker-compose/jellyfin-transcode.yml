@@ -1,0 +1,32 @@
+# NOTE: Intended for split-setup with a jellyfin instance for scanning
+# media / writing metadata, and another instance for transcoding (presumably
+# this instance will run on a personal machine with a GPU). The metadata
+# instance requires persistent storage. The transcode instance only needs a
+# docker volume.
+
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:10.9.9
+    container_name: jellyfin-transcode
+    environment:
+      - PUID=${PUID}
+      - PGID=${GUID}
+      - TZ=${TZ}
+    ports:
+      - 8096:8096
+      - 8920:8920 #optional
+      - 7359:7359/udp #optional
+      - 1900:1900/udp #optional
+    volumes:
+      - config:/config
+      - data:/data
+    restart: unless-stopped
+
+volumes:
+  config:
+  data:
+    driver: local
+    driver_opts:
+      type: cifs
+      device: ${MEDIA}
+      o: username=xxxx,password=yyyy
