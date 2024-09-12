@@ -368,6 +368,21 @@ test_param() {
 
 }
 
+test_allow() {
+
+    ! grep -q $1 .allow && echo "Service stack \"$1\" not yet allowed on system (add to .allow to change this)." && exit 1
+
+    true
+
+}
+
+doctor_host() {
+
+    test_file  .allow
+    test_allow $STACK
+
+}
+
 doctor_hooks() {
 
     # NOTE: Easier just to test for the docker-compose file for first
@@ -388,12 +403,18 @@ doctor_hooks() {
 load_env
 doctor_docker
 doctor_hooks
+doctor_host
 
 ##############################
 #                            #
 #          MAIN / _          #
 #                            #
 ##############################
+
+# NOTE: Each of these decision trees first attempts to match the user-supplied
+# stack name to a known stack name (`stack=...`) and its healthcheck
+# functions (`doctor_...`). Then, it will verify if the stack is allowed to
+# run on the system (`grep $STACK .allow`).
 
 stack=main
 
@@ -671,5 +692,5 @@ fi
 #                       #
 #########################
 
-# Force exit code zero for any '&&' operations in host script
+# NOTE: Force exit code zero for any '&&' operations in host script
 true

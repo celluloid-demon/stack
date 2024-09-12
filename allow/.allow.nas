@@ -1,0 +1,10 @@
+main
+immich
+jellyfin-metadata
+jellyfin-music
+mealie
+odoo
+portainer
+starr
+timetagger
+vikunja
