@@ -5,7 +5,7 @@
 # docker volume.
 
 services:
-  jellyfin:
+  jellyfin-transcode:
     image: lscr.io/linuxserver/jellyfin:10.9.9
     container_name: jellyfin-transcode
     environment:
@@ -28,5 +28,13 @@ volumes:
     driver: local
     driver_opts:
       type: cifs
-      device: ${MEDIA}
-      o: username=xxxx,password=yyyy
+      device: "//smb.nas.sixducks.duckdns.org/media"
+      o: "username=xxxx,password=yyyy"
+
+      # todo make sure to mount in readonly mode
+
+      # todo make generic docker user with generic docker password? THAT can be saved securely in your git repo 
+
+      # more info: https://stackoverflow.com/questions/75926725/how-to-secure-credentials-for-cifs-volume-in-docker-stack-secrets
+
+      # todo just make the volume with a wizard bash script, password can be passed once and it never has to touch your repo (comment-out above volume definition)
