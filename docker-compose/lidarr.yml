@@ -1,6 +1,7 @@
 services:
   lidarr:
-    image: lscr.io/linuxserver/lidarr:2.4.3.4248-ls6
+    # image: lscr.io/linuxserver/lidarr:2.4.3.4248-ls6
+    image: lscr.io/linuxserver/lidarr:latest
     container_name: lidarr
     depends_on:
       - gluetun
