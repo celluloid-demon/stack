@@ -1,7 +1,7 @@
 services:
   qbittorrent:
     # image: lscr.io/linuxserver/qbittorrent:4.6.6
-    image: lscr.io/linuxserver/qbittorrent:latest
+    image: lscr.io/linuxserver/qbittorrent:${QBITTORRENT_VERSION}
     container_name: qbittorrent
     depends_on:
       - gluetun

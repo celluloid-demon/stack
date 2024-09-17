@@ -1,7 +1,7 @@
 services:
   mylar3:
     # image: lscr.io/linuxserver/mylar3:nightly-9e283397-ls437
-    image: lscr.io/linuxserver/mylar3:latest
+    image: lscr.io/linuxserver/mylar3:${MYLAR3_VERSION}
     container_name: mylar3
     depends_on:
       - gluetun

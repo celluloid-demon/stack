@@ -1,7 +1,7 @@
 services:
   bazarr:
     # image: lscr.io/linuxserver/bazarr:development-version-v1.4.4-beta.35
-    image: lscr.io/linuxserver/bazarr:latest
+    image: lscr.io/linuxserver/bazarr:${BAZARR_VERSION}
     container_name: bazarr
     depends_on:
       - gluetun

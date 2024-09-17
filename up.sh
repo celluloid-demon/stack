@@ -12,6 +12,9 @@ stack=$1
 [ $stack = '_'  ] && stack='main'
 [ $stack = 'ts' ] && stack='tailscale'
 
+# Starr apps entrypoint
+[ $stack = 'starr' ] && . .env && . "$STARR_VERSIONS_FILE"
+
 # Tailscale entrypoint
 [ $stack = 'tailscale' ] && sudo tailscale up && exit 0
 

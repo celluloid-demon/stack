@@ -354,6 +354,39 @@ doctor_backup() {
 
 }
 
+doctor_starr_apps() {
+
+    test_file "$STARR_VERSIONS_FILE"
+
+    # TODO: Everything here is most likely deprecated with docker-compose
+    # itself handling version control (up.sh entrypoint is directly sourcing
+    # versions.env file for compose to use).
+
+    # . "$STARR_VERSIONS_FILE"
+
+    # pull_image lscr.io/linuxserver/bazarr:${BAZARR_VERSION}
+    # pull_image ghcr.io/flaresolverr/flaresolverr:${FLARESOLVERR_VERSION}
+    # pull_image qmcgaw/gluetun:${GLUETUN_VERSION}
+    # pull_image lscr.io/linuxserver/qbittorrent:${QBITTORRENT_VERSION}
+    # pull_image lscr.io/linuxserver/radarr:${RADARR_VERSION}
+    # pull_image lscr.io/linuxserver/sonarr:${SONARR_VERSION}
+    # pull_image lscr.io/linuxserver/lidarr:${LIDARR_VERSION}
+    # pull_image lscr.io/linuxserver/readarr:${READARR_VERSION}
+    # pull_image lscr.io/linuxserver/mylar3:${MYLAR3_VERSION}
+    # pull_image lscr.io/linuxserver/prowlarr:${PROWLARR_VERSION}
+
+}
+
+pull_image() {
+
+    # TODO: deprecated?
+
+    local _image="$1"
+
+    docker image pull "$_image"
+
+}
+
 test_param() {
 
     local    _param=$1
@@ -584,6 +617,7 @@ stack=starr
 
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
+    doctor_starr_apps
     doctor_bazarr
     doctor_gluetun
     doctor_lidarr

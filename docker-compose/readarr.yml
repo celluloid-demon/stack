@@ -1,7 +1,7 @@
 services:
   readarr:
     # image: lscr.io/linuxserver/readarr:develop-0.3.32.2587-ls122
-    image: lscr.io/linuxserver/readarr:latest
+    image: lscr.io/linuxserver/readarr:${READARR_VERSION}
     container_name: readarr
     depends_on:
       - gluetun
