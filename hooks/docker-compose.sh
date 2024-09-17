@@ -186,6 +186,12 @@ doctor_sonarr() {
 
 }
 
+doctor_recyclarr() {
+
+    test_dir "$RECYCLARR_VOLUME_CONFIG"
+
+}
+
 doctor_sonarr_alt() {
 
     test_dir "$SONARR_ALT_VOLUME_CONFIG"
@@ -626,6 +632,7 @@ if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ];
     doctor_qbittorrent
     doctor_radarr
     doctor_readarr
+    doctor_recyclarr
     doctor_sonarr
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
