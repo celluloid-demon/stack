@@ -9,9 +9,9 @@ services:
       - PUID=${PUID}
       - PGID=${GUID}
       - TZ=${TZ}
-    # ports:
-    #   - 8989:8989
-    network_mode: "service:gluetun"
+    ports:
+      - 8989:8989
+    # network_mode: "service:gluetun"
     volumes:
       - ${SONARR_VOLUME_CONFIG}:/config
       - ${SONARR_VOLUME_DATA}:/data # avoid common pitfalls: https://readarr.com/#downloads-v1-docker

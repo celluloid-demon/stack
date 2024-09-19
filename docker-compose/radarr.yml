@@ -9,9 +9,9 @@ services:
       - PUID=${PUID}
       - PGID=${GUID}
       - TZ=${TZ}
-    # ports:
-    #   - 7878:7878
-    network_mode: "service:gluetun"
+    ports:
+      - 7878:7878
+    # network_mode: "service:gluetun"
     volumes:
       - ${RADARR_VOLUME_CONFIG}:/config
       - ${RADARR_VOLUME_DATA}:/data # avoid common pitfalls: https://readarr.com/#downloads-v1-docker

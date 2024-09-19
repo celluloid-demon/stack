@@ -9,9 +9,9 @@ services:
       - PUID=${PUID}
       - PGID=${GUID}
       - TZ=${TZ}
-    # ports:
-    #   - 9696:9696
-    network_mode: "service:gluetun"
+    ports:
+      - 9696:9696
+    # network_mode: "service:gluetun"
     volumes:
       - ${PROWLARR_VOLUME_CONFIG}:/config
     restart: unless-stopped

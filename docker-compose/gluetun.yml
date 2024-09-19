@@ -17,13 +17,12 @@ services:
       - 6881:6881
       - 6881:6881/udp
       - 6767:6767 # bazarr
-      - 8191:8191 # flaresolverr
+      # - 8191:8191 # flaresolverr
       - 8686:8686 # lidarr
       - 8090:8090 # mylar3
-      # - 5454:5454 # notifiarr
-      - 9696:9696 # prowlarr
+      # - 9696:9696 # prowlarr
       - 8080:8080 # qbittorrent
-      - 7878:7878 # radarr
+      # - 7878:7878 # radarr
       - 8787:8787 # readarr
-      - 8989:8989 # sonarr
+      # - 8989:8989 # sonarr
     restart: unless-stopped
