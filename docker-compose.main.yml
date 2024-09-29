@@ -5,7 +5,7 @@ include:
   - docker-compose/isponsorblocktv.yml
   - docker-compose/jellyfin-music.yml
   - docker-compose/navidrome.yml
-  # - docker-compose/polaris.yml
   - docker-compose/resilio-sync.yml
   - docker-compose/stirling-pdf.yml
   - docker-compose/syncthing.yml
+  - docker-compose/it-tools.yml
