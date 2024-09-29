@@ -433,6 +433,13 @@ doctor_hooks() {
 
 }
 
+doctor_navidrome() {
+
+    test_dir "$NAVIDROME_VOLUME_CONFIG"
+    test_dir "$NAVIDROME_VOLUME_MUSIC"
+
+}
+
 ###########################
 #                         #
 #          SETUP          #
@@ -464,6 +471,7 @@ if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ];
     doctor_homeassistant
     doctor_isponsorblocktv
     doctor_jellyfin_music
+    doctor_navidrome
     doctor_polaris
     doctor_resilio_sync
     doctor_stirling_pdf

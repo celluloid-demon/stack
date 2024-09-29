@@ -4,7 +4,8 @@ include:
   - docker-compose/homeassistant.yml
   - docker-compose/isponsorblocktv.yml
   - docker-compose/jellyfin-music.yml
-  - docker-compose/polaris.yml
+  - docker-compose/navidrome.yml
+  # - docker-compose/polaris.yml
   - docker-compose/resilio-sync.yml
   - docker-compose/stirling-pdf.yml
   - docker-compose/syncthing.yml
