@@ -8,7 +8,7 @@ services:
       - LANGS=en_GB
       - TZ=${TZ}
     ports:
-      - 8081:8080 # NOTE: taken by qbittorrent
+      - 8081:8080 # NOTE: 8080 taken by qbittorrent
     volumes:
       - ${SP_VOLUME_TESSDATA}:/usr/share/tessdata #Required for extra OCR languages
       - ${SP_VOLUME_EXTRA_CONFIGS}:/configs

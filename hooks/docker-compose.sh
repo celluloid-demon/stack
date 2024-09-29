@@ -440,6 +440,16 @@ doctor_navidrome() {
 
 }
 
+doctor_paperless() {
+
+    test_dir "$PAPERLESS_VOLUME_CONSUME"
+    test_dir "$PAPERLESS_VOLUME_DATA"
+    test_dir "$PAPERLESS_VOLUME_DB"
+    test_dir "$PAPERLESS_VOLUME_EXPORT"
+    test_dir "$PAPERLESS_VOLUME_MEDIA"
+
+}
+
 ###########################
 #                         #
 #          SETUP          #
@@ -580,6 +590,32 @@ stack=odoo
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
     doctor_odoo
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+fi
+
+###############################
+#                             #
+#          PAPERLESS          #
+#                             #
+###############################
+
+stack=paperless
+
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    doctor_paperless
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 

@@ -4,6 +4,7 @@ jellyfin-metadata
 jellyfin-music
 mealie
 odoo
+paperless
 portainer
 starr
 timetagger
