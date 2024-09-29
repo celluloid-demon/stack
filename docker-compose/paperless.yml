@@ -58,7 +58,7 @@ services:
       - PAPERLESS_TIKA_GOTENBERG_ENDPOINT=http://localhost:3000
       - PAPERLESS_TIKA_ENDPOINT=http://localhost:9998
       - PAPERLESS_TIME_ZONE=${TZ}
-      # - PAPERLESS_URL=${PAPERLESS_URL} # WARNING (x2): This is required if you will be exposing Paperless-ngx on a public domain. Do not include a trailing slash.
+      - PAPERLESS_URL=${PAPERLESS_URL} # WARNING (x2): This is required if you will be exposing Paperless-ngx on a public domain. Do not include a trailing slash.
       - USERMAP_UID=${PUID}
       - USERMAP_GID=${GUID}
       - PAPERLESS_OCR_SKIP_ARCHIVE_FILE=with_text # Skip archive file generation for already ocr'ed documents.
