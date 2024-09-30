@@ -464,6 +464,13 @@ doctor_silverbullet() {
 
 }
 
+doctor_kavita() {
+
+    test_dir "$KAVITA_VOLUME_CONFIG"
+    test_dir "$KAVITA_VOLUME_BOOKS"
+
+}
+
 ###########################
 #                         #
 #          SETUP          #
@@ -495,6 +502,7 @@ if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ];
     doctor_homeassistant
     doctor_isponsorblocktv
     doctor_jellyfin_music
+    doctor_kavita
     doctor_navidrome
     doctor_polaris
     doctor_resilio_sync
