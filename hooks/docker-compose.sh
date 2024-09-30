@@ -450,6 +450,13 @@ doctor_paperless() {
 
 }
 
+doctor_haptic() {
+
+    test_dir "$HAPTIC_VOLUME_CONFIG"
+    test_dir "$HAPTIC_VOLUME_DATA"
+
+}
+
 ###########################
 #                         #
 #          SETUP          #
