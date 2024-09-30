@@ -1,0 +1,13 @@
+services:
+  silverbullet:
+    image: zefhemel/silverbullet:latest
+    container_name: silverbullet
+    env_file:
+      - ${SB_ENV_FILE}
+    # environment:
+    #   - SB_USER=admin:admin
+    ports:
+      - 3000:3000
+    volumes:
+      - ${SB_VOLUME_SPACE}:/space
+    restart: unless-stopped

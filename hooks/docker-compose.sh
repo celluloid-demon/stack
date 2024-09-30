@@ -457,6 +457,13 @@ doctor_haptic() {
 
 }
 
+doctor_silverbullet() {
+
+    test_file "$SB_ENV_FILE"
+    test_dir  "$SB_VOLUME_SPACE"
+
+}
+
 ###########################
 #                         #
 #          SETUP          #
@@ -491,6 +498,7 @@ if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ];
     doctor_navidrome
     doctor_polaris
     doctor_resilio_sync
+    doctor_silverbullet
     doctor_stirling_pdf
     doctor_syncthing
 
