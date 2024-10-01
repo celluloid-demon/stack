@@ -490,6 +490,13 @@ doctor_n8n() {
 
 }
 
+doctor_calibre_web() {
+
+    test_dir "$CALIBRE_VOLUME_CONFIG"
+    test_dir "$CALIBRE_VOLUME_BOOKS"
+
+}
+
 ###########################
 #                         #
 #          SETUP          #
@@ -517,6 +524,7 @@ stack=main
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
     doctor_audiobookshelf
+    doctor_calibre_web
     doctor_das_wfpk
     doctor_homeassistant
     doctor_isponsorblocktv

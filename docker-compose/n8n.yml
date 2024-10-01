@@ -47,6 +47,8 @@ services:
     command: worker
     depends_on:
       - n8n
+    environment:
+      - N8N_ENCRYPTION_KEY
 
   postgres:
     image: postgres:16
