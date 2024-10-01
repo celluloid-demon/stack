@@ -35,6 +35,9 @@ services:
   n8n:
     <<: *shared
     container_name: n8n
+    # WARNING: Use this for local development and testing. It isn't safe to use it in production.
+    # To be able to use webhooks for trigger nodes of external services like GitHub, n8n has to be reachable from the web. n8n has a tunnel service which redirects requests from n8n's servers to your local n8n instance.
+    # command: 'start --tunnel'
     ports:
       - 5678:5678
 
