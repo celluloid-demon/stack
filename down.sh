@@ -9,6 +9,9 @@ stack=$1
 # Aliases
 [ $stack = '_' ] && stack='main'
 
+# n8n entrypoint
+[ $stack = 'n8n' ] && . .env && . "$N8N_ENV_FILE"
+
 # Starr apps entrypoint
 [ $stack = 'starr' ] && . .env && . "$STARR_VERSIONS_FILE"
 

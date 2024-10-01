@@ -63,6 +63,14 @@ test_image() {
 
 }
 
+test_executable() {
+
+    [ ! -x "$1" ] && echo "$1 not executable, exiting" && exit 1
+
+    true
+
+}
+
 test_owner() {
 
     # 1: file
@@ -471,6 +479,17 @@ doctor_kavita() {
 
 }
 
+doctor_n8n() {
+
+    test_file       "$N8N_ENV_FILE"
+    test_file       "$N8N_INIT_DATA"
+    test_executable "$N8N_INIT_DATA"
+    test_dir        "$N8N_VOLUME_DATA"
+    test_dir        "$N8N_VOLUME_DB"
+    test_dir        "$N8N_VOLUME_REDIS"
+
+}
+
 ###########################
 #                         #
 #          SETUP          #
@@ -587,6 +606,32 @@ stack=mealie
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
     doctor_mealie
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+fi
+
+#########################
+#                       #
+#          N8N          #
+#                       #
+#########################
+
+stack=n8n
+
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    doctor_n8n
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 

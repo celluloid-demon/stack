@@ -3,6 +3,7 @@ immich
 jellyfin-metadata
 jellyfin-music
 mealie
+n8n
 odoo
 paperless
 portainer

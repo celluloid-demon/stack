@@ -12,6 +12,9 @@ stack=$1
 [ $stack = '_'  ] && stack='main'
 [ $stack = 'ts' ] && stack='tailscale'
 
+# n8n entrypoint
+[ $stack = 'n8n' ] && . .env && . "$N8N_ENV_FILE"
+
 # Starr apps entrypoint
 [ $stack = 'starr' ] && . .env && . "$STARR_VERSIONS_FILE"
 
