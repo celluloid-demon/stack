@@ -9,7 +9,7 @@ Requirements:
 - A configured `.env` file in project root.
 - A configured `.allow` file in project root
   - NOTE: I run this same repo on multiple devices - the allow list is mostly to prevent me from accidentally pulling unwanted images on the wrong machine.
-  - NOTE: Names in the allow list are docker compose project names, which `up.sh` gets from `docker-compose.<PROJECT_NAME>.yml`.
+  - NOTE: Names in the allow list are docker compose project names, which `up.sh` gets from STACK_NAME in `docker-compose.<STACK_NAME>.yml`.
 
 Quickstart:
 
