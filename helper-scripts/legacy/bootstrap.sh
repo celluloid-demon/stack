@@ -18,49 +18,51 @@ DEBUG=0
 #   STEAMOS
 #   UBUNTU_WSL
 
-OS=FEDORA_WSL
+# OS=FEDORA_WSL # DEPRECATED
 
 # Declare constants
-APPLICATIONS="${HOME}/Applications"
-# CACHE="/cache/jonathan"
-CACHE="/cache.jonathan"
-DOCUMENTS="${HOME}/Documents"
-GIT="${HOME}/git"
-SCRIPT_FOLDER="$(dirname "$0")"
-SYSTEM_BIN="/usr/local/bin"
-SYSTEM_UNITS="/etc/systemd/system"
+readonly APPLICATIONS="${HOME}/Applications"
+# readonly CACHE="/cache/jonathan"
+readonly CACHE="/cache.jonathan"
+readonly DOCUMENTS="${HOME}/Documents"
+readonly GIT="${HOME}/git"
+readonly LIB='./lib'
+readonly SCRIPT_FOLDER="$(dirname "$0")"
+readonly SYSTEM_BIN="/usr/local/bin"
+readonly SYSTEM_UNITS="/etc/systemd/system"
 
-RESOURCES="${SCRIPT_FOLDER}/resources"
+readonly RESOURCES="${SCRIPT_FOLDER}/resources"
 
 # WSL
-WIN_USER="Jonathan"
-WIN_HOME="/mnt/c/Users/${WIN_USER}"
+readonly WIN_USER="Jonathan"
+readonly WIN_HOME="/mnt/c/Users/${WIN_USER}"
 
-# Source libraries
-. "$LIB_TEST"
+# Libraries
+readonly ENV="${LIB}/env.sh"
+readonly ERROR="${LIB}/error.sh"
+readonly TEST="${LIB}/test.sh"
+
+# Source external libraries
+. "$ENV"
+. "$ERROR"
+. "$TEST"
+
+###########################
+#                         #
+#          SETUP          #
+#                         #
+###########################
+
+load_env
 
 do=1
 if [ $OS = FEDORA ] && [ $do -eq 1 ]; then
 
-    # NOTE: This setup assumes that /home is a btrfs subvol '@home' that's
-    # mounted on a separate physical disk drive (read: applications installed
-    # locally here would benefit greatly from symlinks pointing to folders on
-    # an SSD)
-
-    sudo mkdir -p "$CACHE"
-
-    # (enforce top-level write-access, but don't bother with sluggish recursive operations)
-    sudo chown ${USER}.${USER} "$CACHE"
-
-    mkdir -p "${CACHE}/Applications"
-    mkdir -p "${CACHE}/git"
-
-    [ ! -d "$APPLICATIONS" ] && ln -s "${CACHE}/Applications" "${HOME}/Applications"
-    [ ! -d "$GIT" ]          && ln -s "${CACHE}/git"          "${HOME}/git"
+    mkdir -p "${HOME}/git"
 
 fi
 
-do=1
+do=0
 if [ $OS = FEDORA_WSL ] && [ $do -eq 1 ]; then
 
     # NOTE: This setup assumes that the whole of user's home directory, as
@@ -77,7 +79,7 @@ if [ $OS = FEDORA_WSL ] && [ $do -eq 1 ]; then
 
 fi
 
-do=1
+do=0
 if [ $OS = UBUNTU_WSL ] && [ $do -eq 1 ]; then
 
     # NOTE: This setup assumes that the whole of user's home directory, as
@@ -657,13 +659,9 @@ set_password() {
     
     [ $DEBUG -eq 1 ] && echo $func
 
-    if [ $OS = FEDORA ]; then
+    echo $OS
 
-        password_status=$(sudo passwd --status "$USER" | awk '{print $2}')
-
-        if [ "$password_status" = "PS" ]; then FLAG_password_set=1; fi
-
-    elif [ $OS = FEDORA_WSL ]; then
+    if [ $OS = FEDORA* ]; then
 
         password_status=$(sudo passwd --status "$USER" | awk '{print $2}')
 
@@ -890,6 +888,7 @@ from_dnf_install_packages() {
 
     PACKAGES_COMMON="byobu gh git krfb nano pv rsync tldr tree"
     PACKAGES_WSL_ONLY="lightdm"
+    PACKAGES_DOCKER="byobu gh git nano pv rsync tldr tree"
 
     if [ $OS = FEDORA ]; then
 
@@ -912,6 +911,13 @@ from_dnf_install_packages() {
         sudo dnf install -y $PACKAGES_COMMON $PACKAGES_VSCODE
 
         sudo dnf groupinstall -y "Development Tools" "Development Libraries"
+
+    fi
+
+    if [ $OS = FEDORA_DOCKER ]; then
+
+        sudo dnf upgrade -y
+        sudo dnf install -y $PACKAGES_DOCKER
 
     fi
 
@@ -1439,14 +1445,11 @@ EOF
 
 main() {
 
-    ###########################
-    #                         #
-    #          BEGIN          #
-    #                         #
-    ###########################
-
-    # todo placeholder
-    echo "Hello world."
+    # ###########################
+    # #                         #
+    # #          BEGIN          #
+    # #                         #
+    # ###########################
 
     # set_password
 
@@ -1473,7 +1476,7 @@ main() {
 
     # from_apt_install_packages
 
-    # from_dnf_install_packages
+    from_dnf_install_packages
 
     # from_pacman_install_packages
 
@@ -1508,8 +1511,6 @@ main() {
     # configure_ssh
 
     # create_images_subvol
-
-    exit_zero
 
 }
 
