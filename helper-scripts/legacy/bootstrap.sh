@@ -3,12 +3,15 @@
 # Description: Helper snippets to get Fedora up and running.
 
 # Exit on error
-set -e
+set -eE
+
+trap 'exit_error $LINENO' ERR
+trap 'exit_zero' EXIT
 
 # Declare switches (to control program flow)
 DEBUG=0
 
-# Valid switches:
+# Valid OS switches:
 
 #   FEDORA
 #   FEDORA_WSL
@@ -32,6 +35,9 @@ RESOURCES="${SCRIPT_FOLDER}/resources"
 # WSL
 WIN_USER="Jonathan"
 WIN_HOME="/mnt/c/Users/${WIN_USER}"
+
+# Source libraries
+. "$LIB_TEST"
 
 do=1
 if [ $OS = FEDORA ] && [ $do -eq 1 ]; then
@@ -1439,66 +1445,69 @@ main() {
     #                         #
     ###########################
 
-    set_password
+    # todo placeholder
+    echo "Hello world."
 
-    configure_wsl
+    # set_password
 
-    configure_home_btrfs
+    # configure_wsl
 
-    install_steamos_tweak_cpu
-    install_steamos_tweak_mglru
-    install_steamos_tweak_watchdog
-    install_steamos_tweak_memory
-    install_steamos_tweak_io_scheduler
-    install_steamos_tweak_dragon
+    # configure_home_btrfs
 
-    create_steamapps_subvol
+    # install_steamos_tweak_cpu
+    # install_steamos_tweak_mglru
+    # install_steamos_tweak_watchdog
+    # install_steamos_tweak_memory
+    # install_steamos_tweak_io_scheduler
+    # install_steamos_tweak_dragon
 
-    ######################################
-    #                                    #
-    #          STAGE 1 PACKAGES          #
-    #                                    #
-    ######################################
+    # create_steamapps_subvol
 
-    configure_rpmfusion
+    # ######################################
+    # #                                    #
+    # #          STAGE 1 PACKAGES          #
+    # #                                    #
+    # ######################################
 
-    from_apt_install_packages
+    # configure_rpmfusion
 
-    from_dnf_install_packages
+    # from_apt_install_packages
 
-    from_pacman_install_packages
+    # from_dnf_install_packages
 
-    ##################################
-    #                                #
-    #          End STAGE 1           #
-    #                                #
-    ##################################
+    # from_pacman_install_packages
 
-    configure_git
+    # ##################################
+    # #                                #
+    # #          End STAGE 1           #
+    # #                                #
+    # ##################################
 
-    ###############################################
-    #                                             #
-    #          STAGE 2 PACKAGES                   #
-    #                                             #
-    #            DEPENDS ON: git, flatpak         #
-    #                                             #
-    ###############################################
+    # configure_git
 
-    from_flathub_install_packages
+    # ###############################################
+    # #                                             #
+    # #          STAGE 2 PACKAGES                   #
+    # #                                             #
+    # #            DEPENDS ON: git, flatpak         #
+    # #                                             #
+    # ###############################################
 
-    from_snap_install_packages
+    # from_flathub_install_packages
 
-    from_repo_install_rsync_helper_scripts
+    # from_snap_install_packages
 
-    from_repo_install_yt_dlp
+    # from_repo_install_rsync_helper_scripts
 
-    from_web_install_discord
+    # from_repo_install_yt_dlp
 
-    install_shared_config_nix
+    # from_web_install_discord
 
-    configure_ssh
+    # install_shared_config_nix
 
-    create_images_subvol
+    # configure_ssh
+
+    # create_images_subvol
 
     exit_zero
 
