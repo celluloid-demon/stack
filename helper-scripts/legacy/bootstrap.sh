@@ -869,12 +869,21 @@ from_apt_install_packages() {
     PACKAGES="byobu flatpak gh git htop podman pv rsync tldr tree"
     PACKAGES_DEV="build-essential"
     PACKAGES_TRANSCODING="ffmpeg"
+    PACKAGES_PROXMOX='byobu gh git nano pv rsync tldr tree'
 
     if [ $OS = UBUNTU_WSL ]; then
 
         sudo apt update
         sudo apt upgrade -y
         sudo apt install -y $PACKAGES $PACKAGES_DEV $PACKAGES_TRANSCODING
+
+    fi
+
+    if [ $OS = PROXMOX ]; then
+
+        sudo apt update
+        sudo apt upgrade -y
+        sudo apt install -y $PACKAGES_PROXMOX
 
     fi
 
@@ -1474,7 +1483,7 @@ main() {
 
     # configure_rpmfusion
 
-    # from_apt_install_packages
+    from_apt_install_packages
 
     from_dnf_install_packages
 
