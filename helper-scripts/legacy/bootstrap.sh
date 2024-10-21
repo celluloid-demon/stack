@@ -870,6 +870,7 @@ from_apt_install_packages() {
     PACKAGES_DEV="build-essential"
     PACKAGES_TRANSCODING="ffmpeg"
     PACKAGES_PROXMOX='byobu gh git nano pv rsync tldr tree'
+    PACKAGES_DOCKER='apt-utils'
 
     if [ $OS = UBUNTU_WSL ]; then
 
