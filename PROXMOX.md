@@ -8,3 +8,5 @@ This script provides options for managing Proxmox VE repositories, including dis
 __Setting up NFS storage:__
 
 - If exporting your NFS share from TrueNAS (which uses v3 by default - at time of writing), remember to __set v3 when adding the share__ to proxmox!
+- NOTE: Proxmox 8 (at time of writing) has issues correctly unmounting/removing NFS shares (confirm with `df -h`). To completely remote/unmount an NFS share from proxmox, try: `umount -f -l /mnt/pve/<share>`.
+- __WARNING: YOU MAY HAVE TO DO THE ABOVE FOR *EVERY* PROXMOX NODE IN YOUR CLUSTER TO COMPLETELY AND CORRECTLY REMOVE THE NFS SHARE FROM IT.__
