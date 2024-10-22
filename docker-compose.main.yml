@@ -6,7 +6,7 @@ include:
   # - docker-compose/it-tools.yml
   # - docker-compose/jellyfin-music.yml
   # - docker-compose/kavita.yml
-  - docker-compose/navidrome.yml
+  - docker/compose/navidrome.yml
   # - docker-compose/resilio-sync.yml
   # - docker-compose/stirling-pdf.yml
   # - docker-compose/syncthing.yml
