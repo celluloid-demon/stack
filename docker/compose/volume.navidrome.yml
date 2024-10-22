@@ -1,0 +1,11 @@
+volumes:
+  navidrome-config:
+    driver_opts:
+      type: "nfs"
+      o: "addr=${NFS_SERVER},nolock,soft,nfsvers=${NFS_VERSION}"
+      device: ":${NAVIDROME_VOLUME_CONFIG}"
+  navidrome-music:
+    driver_opts:
+      type: "nfs"
+      o: "addr=${NFS_SERVER},nolock,soft,nfsvers=${NFS_VERSION}"
+      device: ":${NAVIDROME_VOLUME_MUSIC}"
