@@ -12,6 +12,10 @@ stack=$1
 [ $stack = '_'  ] && stack='main'
 [ $stack = 'ts' ] && stack='tailscale'
 
+# Local NFS server entrypoint
+[ ! -f .nfs ] && echo ".nfs file missing" && exit 1
+. .nfs && export NFS_SERVER
+
 # Legacy bootstrap entrypoint
 [ $stack = 'bootstrap' ] && . .env && sudo helper-scripts/legacy/bootstrap.sh && exit 0
 

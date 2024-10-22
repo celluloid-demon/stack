@@ -1,0 +1,12 @@
+include:
+  # - docker-compose/audiobookshelf.yml
+  # - docker-compose/download-audio-stream-wfpk.yml
+  # - docker-compose/homeassistant.yml
+  # - docker-compose/isponsorblocktv.yml
+  # - docker-compose/it-tools.yml
+  # - docker-compose/jellyfin-music.yml
+  # - docker-compose/kavita.yml
+  - docker-compose/navidrome.yml
+  # - docker-compose/resilio-sync.yml
+  # - docker-compose/stirling-pdf.yml
+  # - docker-compose/syncthing.yml
