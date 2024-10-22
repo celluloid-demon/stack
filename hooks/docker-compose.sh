@@ -398,19 +398,19 @@ stack=main
 
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-    doctor_audiobookshelf
-    doctor_calibre_web
-    doctor_das_wfpk
-    doctor_homeassistant
-    doctor_isponsorblocktv
-    doctor_jellyfin_music
-    doctor_kavita
+    # doctor_audiobookshelf
+    # doctor_calibre_web
+    # doctor_das_wfpk
+    # doctor_homeassistant
+    # doctor_isponsorblocktv
+    # doctor_jellyfin_music
+    # doctor_kavita
     doctor_navidrome
-    doctor_polaris
-    doctor_resilio_sync
-    doctor_silverbullet
-    doctor_stirling_pdf
-    doctor_syncthing
+    # doctor_polaris
+    # doctor_resilio_sync
+    # doctor_silverbullet
+    # doctor_stirling_pdf
+    # doctor_syncthing
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 

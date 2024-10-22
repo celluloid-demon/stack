@@ -88,6 +88,7 @@ $RECYCLE.BIN/
 .env
 *.log
 *-log
+.nfs
 docker-compose._.yml
 docker-polaris
 get-docker.sh
