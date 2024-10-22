@@ -15,3 +15,6 @@ services:
       - navidrome-config:/data
       - navidrome-music:/music:ro
     restart: unless-stopped
+
+include:
+  - docker-compose/volume.navidrome.yml
