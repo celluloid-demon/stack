@@ -1,0 +1,85 @@
+# n8n with PostgreSQL and Worker
+# ==============================
+
+# More info: https://github.com/n8n-io/n8n-hosting/tree/main/docker-compose/withPostgresAndWorker
+
+x-shared: &shared
+  image: docker.n8n.io/n8nio/n8n:1.60.1
+  depends_on:
+    redis:
+      condition: service_healthy
+    postgres:
+      condition: service_healthy
+  env_file:
+    - ${N8N_ENV_FILE}
+  environment:
+    - DB_TYPE=postgresdb
+    - DB_POSTGRESDB_HOST=postgres
+    - DB_POSTGRESDB_PORT=5432
+    - DB_POSTGRESDB_DATABASE=${N8N_POSTGRES_DB}
+    - DB_POSTGRESDB_USER=${N8N_POSTGRES_NON_ROOT_USER}
+    - DB_POSTGRESDB_PASSWORD=${N8N_POSTGRES_NON_ROOT_PASSWORD}
+    - EXECUTIONS_MODE=queue
+    - GENERIC_TIMEZONE=${TZ}
+    - QUEUE_BULL_REDIS_HOST=redis
+    - QUEUE_HEALTH_CHECK_ACTIVE=true
+    - TZ=${TZ}
+  links:
+    - postgres
+    - redis
+  volumes:
+    - ${N8N_VOLUME_DATA}:/home/node/.n8n
+  restart: always
+
+services:
+  n8n:
+    <<: *shared
+    container_name: n8n
+    # WARNING: Use this for local development and testing. It isn't safe to use it in production.
+    # To be able to use webhooks for trigger nodes of external services like GitHub, n8n has to be reachable from the web. n8n has a tunnel service which redirects requests from n8n's servers to your local n8n instance.
+    # command: 'start --tunnel'
+    ports:
+      - 5678:5678
+
+  n8n-worker:
+    <<: *shared
+    container_name: n8n-worker
+    command: worker
+    depends_on:
+      - n8n
+    environment:
+      - N8N_ENCRYPTION_KEY
+
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=${N8N_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${N8N_POSTGRES_PASSWORD}
+      - POSTGRES_DB=${N8N_POSTGRES_DB}
+      - POSTGRES_NON_ROOT_USER=${N8N_POSTGRES_NON_ROOT_USER}
+      - POSTGRES_NON_ROOT_PASSWORD=${N8N_POSTGRES_NON_ROOT_PASSWORD}
+      - TZ=${TZ}
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -h localhost -U ${N8N_POSTGRES_USER} -d ${N8N_POSTGRES_DB}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - ${N8N_VOLUME_DB}:/var/lib/postgresql/data
+      - ${N8N_INIT_DATA}:/docker-entrypoint-initdb.d/init-data.sh
+    restart: always
+
+  redis:
+    image: redis:6-alpine
+    container_name: redis
+    environment:
+      - TZ=${TZ}
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - ${N8N_VOLUME_REDIS}:/data
+    restart: always
