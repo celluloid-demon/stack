@@ -1,0 +1,17 @@
+services:
+  prowlarr:
+    # image: lscr.io/linuxserver/prowlarr:1.21.2
+    image: lscr.io/linuxserver/prowlarr:${PROWLARR_VERSION}
+    container_name: prowlarr
+    depends_on:
+      - gluetun
+    environment:
+      - PUID=${PUID}
+      - PGID=${GUID}
+      - TZ=${TZ}
+    ports:
+      - 9696:9696
+    # network_mode: "service:gluetun"
+    volumes:
+      - ${PROWLARR_VOLUME_CONFIG}:/config
+    restart: unless-stopped

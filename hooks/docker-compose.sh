@@ -619,14 +619,14 @@ stack=starr
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
     doctor_starr_apps
-    doctor_bazarr
+    # doctor_bazarr
     doctor_gluetun
-    doctor_lidarr
-    doctor_mylar3
+    # doctor_lidarr
+    # doctor_mylar3
     doctor_prowlarr
     doctor_qbittorrent
     doctor_radarr
-    doctor_readarr
+    # doctor_readarr
     doctor_recyclarr
     doctor_sonarr
 

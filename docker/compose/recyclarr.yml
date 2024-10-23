@@ -1,0 +1,15 @@
+services:
+  recyclarr:
+    image: ghcr.io/recyclarr/recyclarr:${RECYCLARR_VERSION}
+    container_name: recyclarr
+    depends_on:
+      - gluetun
+    environment:
+      - CRON_SCHEDULE=@daily
+      # - RECYCLARR_CREATE_CONFIG=true # more info: https://recyclarr.dev/wiki/installation/docker/
+      - TZ=${TZ}
+    # network_mode: "service:gluetun"
+    user: 1000:1000
+    volumes:
+      - ${RECYCLARR_VOLUME_CONFIG}:/config
+    restart: unless-stopped

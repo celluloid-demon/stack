@@ -1,0 +1,19 @@
+services:
+  qbittorrent:
+    # image: lscr.io/linuxserver/qbittorrent:4.6.6
+    image: lscr.io/linuxserver/qbittorrent:${QBITTORRENT_VERSION}
+    container_name: qbittorrent
+    depends_on:
+      - gluetun
+    environment:
+      - PUID=${PUID}
+      - PGID=${GUID}
+      - TZ=${TZ}
+      - WEBUI_PORT=8080 # see: https://docs.linuxserver.io/images/docker-qbittorrent/#webui_port-variable
+    # ports:
+    #   - 8080:8080
+    network_mode: "service:gluetun"
+    volumes:
+      - ${QBITTORRENT_VOLUME_CONFIG}:/config
+      - ${QBITTORRENT_VOLUME_DOWNLOADS}:/data/downloads # see: https://wiki.servarr.com/sonarr/system#docker-bad-remote-path-mapping
+    restart: unless-stopped

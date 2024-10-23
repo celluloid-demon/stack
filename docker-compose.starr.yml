@@ -1,0 +1,12 @@
+include:
+  # - docker/compose/bazarr.yml
+  - docker/compose/flaresolverr.yml
+  - docker/compose/gluetun.yml
+  - docker/compose/qbittorrent.yml
+  - docker/compose/radarr.yml
+  - docker/compose/sonarr.yml
+  # - docker/compose/lidarr.yml
+  # - docker/compose/readarr.yml
+  # - docker/compose/mylar3.yml
+  - docker/compose/prowlarr.yml
+  - docker/compose/recyclarr.yml
