@@ -1,0 +1,3 @@
+include:
+  - docker/compose/nginx-proxy-manager.yml
+  - docker/compose/pihole.yml
