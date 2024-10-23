@@ -1,0 +1,103 @@
+# Docker Compose file for running paperless from the docker container registry.
+# This file contains everything paperless needs to run.
+# Paperless supports amd64, arm and arm64 hardware.
+# All compose files of paperless configure paperless in the following way:
+#
+# - Paperless is (re)started on system boot, if it was running before shutdown.
+# - Docker volumes for storing data are managed by Docker.
+# - Folders for importing and exporting files are created in the same directory
+#   as this file and mounted to the correct folders inside the container.
+# - Paperless listens on port 8000.
+#
+# SQLite is used as the database. The SQLite file is stored in the data volume.
+#
+# In addition to that, this Docker Compose file adds the following optional
+# configurations:
+#
+# - Apache Tika and Gotenberg servers are started with paperless and paperless
+#   is configured to use these services. These provide support for consuming
+#   Office documents (Word, Excel, Power Point and their LibreOffice counter-
+#   parts.
+#
+# To install and update paperless with this file, do the following:
+#
+# - Copy this file as 'docker-compose.yml' and the files 'docker-compose.env'
+#   and '.env' into a folder.
+# - Run 'docker compose pull'.
+# - Run 'docker compose run --rm webserver createsuperuser' to create a user.
+# - Run 'docker compose up -d'.
+#
+# For more extensive installation and update instructions, refer to the
+# documentation.
+
+##############################################################################
+#                                                                            #
+# NOTE: Certain configuration options may be set via the UI. This currently  #
+# includes common OCR related settings and some frontend settings. If set,   #
+# these will take preference over the settings via environment variables. If #
+# not set, the environment setting or applicable default will be utilized    #
+# instead.                                                                   #
+#                                                                            #
+##############################################################################
+
+services:
+  webserver:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    container_name: paperless
+    depends_on:
+      - broker
+      - gotenberg
+      - tika
+    environment:
+      - PAPERLESS_OCR_LANGUAGE=eng # The default language to use for OCR.
+      - PAPERLESS_OCR_PAGES=1 # Consider setting PAPERLESS_OCR_PAGES to 1, so that paperless will only OCR the first page of your documents. In most cases, this page contains enough information to be able to find it.
+      - PAPERLESS_REDIS=redis://broker:6379
+      - PAPERLESS_TASK_WORKERS=2
+      - PAPERLESS_THREADS_PER_WORKER=1 # The Raspberry Pi models 3 and up have 4 cores, meaning that paperless will use 2 workers and 2 threads per worker. This may result in sluggish response times during consumption, so you might want to lower these settings (example: 2 workers and 1 thread to always have some computing power left for other tasks).
+      - PAPERLESS_TIKA_ENABLED=1
+      - PAPERLESS_TIKA_GOTENBERG_ENDPOINT=http://localhost:3000
+      - PAPERLESS_TIKA_ENDPOINT=http://localhost:9998
+      - PAPERLESS_TIME_ZONE=${TZ}
+      - PAPERLESS_URL=${PAPERLESS_URL} # WARNING (x2): This is required if you will be exposing Paperless-ngx on a public domain. Do not include a trailing slash.
+      - USERMAP_UID=${PUID}
+      - USERMAP_GID=${GUID}
+      - PAPERLESS_OCR_SKIP_ARCHIVE_FILE=with_text # Skip archive file generation for already ocr'ed documents.
+      - PAPERLESS_WEBSERVER_WORKERS=1 # This will save some memory.
+      # Set if accessing paperless via a domain subpath e.g. https://domain.com/PATHPREFIX and using a reverse-proxy like traefik or nginx
+      # - PAPERLESS_FORCE_SCRIPT_NAME=/PATHPREFIX
+      # - PAPERLESS_STATIC_URL=/PATHPREFIX/static/ # trailing slash required
+    ports:
+      - 19606:8000
+    volumes:
+      - ${PAPERLESS_VOLUME_DATA}:/usr/src/paperless/data # This is where paperless stores all its data (search index, SQLite database, classification model, etc).
+      - ${PAPERLESS_VOLUME_MEDIA}:/usr/src/paperless/media # This is where your documents and thumbnails are stored.
+      - ${PAPERLESS_VOLUME_EXPORT}:/usr/src/paperless/export
+      - ${PAPERLESS_VOLUME_CONSUME}:/usr/src/paperless/consume # This is where your documents should go to be consumed.
+    restart: unless-stopped
+
+  # Paperless can make use of Tika and Gotenberg for parsing and converting
+  # "Office" documents (such as ".doc", ".xlsx" and ".odt"). Tika and
+  # Gotenberg are also needed to allow parsing of E-Mails (.eml).
+
+  gotenberg:
+    image: docker.io/gotenberg/gotenberg:8.7
+    container_name: gotenberg
+    # The gotenberg chromium route is used to convert .eml files. We do not
+    # want to allow external content like tracking pixels or even javascript.
+    command:
+      - "gotenberg"
+      - "--chromium-disable-javascript=true"
+      - "--chromium-allow-list=file:///tmp/.*"
+    restart: unless-stopped
+
+  tika:
+    image: docker.io/apache/tika:latest
+    container_name: tika
+    restart: unless-stopped
+
+  broker:
+    image: docker.io/library/redis:7
+    container_name: paperless-db
+    volumes:
+      - ${PAPERLESS_VOLUME_DB}:/data
+    restart: unless-stopped
