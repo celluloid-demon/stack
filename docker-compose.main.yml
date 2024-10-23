@@ -1,6 +1,6 @@
 include:
   - docker/compose/audiobookshelf.yml
-  - docker/compose/download-audio-stream-wfpk.yml
+  # - docker/compose/download-audio-stream-wfpk.yml
   - docker/compose/homeassistant.yml
   - docker/compose/isponsorblocktv.yml
   - docker/compose/it-tools.yml
