@@ -12,9 +12,6 @@ services:
       - 4533:4533
     user: ${PUID}:${GUID} # should be owner of volumes
     volumes:
-      - navidrome-config:/data
-      - navidrome-music:/music:ro
+      - ${NAVIDROME_VOLUME_CONFIG}:/data
+      - ${NAVIDROME_VOLUME_MUSIC}:/music:ro
     restart: unless-stopped
-
-include:
-  - docker/compose/volume.navidrome.yml

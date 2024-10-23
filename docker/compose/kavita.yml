@@ -1,0 +1,16 @@
+services:
+  kavita:
+    image: jvmilazz0/kavita:latest
+    container_name: kavita
+    environment:
+      - PUID=${PUID}
+      - PGID=${GUID}
+      - TZ=${TZ}
+    ports:
+      - 5000:5000
+    volumes:
+      - ${KAVITA_VOLUME_CONFIG}:/kavita/config
+      - ${KAVITA_VOLUME_BOOKS}:/books
+      # - ./comics:/comics
+      # - ./manga:/manga
+    restart: unless-stopped

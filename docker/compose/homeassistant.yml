@@ -1,0 +1,20 @@
+services:
+  homeassistant:
+    image: lscr.io/linuxserver/homeassistant:2024.8.2
+    container_name: homeassistant
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    # devices:
+    #   - /path/to/device:/path/to/device # for passing through USB, serial or gpio devices
+    environment:
+      - PUID=${PUID}
+      - PGID=${GUID}
+      - TZ=${TZ}
+    network_mode: host
+    # ports:
+    #   - 8123:8123 # optional (discarded in host network mode)
+    volumes:
+      - /var/run/dbus:/var/run/dbus:ro # for accessing bluetooth see: https://docs.linuxserver.io/images/docker-homeassistant/#accessing-bluetooth-device
+      - ${HASS_VOLUME_CONFIG}:/config
+    restart: unless-stopped

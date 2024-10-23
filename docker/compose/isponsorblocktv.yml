@@ -1,0 +1,10 @@
+services:
+  iSponsorBlockTV:
+    image: ghcr.io/dmunozv04/isponsorblocktv:latest
+    container_name: iSponsorBlockTV
+    environment:
+      - TZ=${TZ}
+    network_mode: host
+    volumes:
+    - ${ISBTV_VOLUME_DATA}:/app/data
+    restart: unless-stopped

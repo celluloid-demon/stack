@@ -1,0 +1,17 @@
+services:
+  stirling-pdf:
+    image: frooodle/s-pdf:0.28.3
+    container_name: stirling-pdf
+    environment:
+      - DOCKER_ENABLE_SECURITY=false
+      - INSTALL_BOOK_AND_ADVANCED_HTML_OPS=false
+      - LANGS=en_GB
+      - TZ=${TZ}
+    ports:
+      - 8081:8080 # NOTE: 8080 taken by qbittorrent
+    volumes:
+      - ${SP_VOLUME_TESSDATA}:/usr/share/tessdata #Required for extra OCR languages
+      - ${SP_VOLUME_EXTRA_CONFIGS}:/configs
+#      - ./customFiles:/customFiles/
+#      - ./logs:/logs/
+    restart: unless-stopped

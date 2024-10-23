@@ -1,0 +1,15 @@
+services:
+  download-audio-stream:
+    image: download-audio-stream
+    build: local/download-audio-stream
+    container_name: download-audio-stream-wfpk
+    environment:
+      - CRON_COMMENT=${DAS_WFPK_CRON_COMMENT}
+      - CRON_SCHEDULE=${DAS_WFPK_CRON_SCHEDULE}
+      - DURATION=${DAS_WFPK_DURATION}
+      - OUTPUT_FILE_BASENAME=${DAS_WFPK_OUTPUT_FILE_BASENAME}
+      - STREAM_URL=${DAS_WFPK_STREAM_URL}
+      - TZ=${TZ}
+    volumes:
+      - ${DAS_WFPK_VOLUME_OUTPUT}:/output
+    restart: unless-stopped
