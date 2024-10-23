@@ -1,0 +1,26 @@
+# Example docker-compose file for TimeTagger that uses the published
+# Docker image in the nonroot variant.
+# Shows all options settable via the environment.
+#
+# !! Make sure to apply your own credentials                       !!
+# !! You can use e.g. https://timetagger.app/cred to generate them !!
+# !! In docker-compose characters '$' should be escaped as '$$'    !!
+# !! If you use a .env file, use single quotes instead of escaping !!
+
+services:
+  timetagger:
+    image: ghcr.io/almarklein/timetagger:v23.9.2-nonroot
+    container_name: timetagger
+    environment:
+      - TIMETAGGER_BIND=0.0.0.0:80
+      - TIMETAGGER_DATADIR=/opt/_timetagger
+      - TIMETAGGER_LOG_LEVEL=info
+      # - TIMETAGGER_CREDENTIALS=test:$$2a$$08$$0CD1NFiIbancwWsu3se1v.RNR/b7YeZd71yg3cZ/3whGlyU6Iny5i  # test:test
+      - TZ=${TZ}
+    env_file:
+      - ${TIMETAGGER_ENV_FILE}
+    ports:
+      - ${TIMETAGGER_PORT}:80
+    volumes:
+      - ${TIMETAGGER_VOLUME_DATA}:/opt/_timetagger
+    restart: unless-stopped
