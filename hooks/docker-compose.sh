@@ -401,7 +401,6 @@ if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ];
     doctor_audiobookshelf
     # doctor_calibre_web
     doctor_das_wfpk
-    doctor_homeassistant
     doctor_isponsorblocktv
     # doctor_jellyfin_music
     doctor_kavita
@@ -411,6 +410,32 @@ if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ];
     # doctor_silverbullet
     doctor_stirling_pdf
     # doctor_syncthing
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+fi
+
+###################################
+#                                 #
+#          HOMEASSISTANT          #
+#                                 #
+###################################
+
+stack=homeassistant
+
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    doctor_homeassistant
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 
