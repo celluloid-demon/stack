@@ -1,6 +1,10 @@
 LXC (Linux Container) Notes
 ===========================
 
+__Bindmounts for granting unprivileged containers access to host-mounted NFS shares:__
+
+- https://pve.proxmox.com/wiki/Unprivileged_LXC_containers#Using_local_directory_bind_mount_points
+
 __To run ARM-based LXC containers:__
 
 - You can grab ARM-based rootfs tarballs [here](https://jenkins.linuxcontainers.org/view/Images/).
