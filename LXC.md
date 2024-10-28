@@ -4,6 +4,7 @@ LXC (Linux Container) Notes
 __Bindmounts for granting unprivileged containers access to host-mounted NFS shares:__
 
 - https://pve.proxmox.com/wiki/Unprivileged_LXC_containers#Using_local_directory_bind_mount_points
+- Hint: You can group your nfs mounts intended for your docker lxc runtimes (eg under '/mnt/docker/') by editing their mount points directly in: `/etc/pve/storage.cfg`.
 
 __To run ARM-based LXC containers:__
 
