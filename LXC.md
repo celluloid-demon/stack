@@ -6,7 +6,7 @@ __Bindmounts for granting unprivileged containers access to host-mounted NFS sha
 - https://pve.proxmox.com/wiki/Unprivileged_LXC_containers#Using_local_directory_bind_mount_points
 - Hint: You can group your nfs mounts intended for your docker lxc runtimes (eg under '/mnt/docker/') by editing their mount points directly in: `/etc/pve/storage.cfg`.
 
-__To run ARM-based LXC containers:__
+__To run ARM-based LXC containers (with Debian):__
 
 - You can grab ARM-based rootfs tarballs [here](https://jenkins.linuxcontainers.org/view/Images/).
 - WARNING: Pimox7 seems to have issues creating new LXC containers with ssh pubkey pre-populated, current workaround is to set up ssh keys AFTER container creation.
