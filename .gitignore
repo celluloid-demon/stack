@@ -92,7 +92,6 @@ $RECYCLE.BIN/
 docker-compose._.yml
 docker-polaris
 get-docker.sh
-local/bin
-local/links
+local/*
 password.env
 tmp

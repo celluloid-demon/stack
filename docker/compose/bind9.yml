@@ -1,9 +1,13 @@
 services:
   bind9:
-    image: ubuntu/bind9:latest
+    # *attempt to get this to run on raspberry pi 2 (32-bit), which canonical does not provide
+    image: bind9:latest
+    build:
+      context: ../build/bind9_armv7
+      dockerfile: Dockerfile
     container_name: bind9
     environment:
-      - BIND9_USER=root
+      # - BIND9_USER=root
       - TZ=${TZ}
     ports:
       - 53:53/tcp
