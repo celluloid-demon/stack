@@ -374,7 +374,11 @@ doctor_calibre_web() {
 
 doctor_bind9() {
 
-    local placeholder=
+    test_dir "$BIND_VOLUME_CACHE"
+    test_dir "$BIND_VOLUME_CONFIG"
+    test_dir "$BIND_VOLUME_RECORDS"
+
+    test_file "$BIND_FILE_NAMED"
 
 }
 
@@ -584,8 +588,8 @@ stack=network
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
     doctor_bind9
-    doctor_nginx_proxy_manager
-    doctor_pihole
+    # doctor_nginx_proxy_manager
+    # doctor_pihole
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 

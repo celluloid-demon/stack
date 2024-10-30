@@ -93,5 +93,6 @@ docker-compose._.yml
 docker-polaris
 get-docker.sh
 local/bin
+local/links
 password.env
 tmp
