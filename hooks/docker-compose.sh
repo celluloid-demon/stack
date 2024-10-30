@@ -372,6 +372,24 @@ doctor_calibre_web() {
 
 }
 
+doctor_bind9() {
+
+    local placeholder=
+
+}
+
+doctor_nginx_proxy_manager() {
+
+    local placeholder=
+
+}
+
+doctor_pihole() {
+
+    local placeholder=
+
+}
+
 ###########################
 #                         #
 #          SETUP          #
@@ -540,6 +558,34 @@ stack=n8n
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
     doctor_n8n
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+fi
+
+#############################
+#                           #
+#          NETWORK          #
+#                           #
+#############################
+
+stack=network
+
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    doctor_bind9
+    doctor_nginx_proxy_manager
+    doctor_pihole
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 
