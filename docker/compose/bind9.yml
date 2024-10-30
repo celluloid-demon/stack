@@ -1,5 +1,5 @@
 services:
-  bind9:
+  ns:
     # *attempt to get this to run on raspberry pi 2 (32-bit), which canonical does not provide
     image: bind9:latest
     build:

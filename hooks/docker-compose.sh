@@ -394,6 +394,17 @@ doctor_pihole() {
 
 }
 
+doctor_kea() {
+
+    test_dir "$KEA_VOLUME_CONFIG"
+    test_dir "$KEA_VOLUME_LEASES"
+    test_dir "$KEA_VOLUME_LOGS"
+    test_dir "$KEA_VOLUME_SOCKETS"
+
+    test_file "$KEA_FILE_DHCP4"
+
+}
+
 ###########################
 #                         #
 #          SETUP          #
@@ -588,6 +599,7 @@ stack=network
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
     doctor_bind9
+    doctor_kea
     # doctor_nginx_proxy_manager
     # doctor_pihole
 

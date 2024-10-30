@@ -1,0 +1,54 @@
+# This is an advanced setup which starts both the IPv4 and the IPv6 Kea DHCP
+# services, along with the Control Agent service that can forward HTTP API
+# requests to the relevant locations.
+# The REST API will be available on port 8000 on the localhost address.
+# !! ------------------------------------------------------------------------ !!
+# Both of the DHCP services use the 'host' network so they may actually serve
+# real leases. Docker does not handle routing of IPv6 by default, so it is the
+# only option for that container unless you reconfiger the Docker daemon.
+# !! ------------------------------------------------------------------------ !!
+services:
+  dhcp4:
+    image: jonasal/kea-dhcp4:2
+    container_name: kea-dhcp4
+    command: -c /kea/config/dhcp4.json
+    network_mode: host
+    # This image creates the user kea with uid:gid 101:101/100:101
+    # (Debian/Alpine) which may be used for non-root execution in the future,
+    # however, Kea runs as root right now since it needs high privilege to
+    # open raw sockets.
+    volumes:
+      - ${KEA_VOLUME_CONFIG}:/kea/config
+      - ${KEA_VOLUME_LEASES}:/kea/leases
+      - ${KEA_VOLUME_LOGS}:/kea/logs
+      - sockets:/kea/sockets
+    restart: unless-stopped
+
+  # dhcp6:
+  #   image: jonasal/kea-dhcp6:2
+  #   container_name: kea-dhcp6
+  #   command: -c /kea/config/dhcp6.json
+  #   network_mode: host
+  #   volumes:
+  #     - ${KEA_VOLUME_CONFIG}:/kea/config
+  #     - ${KEA_VOLUME_LEASES}:/kea/leases
+  #     - ${KEA_VOLUME_LOGS}:/kea/logs
+  #     - sockets:/kea/sockets
+  #   restart: unless-stopped
+
+  ctrl-agent:
+    image: jonasal/kea-ctrl-agent:2
+    container_name: kea-ctrl-agent
+    command: -c /kea/config/ctrl-agent.json
+    ports:
+      - 8000:8000
+    volumes:
+      - ${KEA_VOLUME_CONFIG}:/kea/config
+      - ${KEA_VOLUME_LEASES}:/kea/leases
+      - ${KEA_VOLUME_LOGS}:/kea/logs
+      - sockets:/kea/sockets
+    restart: unless-stopped
+
+volumes:
+  sockets:
+  # leases:
