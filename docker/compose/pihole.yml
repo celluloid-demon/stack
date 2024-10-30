@@ -12,9 +12,9 @@ services:
       # WEBPASSWORD: pihole # set a secure password here or it will be random
     env_file:
       - ${PIHOLE_ENV_FILE}
-    # networks:
-    #   net:
-    #     ipv4_address: ${PIHOLE_IP_ADDRESS} # NOTE: access the pihole web gui at <ip_address>/admin
+    networks:
+      net:
+        ipv4_address: ${PIHOLE_IP_ADDRESS} # NOTE: access the pihole web gui at <ip_address>/admin
     # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
     ports:
       - "53:53/tcp"
@@ -26,12 +26,12 @@ services:
       - ${PIHOLE_VOLUME_CONFIG_DNSMASQ}:/etc/dnsmasq.d
     restart: unless-stopped
 
-# networks:
-#   net:
-#     driver: macvlan
-#     driver_opts:
-#       parent: end0 # somethign something omv-managed network interfaces... :)
-#     ipam:
-#       config:
-#         - subnet: 192.168.1.0/24 # your router's address range
-#           gateway: 192.168.1.1   # NOTE: lack of dash is significant
+networks:
+  net:
+    driver: macvlan
+    driver_opts:
+      parent: end0 # somethign something omv-managed network interfaces... :)
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24 # your router's address range
+          gateway: 192.168.1.1   # NOTE: lack of dash is significant!
