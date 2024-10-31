@@ -1,5 +1,5 @@
 include:
-  # - docker/compose/bind9.yml
+  - docker/compose/bind9.yml
   - docker/compose/kea.yml
 #  - docker/compose/nginx-proxy-manager.yml
 #  - docker/compose/pihole.yml

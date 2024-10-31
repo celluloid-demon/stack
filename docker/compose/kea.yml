@@ -41,7 +41,7 @@ services:
     container_name: kea-ctrl-agent
     command: -c /kea/config/ctrl-agent.json
     ports:
-      - 8000:8000
+      - 8002:8000
     volumes:
       - ${KEA_VOLUME_CONFIG}:/kea/config
       - ${KEA_VOLUME_LEASES}:/kea/leases

@@ -401,6 +401,7 @@ doctor_kea() {
     test_dir "$KEA_VOLUME_LOGS"
     test_dir "$KEA_VOLUME_SOCKETS"
 
+    test_file "$KEA_FILE_CTRL_AGENT"
     test_file "$KEA_FILE_DHCP4"
 
 }
