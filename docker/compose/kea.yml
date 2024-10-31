@@ -25,17 +25,17 @@ services:
       - sockets:/kea/sockets
     restart: unless-stopped
 
-  # dhcp6:
-  #   image: jonasal/kea-dhcp6:2
-  #   container_name: kea-dhcp6
-  #   command: -c /kea/config/dhcp6.json
-  #   network_mode: host
-  #   volumes:
-  #     - ${KEA_VOLUME_CONFIG}:/kea/config
-  #     - ${KEA_VOLUME_LEASES}:/kea/leases
-  #     - ${KEA_VOLUME_LOGS}:/kea/logs
-  #     - sockets:/kea/sockets
-  #   restart: unless-stopped
+  dhcp6:
+    image: jonasal/kea-dhcp6:2
+    container_name: kea-dhcp6
+    command: -c /kea/config/dhcp6.json
+    network_mode: host
+    volumes:
+      - ${KEA_VOLUME_CONFIG}:/kea/config
+      - ${KEA_VOLUME_LEASES}:/kea/leases
+      - ${KEA_VOLUME_LOGS}:/kea/logs
+      - sockets:/kea/sockets
+    restart: unless-stopped
 
   ctrl-agent:
     image: jonasal/kea-ctrl-agent:2
