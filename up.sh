@@ -9,8 +9,9 @@ stack=$1
 [ -z "$stack" ] && echo "Stack name must be specified!" && exit 1
 
 # Aliases
-[ $stack = '_'  ] && stack='main'
-[ $stack = 'ts' ] && stack='tailscale'
+[ $stack = '_'   ] && stack='main'
+[ $stack = 'net' ] && stack='network'
+[ $stack = 'ts'  ] && stack='tailscale'
 
 # Legacy bootstrap entrypoint
 [ $stack = 'bootstrap' ] && . .env && sudo helper-scripts/legacy/bootstrap.sh && exit 0
