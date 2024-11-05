@@ -2,5 +2,5 @@
 
 STACK=$1
 
-down.sh $STACK
-up.sh   $STACK
+./down.sh $STACK
+./up.sh   $STACK
