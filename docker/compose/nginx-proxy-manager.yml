@@ -5,43 +5,12 @@ services:
     cap_add:
       - NET_ADMIN
     environment:
-      DISABLE_IPV6: true
-    networks:
-      # custom_bridge:
-      #   ipv4_address: 192.168.100.222
-      #   priority: 900 # proxy manager container MUST know what order to use these networks!
-      net:
-        ipv4_address: 192.168.8.222
-        priority: 1000
+      - DISABLE_IPV6=true
     ports:
-      # - 49152:80 # Public HTTP Port
-      - 80:80 # Public HTTP Port
-      - 443:443  # Public HTTPS Port
-      - 81:81    # Admin Web Port
+      - 80:80   # Public HTTP Port
+      - 443:443 # Public HTTPS Port
+      - 81:81   # Admin Web Port
     volumes:
       - ${NPM_VOLUME_CONFIG}:/data
       - ${NPM_VOLUME_LETSENCRYPT}:/etc/letsencrypt
     restart: unless-stopped
-
-networks:
-  # custom_bridge:
-  #   name: custom_bridge
-  #   driver: bridge
-  #   # external: true
-  #   ipam:
-  #     config:
-  #       - subnet: 192.168.100.0/24
-  #         gateway: 192.168.100.1
-  net:
-    name: net
-    driver: macvlan
-    driver_opts:
-      parent: eth0
-    ipam:
-      config:
-        - subnet: 192.168.8.0/24 # your router's address range
-          gateway: 192.168.8.1   # NOTE: lack of dash is significant
-
-# Defaults:
-# Email:    admin@example.com
-# Password: changeme
