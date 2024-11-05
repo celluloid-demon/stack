@@ -416,6 +416,12 @@ doctor_traefik() {
 
 }
 
+doctor_homer() {
+
+    test_dir "$HOMER_VOLUME_ASSETS"
+
+}
+
 ###########################
 #                         #
 #          SETUP          #
@@ -480,6 +486,32 @@ stack=homeassistant
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
     doctor_homeassistant
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+fi
+
+###########################
+#                         #
+#          HOMER          #
+#                         #
+###########################
+
+stack=homer
+
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    doctor_homer
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 
