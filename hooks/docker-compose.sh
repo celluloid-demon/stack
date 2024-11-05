@@ -384,7 +384,8 @@ doctor_bind9() {
 
 doctor_nginx_proxy_manager() {
 
-    local placeholder=
+    test_dir "$NPM_VOLUME_CONFIG"
+    test_dir "$NPM_VOLUME_LETSENCRYPT"
 
 }
 
@@ -403,6 +404,15 @@ doctor_kea() {
 
     test_file "$KEA_FILE_CTRL_AGENT"
     test_file "$KEA_FILE_DHCP4"
+
+}
+
+doctor_traefik() {
+
+    test_dir  "$TRAEFIK_VOLUME_LETSENCRYPT"
+
+    test_file "$TRAEFIK_FILE_CONFIG"
+    test_file "$REVERSE_PROXY_ENV_FILE"
 
 }
 
@@ -589,19 +599,20 @@ elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' 
 
 fi
 
-#############################
-#                           #
-#          NETWORK          #
-#                           #
-#############################
+###################################
+#                                 #
+#          REVERSE-PROXY          #
+#                                 #
+###################################
 
-stack=network
+stack=reverse-proxy
 
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-    doctor_bind9
-    doctor_kea
-    # doctor_nginx_proxy_manager
+    doctor_nginx_proxy_manager
+    # doctor_traefik
+    # doctor_bind9
+    # doctor_kea
     # doctor_pihole
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then

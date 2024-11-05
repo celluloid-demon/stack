@@ -1,0 +1,53 @@
+services:
+
+  traefik:
+    image: "traefik:v3.2"
+    container_name: "traefik"
+    command:
+      - --api.dashboard=false
+      - --api.insecure=true                             # Traefik will listen on port 8080 by default for API request.
+      - --providers.docker=true                         # Enabling Docker provider.
+      - --providers.docker.exposedbydefault=false       # Do not expose containers unless explicitly told so.
+      - --log.level=DEBUG
+
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge=true
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
+      # - --certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=kimora.ns.cloudflare.com:53,otto.ns.cloudflare.com:53 # attempt to bypass AdGuard or any local DNS resolvers that might be cached or misconfigured
+      # - --certificatesresolvers.letsencrypt.acme.dnschallenge.delayBeforeCheck=20
+      # - --certificatesresolvers.letsencrypt.acme.dnschallenge.disablepropagationcheck=true # *adguard troubleshooting
+      - --certificatesresolvers.letsencrypt.acme.email=${LETSENCRYPT_EMAIL}
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      # - --certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
+
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+
+      - --entrypoints.websecure.http.tls=true
+      - --entrypoints.websecure.http.tls.certResolver=letsencrypt
+      - --entrypoints.websecure.http.tls.domains[0].main=sixducks.org
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.sixducks.org
+
+    environment:
+      - CF_API_EMAIL=${LETSENCRYPT_EMAIL}
+      - CF_DNS_API_TOKEN=${CLOUDFLARE_DNS_API_TOKEN}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "${TRAEFIK_VOLUME_LETSENCRYPT}:/letsencrypt"
+
+  whoami:
+    image: "traefik/whoami"
+    container_name: "simple-service"
+    labels:
+      - "traefik.enable=true"                                                 # Explicitly tell Traefik to expose this container.
+      - "traefik.http.routers.whoami.rule=Host(`whoami.sixducks.org`)"        # The domain the service will respond to.
+      # - "traefik.http.routers.whoami.entrypoints=web"                       # Allow request only from the predefined entry point named "web".
+      - "traefik.http.routers.whoami.entrypoints=websecure"                   # Allow request only from the predefined entry point named "websecure".
+      # - "traefik.http.routers.whoami.tls.certresolver=myresolver"             # Uses the Host rule to define which certificate to issue.

@@ -9,15 +9,19 @@ stack=$1
 [ -z "$stack" ] && echo "Stack name must be specified!" && exit 1
 
 # Aliases
-[ $stack = '_'   ] && stack='main'
-[ $stack = 'net' ] && stack='network'
-[ $stack = 'ts'  ] && stack='tailscale'
+[ $stack = '_'     ] && stack='main'
+[ $stack = 'net'   ] && stack='network'
+[ $stack = 'ts'    ] && stack='tailscale'
+[ $stack = 'proxy' ] && stack='reverse-proxy'
 
 # Legacy bootstrap entrypoint
 [ $stack = 'bootstrap' ] && . .env && sudo helper-scripts/legacy/bootstrap.sh && exit 0
 
 # n8n entrypoint
 [ $stack = 'n8n' ] && . .env && . "$N8N_ENV_FILE"
+
+# Reverse-proxy entrypoint (Traefik) [DEPRECATED]
+# [ $stack = 'reverse-proxy' ] && . .env && . "$REVERSE_PROXY_ENV_FILE"
 
 # Starr apps entrypoint
 [ $stack = 'starr' ] && . .env && . "$STARR_VERSIONS_FILE"
