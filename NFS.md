@@ -33,3 +33,4 @@ Source: https://unix.stackexchange.com/questions/146620/difference-between-sync-
 __Inspiration:__
 
 - `options vers=4.1,nconnect=16,async,rsize=131072,wsize=131072`
+- `options vers=4.2,nconnect=16,async,rsize=131072,wsize=131072`
