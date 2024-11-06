@@ -6,9 +6,12 @@
 #                                                                                        #
 ##########################################################################################
 
+# *vzdump hasn't handled network shares very for years...
+
 readonly VM_ID=$1
 readonly LIMIT=5000 # KiB/s (default: unlimited)
-readonly BACKUP_DIR='/mnt/pve/global/dump'
+# readonly BACKUP_DIR='/mnt/pve/global/dump'
+readonly BACKUP_DIR='/var/lib/vz/dump'
 
 # WARNING: Without BW limits, backup will always consume the max bandwidth. So
 # if your backup server is on the same server, and the VMs etc, then this
