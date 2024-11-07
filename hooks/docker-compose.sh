@@ -424,6 +424,12 @@ doctor_homarr() {
 
 }
 
+doctor_homer() {
+
+    test_dir "$HOMER_VOLUME_ASSETS"
+
+}
+
 ###########################
 #                         #
 #          SETUP          #
@@ -513,7 +519,8 @@ stack=dashboard
 
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-    doctor_homarr
+    doctor_homer
+    # doctor_homarr
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 

@@ -1,0 +1,3 @@
+include:
+  - docker/compose/homer.yml
+  # - docker/compose/homarr.yml
