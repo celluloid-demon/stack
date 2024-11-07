@@ -1,12 +1,15 @@
+#---------------------------------------------------------------------#
+#     Homarr - A simple, yet powerful dashboard for your server.      #
+#---------------------------------------------------------------------#
 services:
-  homer:
-    image: b4bz/homer:latest
-    container_name: homer
-    environment:
-      - INIT_ASSETS=1 # default
+  homarr:
+    image: ghcr.io/ajnart/homarr:latest
+    container_name: homarr
     ports:
-      - 8080:8080
-    user: 0:0 # 1000:1000
+      - 7575:7575
     volumes:
-      - ${HOMER_VOLUME_ASSETS}:/www/assets
+      - ${HOMARR_VOLUME_CONFIGS}:/app/data/configs
+      - ${HOMARR_VOLUME_DATA}:/data
+      - ${HOMARR_VOLUME_ICONS}:/app/public/icons
+      - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
     restart: unless-stopped

@@ -416,9 +416,11 @@ doctor_traefik() {
 
 }
 
-doctor_homer() {
+doctor_homarr() {
 
-    test_dir "$HOMER_VOLUME_ASSETS"
+    test_dir "$HOMARR_VOLUME_CONFIGS"
+    test_dir "$HOMARR_VOLUME_DATA"
+    test_dir "$HOMARR_VOLUME_ICONS"
 
 }
 
@@ -501,17 +503,17 @@ elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' 
 
 fi
 
-###########################
-#                         #
-#          HOMER          #
-#                         #
-###########################
+###############################
+#                             #
+#          DASHBOARD          #
+#                             #
+###############################
 
-stack=homer
+stack=dashboard
 
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-    doctor_homer
+    doctor_homarr
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 
