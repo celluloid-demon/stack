@@ -10,6 +10,7 @@ services:
       - 80:80   # Public HTTP Port
       - 443:443 # Public HTTPS Port
       - 81:81   # Admin Web Port
+      - 445:445 # samba (truenas)
     volumes:
       - ${NPM_VOLUME_CONFIG}:/data
       - ${NPM_VOLUME_LETSENCRYPT}:/etc/letsencrypt
