@@ -430,6 +430,12 @@ doctor_homer() {
 
 }
 
+doctor_tamari() {
+
+    test_dir "$TAMARI_VOLUME_APPDATA"
+
+}
+
 ###########################
 #                         #
 #          SETUP          #
@@ -769,6 +775,32 @@ if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ];
     # doctor_readarr
     doctor_recyclarr
     doctor_sonarr
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+fi
+
+############################
+#                          #
+#          TAMARI          #
+#                          #
+############################
+
+stack=tamari
+
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    doctor_tamari
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 
