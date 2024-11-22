@@ -259,8 +259,7 @@ doctor_mealie() {
 doctor_syncthing() {
 
     test_dir "$SYNCTHING_VOLUME_CONFIG"
-    test_dir "$HOST_DATA_1"
-    test_dir "$HOST_DATA_2"
+    test_dir "$SYNCTHING_VOLUME_DATA"
 
 }
 
@@ -473,7 +472,7 @@ if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ];
     doctor_resilio_sync
     # doctor_silverbullet
     doctor_stirling_pdf
-    # doctor_syncthing
+    doctor_syncthing
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 

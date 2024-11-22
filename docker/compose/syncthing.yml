@@ -14,8 +14,7 @@ services:
       - 21027:21027/udp
     volumes:
       - ${SYNCTHING_VOLUME_CONFIG}:/config
-      - ${HOST_DATA_1}:${CONTAINER_DATA_1} # avoid having to define shares both in syncthing web gui AND here
-      - ${HOST_DATA_2}:${CONTAINER_DATA_2}
+      - ${SYNCTHING_VOLUME_DATA}:${SYNCTHING_VOLUME_DATA} # avoids having to specify share paths both in syncthing web gui AND in here
       # - ${DATA1_HOST}:${DATA1_CONTAINER}
       # - ${DATA1_HOST}:${DATA1_CONTAINER}
     restart: unless-stopped
