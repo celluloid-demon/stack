@@ -311,7 +311,7 @@ doctor_hooks() {
     # positional parameter.
 
     test_file  "./docker-compose.${STACK}.yml"
-    test_param "$OPERATION"     "up    down"
+    test_param "$OPERATION"     "up    down run"
     test_param "$SUB_OPERATION" "begin end"
 
 }
