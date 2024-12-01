@@ -20,9 +20,6 @@ stack=$1
 # n8n entrypoint
 [ $stack = 'n8n' ] && . .env && . "$N8N_ENV_FILE"
 
-# Reverse-proxy entrypoint (Traefik) [DEPRECATED]
-# [ $stack = 'reverse-proxy' ] && . .env && . "$REVERSE_PROXY_ENV_FILE"
-
 # Starr apps entrypoint
 [ $stack = 'starr' ] && . .env && . "$STARR_VERSIONS_FILE"
 

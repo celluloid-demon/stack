@@ -435,6 +435,15 @@ doctor_tamari() {
 
 }
 
+doctor_tandoor() {
+
+    test_file "$TANDOOR_ENV_FILE"
+
+    test_dir "$TANDOOR_VOLUME_DATA"
+    test_dir "$TANDOOR_VOLUME_MEDIA_FILES"
+
+}
+
 ###########################
 #                         #
 #          SETUP          #
@@ -800,6 +809,32 @@ stack=tamari
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
     doctor_tamari
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+fi
+
+#############################
+#                           #
+#          TANDOOR          #
+#                           #
+#############################
+
+stack=tandoor
+
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    doctor_tandoor
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 
