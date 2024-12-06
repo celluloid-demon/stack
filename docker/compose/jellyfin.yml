@@ -1,0 +1,27 @@
+# More info: https://jellyfin.org/docs/general/administration/hardware-acceleration/intel#configure-with-linux-virtualization
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:10.9.9
+    container_name: jellyfin
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128 # for hardware-accelerated transcoding (intel quicksync)
+    environment:
+      - PUID=${PUID}
+      - PGID=${GUID}
+      - TZ=${TZ}
+#      - DOCKER_MODS=linuxserver/mods:jellyfin-opencl-intel # for HDR tone-mapping (think 4k bluray) | more info: https://github.com/linuxserver/docker-jellyfin?tab=readme-ov-file#intel
+    group_add:
+      - "107" # Change this to match your "render" host group id and remove this comment
+#    ports:
+#      - 8096:8096
+#      # - 8920:8920 #optional
+#      # - 7359:7359/udp #optional
+#      # - 1900:1900/udp #optional
+    network_mode: host
+    volumes:
+      - ${JELLYFIN_VOLUME_CACHE}:/cache
+      - ${JELLYFIN_VOLUME_CONFIG}:/config
+      - ${JELLYFIN_VOLUME_MOVIES}:/data/movies
+      - ${JELLYFIN_VOLUME_TVSHOWS}:/data/tvshows
+      - ${JELLYFIN_VOLUME_SHORTS}:/data/shorts
+    restart: unless-stopped

@@ -164,8 +164,9 @@ doctor_prowlarr_alt() {
 
 }
 
-doctor_jellyfin_metadata() {
+doctor_jellyfin() {
 
+    test_dir "$JELLYFIN_VOLUME_CACHE"
     test_dir "$JELLYFIN_VOLUME_CONFIG"
     test_dir "$JELLYFIN_VOLUME_MOVIES"
     test_dir "$JELLYFIN_VOLUME_TVSHOWS"
