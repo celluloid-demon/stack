@@ -176,6 +176,7 @@ doctor_jellyfin() {
 
 doctor_jellyfin_music() {
 
+    test_dir "$JFM_VOLUME_CACHE"
     test_dir "$JFM_VOLUME_CONFIG"
     test_dir "$JFM_VOLUME_MUSIC"
 
@@ -475,7 +476,6 @@ if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ];
     # doctor_calibre_web
     doctor_das_wfpk
     doctor_isponsorblocktv
-    # doctor_jellyfin_music
     doctor_kavita
     doctor_navidrome
     # doctor_polaris
@@ -577,17 +577,43 @@ elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' 
 
 fi
 
-#######################################
-#                                     #
-#          JELLYFIN-METADATA          #
-#                                     #
-#######################################
+##############################
+#                            #
+#          JELLYFIN          #
+#                            #
+##############################
 
-stack=jellyfin-metadata
+stack=jellyfin
 
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
-    doctor_jellyfin_metadata
+    doctor_jellyfin
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+fi
+
+######################################
+#                                    #
+#          JELLYFIN (MUSIC)          #
+#                                    #
+######################################
+
+stack=jellyfin-music
+
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    doctor_jellyfin_music
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 

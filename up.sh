@@ -10,9 +10,10 @@ stack=$1
 
 # Aliases
 [ $stack = '_'     ] && stack='main'
+[ $stack = 'jfm'   ] && stack='jellyfin-music'
 [ $stack = 'net'   ] && stack='network'
-[ $stack = 'ts'    ] && stack='tailscale'
 [ $stack = 'proxy' ] && stack='reverse-proxy'
+[ $stack = 'ts'    ] && stack='tailscale'
 
 # Legacy bootstrap entrypoint
 [ $stack = 'bootstrap' ] && . .env && sudo helper-scripts/legacy/bootstrap.sh && exit 0
