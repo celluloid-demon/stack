@@ -9,7 +9,7 @@ services:
       - /dev/net/tun:/dev/net/tun
     environment:
       - VPN_SERVICE_PROVIDER=protonvpn
-      - SERVER_COUNTRIES=Netherlands
+      - SERVER_COUNTRIES=Sweden
       - TZ=${TZ}
     env_file:
       - ${GLUETUN_ENV_FILE}

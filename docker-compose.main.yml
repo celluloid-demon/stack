@@ -4,7 +4,6 @@ include:
   - docker/compose/isponsorblocktv.yml
   - docker/compose/it-tools.yml
   - docker/compose/kavita.yml
-  - docker/compose/navidrome.yml
-  - docker/compose/resilio-sync.yml
+#  - docker/compose/resilio-sync.yml
   - docker/compose/stirling-pdf.yml
-  - docker/compose/syncthing.yml
+#  - docker/compose/syncthing.yml

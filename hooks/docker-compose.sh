@@ -171,6 +171,7 @@ doctor_jellyfin() {
     test_dir "$JELLYFIN_VOLUME_MOVIES"
     test_dir "$JELLYFIN_VOLUME_TVSHOWS"
     test_dir "$JELLYFIN_VOLUME_SHORTS"
+    test_dir "$JELLYFIN_VOLUME_MUSIC"
 
 }
 
@@ -477,7 +478,6 @@ if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ];
     doctor_das_wfpk
     doctor_isponsorblocktv
     doctor_kavita
-    doctor_navidrome
     # doctor_polaris
     doctor_resilio_sync
     # doctor_silverbullet
@@ -603,58 +603,6 @@ elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' 
 
 fi
 
-######################################
-#                                    #
-#          JELLYFIN (MUSIC)          #
-#                                    #
-######################################
-
-stack=jellyfin-music
-
-if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
-
-    doctor_jellyfin_music
-
-elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
-
-    do_nothing=
-
-elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
-
-    do_nothing=
-
-elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
-
-    do_nothing=
-
-fi
-
-############################
-#                          #
-#          MEALIE          #
-#                          #
-############################
-
-stack=mealie
-
-if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
-
-    doctor_mealie
-
-elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
-
-    do_nothing=
-
-elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
-
-    do_nothing=
-
-elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
-
-    do_nothing=
-
-fi
-
 #########################
 #                       #
 #          N8N          #
@@ -666,6 +614,32 @@ stack=n8n
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
     doctor_n8n
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+fi
+
+###############################
+#                             #
+#          NAVIDROME          #
+#                             #
+###############################
+
+stack=navidrome
+
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    doctor_navidrome
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 
