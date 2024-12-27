@@ -447,6 +447,14 @@ doctor_tandoor() {
 
 }
 
+doctor_nextcloud() {
+
+    test_dir "$NEXTCLOUD_VOLUME_CONFIG"
+    test_dir "$NEXTCLOUD_VOLUME_DATA"
+    test_dir "$NEXTCLOUD_VOLUME_DB"
+
+}
+
 ###########################
 #                         #
 #          SETUP          #
@@ -640,6 +648,32 @@ stack=navidrome
 if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
 
     doctor_navidrome
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    do_nothing=
+
+elif [ $STACK = $stack ] && [ $OPERATION = 'down' ] && [ $SUB_OPERATION = 'end' ]; then
+
+    do_nothing=
+
+fi
+
+###############################
+#                             #
+#          NEXTCLOUD          #
+#                             #
+###############################
+
+stack=nextcloud
+
+if [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
+
+    doctor_nextcloud
 
 elif [ $STACK = $stack ] && [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'end' ]; then
 

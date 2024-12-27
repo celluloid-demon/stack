@@ -1,0 +1,34 @@
+services:
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud:latest
+    container_name: nextcloud
+    environment:
+      # - NEXTCLOUD_ADMIN_USER=jonathan
+      # - NEXTCLOUD_ADMIN_PASSWORD=password
+      - MYSQL_PASSWORD=nextcloud
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_HOST=nextcloud-db
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    ports:
+      # - 8080:8080
+      - 32315:443
+    volumes:
+      - ${NEXTCLOUD_VOLUME_CONFIG}:/config
+      - ${NEXTCLOUD_VOLUME_DATA}:/data
+    restart: unless-stopped
+
+  nextcloud-db:
+    image: mariadb:11.6.2
+    container_name: nextcloud-db
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    environment:
+      - MYSQL_ROOT_PASSWORD=nextcloud
+      - MYSQL_PASSWORD=nextcloud
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    volumes:
+      - ${NEXTCLOUD_VOLUME_DB}:/var/lib/mysql
+    restart: unless-stopped
