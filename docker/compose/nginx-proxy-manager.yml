@@ -6,11 +6,12 @@ services:
       - NET_ADMIN
     environment:
       - DISABLE_IPV6=true
-    ports:
-      - 80:80   # Public HTTP Port
-      - 443:443 # Public HTTPS Port
-      - 81:81   # Admin Web Port
-      - 445:445 # samba (truenas)
+    network_mode: host
+#    ports:
+#      - 80:80   # Public HTTP Port
+#      - 443:443 # Public HTTPS Port
+#      - 81:81   # Admin Web Port
+#      - 445:445 # samba (truenas)
     volumes:
       - ${NPM_VOLUME_CONFIG}:/data
       - ${NPM_VOLUME_LETSENCRYPT}:/etc/letsencrypt

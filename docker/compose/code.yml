@@ -1,0 +1,19 @@
+services:
+  code:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: code
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=${TZ}
+#      - PASSWORD=password #optional
+#      - HASHED_PASSWORD= #optional
+#      - SUDO_PASSWORD=password #optional
+#      - SUDO_PASSWORD_HASH= #optional
+      - PROXY_DOMAIN=code.sixducks.org #optional
+#      - DEFAULT_WORKSPACE=/config/workspace #optional
+    volumes:
+      - /mnt/pool/config/code:/config
+    ports:
+      - 8443:8443
+    restart: unless-stopped
