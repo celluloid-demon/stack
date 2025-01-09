@@ -7,7 +7,7 @@ services:
       - gluetun
     environment:
       - PUID=${PUID}
-      - PGID=${GUID}
+      - PGID=${PGID}
       - TZ=${TZ}
       - WEBUI_PORT=8080 # see: https://docs.linuxserver.io/images/docker-qbittorrent/#webui_port-variable
     # ports:

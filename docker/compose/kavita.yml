@@ -4,7 +4,7 @@ services:
     container_name: kavita
     environment:
       - PUID=${PUID}
-      - PGID=${GUID}
+      - PGID=${PGID}
       - TZ=${TZ}
     ports:
       - 5000:5000

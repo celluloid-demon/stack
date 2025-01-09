@@ -60,7 +60,7 @@ services:
       - PAPERLESS_TIME_ZONE=${TZ}
       - PAPERLESS_URL=${PAPERLESS_URL} # WARNING (x2): This is required if you will be exposing Paperless-ngx on a public domain. Do not include a trailing slash.
       - USERMAP_UID=${PUID}
-      - USERMAP_GID=${GUID}
+      - USERMAP_GID=${PGID}
       - PAPERLESS_OCR_SKIP_ARCHIVE_FILE=with_text # Skip archive file generation for already ocr'ed documents.
       - PAPERLESS_WEBSERVER_WORKERS=1 # This will save some memory.
       # Set if accessing paperless via a domain subpath e.g. https://domain.com/PATHPREFIX and using a reverse-proxy like traefik or nginx

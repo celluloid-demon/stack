@@ -7,7 +7,7 @@ services:
       - gluetun
     environment:
       - PUID=${PUID}
-      - PGID=${GUID}
+      - PGID=${PGID}
       - TZ=${TZ}
     ports:
       - 7878:7878
