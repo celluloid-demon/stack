@@ -1,9 +1,9 @@
 services:
     tamari:
-        image: alexbates/tamari:0.9
+        image: alexbates/tamari:1.0
         container_name: tamari
         ports:
-            - 4888:4888
+            - 41964:4888
         volumes:
-            - ${TAMARI_VOLUME_APPDATA}:/app/appdata
+            - /mnt/pool/db/tamari/appdata:/app/appdata
         restart: unless-stopped

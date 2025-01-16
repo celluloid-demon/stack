@@ -6,13 +6,22 @@ services:
       - NET_ADMIN
     environment:
       - DISABLE_IPV6=true
-    network_mode: host
-#    ports:
-#      - 80:80   # Public HTTP Port
-#      - 443:443 # Public HTTPS Port
-#      - 81:81   # Admin Web Port
-#      - 445:445 # samba (truenas)
+    # network_mode: host
+    # ports:
+    #   - 42651:80   # Public HTTP Port
+    #   - 40314:443 # Public HTTPS Port
+    #   - 42250:81   # Admin Web Port
+    #   - 48724:445 # samba (stream for truenas-hosted samba shares)
+    ports:
+      - 80:80   # Public HTTP Port
+      - 443:443 # Public HTTPS Port
+      - 81:81   # Admin Web Port
+      - 48724:445 # samba (stream for truenas-hosted samba shares)
     volumes:
       - ${NPM_VOLUME_CONFIG}:/data
       - ${NPM_VOLUME_LETSENCRYPT}:/etc/letsencrypt
     restart: unless-stopped
+
+# Default Administrator User
+# Email:    admin@example.com
+# Password: changeme

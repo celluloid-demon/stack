@@ -1,2 +1,9 @@
-include:
-  - docker/compose/vikunja.yml
+services:
+  sshwifty:
+    image: niruix/sshwifty:latest
+    container_name: sshwifty
+	environment:
+	  - SSHWIFTY_READTIMEOUT=3600
+    ports:
+      - 8182:8182
+    restart: always

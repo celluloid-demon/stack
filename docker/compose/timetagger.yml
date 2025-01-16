@@ -9,18 +9,19 @@
 
 services:
   timetagger:
-    image: ghcr.io/almarklein/timetagger:v23.9.2-nonroot
+    # image: ghcr.io/almarklein/timetagger:v23.9.2-nonroot
+    image: ghcr.io/almarklein/timetagger:latest
     container_name: timetagger
     environment:
       - TIMETAGGER_BIND=0.0.0.0:80
       - TIMETAGGER_DATADIR=/opt/_timetagger
       - TIMETAGGER_LOG_LEVEL=info
       # - TIMETAGGER_CREDENTIALS=test:$$2a$$08$$0CD1NFiIbancwWsu3se1v.RNR/b7YeZd71yg3cZ/3whGlyU6Iny5i  # test:test
-      - TZ=${TZ}
+      - TZ=America/Los_Angeles
     env_file:
-      - ${TIMETAGGER_ENV_FILE}
+      - /mnt/pool/db/timetagger/password.env
     ports:
-      - ${TIMETAGGER_PORT}:80
+      - 34315:80
     volumes:
-      - ${TIMETAGGER_VOLUME_DATA}:/opt/_timetagger
+      - /mnt/pool/db/timetagger/data:/opt/_timetagger
     restart: unless-stopped

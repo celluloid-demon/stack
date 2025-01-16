@@ -17,7 +17,7 @@ services:
     env_file:
       - ${VIKUNJA_ENV_PASSWORDS}
     ports:
-      - 3456:3456
+      - 35709:3456
     volumes:
       - ${VIKUNJA_VOLUME_FILES}:/app/vikunja/files
     restart: unless-stopped

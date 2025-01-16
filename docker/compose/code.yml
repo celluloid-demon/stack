@@ -1,19 +1,14 @@
 services:
-  code:
-    image: lscr.io/linuxserver/code-server:latest
-    container_name: code
+  code-server:
+    image: codercom/code-server:latest
+    container_name: code-server
     environment:
-      - PUID=0
-      - PGID=0
-      - TZ=${TZ}
-#      - PASSWORD=password #optional
-#      - HASHED_PASSWORD= #optional
-#      - SUDO_PASSWORD=password #optional
-#      - SUDO_PASSWORD_HASH= #optional
-      - PROXY_DOMAIN=https://code.sixducks.org #optional
-#      - DEFAULT_WORKSPACE=/config/workspace #optional
+      - DOCKER_USER=0
+    user: 0:0
     volumes:
-      - /mnt/pool/config/code:/config
+      - '/mnt/pool/config/code:/root/.config'
+      # - $PWD:/home/coder/project # add project dir here
     ports:
-      - 8443:8443
-    restart: unless-stopped
+      - 37747:8080
+    tty: true
+    stdin_open: true

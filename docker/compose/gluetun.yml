@@ -21,7 +21,7 @@ services:
       - 8686:8686 # lidarr
       - 8090:8090 # mylar3
       # - 9696:9696 # prowlarr
-      - 8080:8080 # qbittorrent
+      - 26683:8080 # qbittorrent
       # - 7878:7878 # radarr
       - 8787:8787 # readarr
       # - 8989:8989 # sonarr

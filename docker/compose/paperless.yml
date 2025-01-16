@@ -40,6 +40,8 @@
 #                                                                            #
 ##############################################################################
 
+# For running behind reverse proxy: https://github.com/paperless-ngx/paperless-ngx/wiki/Using-a-Reverse-Proxy-with-Paperless-ngx
+
 services:
   webserver:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest

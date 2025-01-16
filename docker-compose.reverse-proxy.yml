@@ -1,7 +1,2 @@
 include:
   - docker/compose/nginx-proxy-manager.yml
-  # - docker/compose/traefik.yml
-  # - docker/compose/powerdns.yml
-  # - docker/compose/bind9.yml
-  # - docker/compose/kea.yml
-  # - docker/compose/pihole.yml
