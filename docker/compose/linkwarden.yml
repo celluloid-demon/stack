@@ -1,0 +1,28 @@
+services:
+
+  linkwarden:
+    image: ghcr.io/linkwarden/linkwarden:latest
+    depends_on:
+      - postgres
+    # env_file: .env
+    environment:
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
+      - NEXTAUTH_URL=https://linkwarden.sixducks.org/api/v1/auth
+      - NEXTAUTH_SECRET=
+      - POSTGRES_PASSWORD=
+    ports:
+      - 63999:3000
+    volumes:
+      - /mnt/pool/db/linkwarden/data:/data/data
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    # env_file: .env
+    environment:
+      - NEXTAUTH_URL=https://linkwarden.sixducks.org/api/v1/auth
+      - NEXTAUTH_SECRET=
+      - POSTGRES_PASSWORD=
+    volumes:
+      - /mnt/pool/db/linkwarden/db:/var/lib/postgresql/data
+    restart: unless-stopped
