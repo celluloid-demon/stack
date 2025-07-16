@@ -48,7 +48,7 @@ doctor_hooks() {
     # NOTE: Easier just to test for the docker-compose file for first
     # positional parameter.
 
-    test_file  "./docker-compose.${STACK}.yml"
+    test_file  "modules/docker-compose.${STACK}.yml"
     test_param "$OPERATION"     "up    down run"
     test_param "$SUB_OPERATION" "begin end"
 
