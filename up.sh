@@ -3,9 +3,20 @@
 # Exit on error
 set -eE
 
+trap 'exit_error $LINENO' ERR
+trap 'exit_zero' EXIT
+
 # Set working directory
 WORKDIR="$(dirname "$0")" && \
 cd "$WORKDIR"
+
+# Declare constants
+readonly LIB='./lib'
+
+readonly ERROR="${LIB}/error.sh"
+
+# Source external libraries
+. "$ERROR"
 
 # Parse args
 stack=$1
@@ -16,9 +27,11 @@ stack=$1
 [ -f local/aliases.sh ] && . local/aliases.sh
 
 # Run custom entrypoint if available
-[ -f  "modules/${stack}/entrypoint.sh" ] && . "modules/${stack}/entrypoint.sh"
+[ -f  "modules/entrypoint.${stack}.sh" ] && . "modules/entrypoint.${stack}.sh"
 
 # Run docker-compose with hooks
-hooks/docker-compose.sh ${stack} up begin && \
-docker compose --file modules/${stack}/docker-compose.yml --project-name ${stack} up --detach --remove-orphans && \
-hooks/docker-compose.sh ${stack} up end
+hooks.sh ${stack} up begin && \
+
+    docker compose --file modules/docker-compose.${stack}.yml --project-name ${stack} up --detach --remove-orphans && \
+
+hooks.sh ${stack} up end

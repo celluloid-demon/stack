@@ -1,10 +1,3 @@
-#!/bin/bash
-
-# Exit on error
-set -eE
-
-trap 'exit_error $LINENO' ERR
-trap 'exit_zero' EXIT
 
 exit_zero() {
 
