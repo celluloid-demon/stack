@@ -1,24 +1,28 @@
 #!/bin/bash
 
-# Usage: hooks/docker-compose.sh <DOCKER-COMPOSE PROJECT NAME> <OPERATION> <SUB-OPERATION>
-
 # Description: For everything else besides the docker-compose command.
+
+# Usage: hooks/docker-compose.sh <DOCKER-COMPOSE PROJECT NAME> <OPERATION> <SUB-OPERATION>
 
 # Declare constants
 readonly LIB='./lib'
+readonly MACROS='./macros'
 
-readonly STACK=$1 # docker-compose project name
+readonly STACK=$1 # AKA docker-compose project name
 readonly OPERATION=$2
 readonly SUB_OPERATION=$3
 
-readonly ENV="${LIB}/env.sh"
 readonly ERROR="${LIB}/error.sh"
 readonly TEST="${LIB}/test.sh"
 
+readonly ENV="${MACROS}/env.sh"
+
 # Source external libraries
-. "$ENV"
 . "$ERROR"
 . "$TEST"
+
+# Source external macros
+. "$ENV"
 
 doctor_docker() {
 
