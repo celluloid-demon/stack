@@ -16,7 +16,7 @@ readonly LIB='./lib'
 readonly ERROR="${LIB}/error.sh"
 
 # Source external libraries
-. "$ERROR"
+[ -f "$ERROR" ] && . "$ERROR"
 
 # Parse args
 stack=$1
@@ -30,8 +30,8 @@ stack=$1
 [ -f  "modules/entrypoint.${stack}.sh" ] && . "modules/entrypoint.${stack}.sh"
 
 # Run docker-compose with hooks
-hooks.sh ${stack} up begin && \
+./hooks.sh ${stack} up begin && \
 
     docker compose --file modules/docker-compose.${stack}.yml --project-name ${stack} up --detach --remove-orphans && \
 
-hooks.sh ${stack} up end
+./hooks.sh ${stack} up end

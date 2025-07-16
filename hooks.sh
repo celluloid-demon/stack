@@ -25,8 +25,8 @@ readonly ERROR="${LIB}/error.sh"
 readonly TEST="${LIB}/test.sh"
 
 # Source external libraries
-. "$ERROR"
-. "$TEST"
+[ -f "$ERROR" ] && . "$ERROR"
+[ -f "$TEST"  ] && . "$TEST"
 
 doctor_docker() {
 
