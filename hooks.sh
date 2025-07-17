@@ -28,7 +28,16 @@ readonly TEST="${LIB}/test.sh"
 [ -f "$ERROR" ] && . "$ERROR"
 [ -f "$TEST"  ] && . "$TEST"
 
+doctor_container_engine() {
+
+    [ $CONTAINER_ENGINE = docker ] && test_command docker
+    [ $CONTAINER_ENGINE = podman ] && test_command podman
+
+}
+
 doctor_docker() {
+
+    # NOTE: deprecated, here for legacy macvlan logic
 
     # Docker engine
     test_command docker
@@ -86,7 +95,7 @@ source_hooks() {
 main() {
 
     load_env
-    doctor_docker
+    doctor_container_engine
     doctor_hooks
     doctor_host
     source_hooks

@@ -27,7 +27,7 @@ stack=$1
 [ -f local/aliases.sh ] && . local/aliases.sh
 
 # Source env
-# [ -f .env ] && . .env
+[ -f ./modules/.env ] && . ./modules/.env
 
 # Run custom entrypoint if available
 [ -f  "modules/entrypoint.${stack}.sh" ] && . "modules/entrypoint.${stack}.sh"
@@ -35,6 +35,6 @@ stack=$1
 # Run docker-compose with hooks
 ./hooks.sh ${stack} up begin && \
 
-    docker compose --file modules/docker-compose.${stack}.yml --project-name ${stack} up --detach --remove-orphans && \
+    eval $CONTAINER_ENGINE compose --file modules/docker-compose.${stack}.yml --project-name ${stack} up --detach --remove-orphans && \
 
 ./hooks.sh ${stack} up end

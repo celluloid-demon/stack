@@ -1,7 +1,7 @@
 services:
   nginx-proxy-manager:
-    image: docker.io/jc21/nginx-proxy-manager:2.11.3
-    # image: docker.io/jc21/nginx-proxy-manager:latest
+    image: docker.io/jc21/nginx-proxy-manager:2.12.6
+    # image: docker.io/jc21/nginx-proxy-manager:2.11.3
     container_name: nginx-proxy-manager
     cap_add:
       - NET_ADMIN
@@ -19,8 +19,8 @@ services:
       - 81:81   # Admin Web Port
       - 48724:445 # samba (stream for truenas-hosted samba shares)
     volumes:
-      - ${NPM_VOLUME_CONFIG}:/data
-      - ${NPM_VOLUME_LETSENCRYPT}:/etc/letsencrypt
+      - ${NPM_VOLUME_CONFIG}:/data:z
+      - ${NPM_VOLUME_LETSENCRYPT}:/etc/letsencrypt:z
     restart: unless-stopped
 
 # Default Administrator User
