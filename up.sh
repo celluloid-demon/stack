@@ -26,6 +26,9 @@ stack=$1
 [ -f aliases.sh       ] && . aliases.sh
 [ -f local/aliases.sh ] && . local/aliases.sh
 
+# Source env
+# [ -f .env ] && . .env
+
 # Run custom entrypoint if available
 [ -f  "modules/entrypoint.${stack}.sh" ] && . "modules/entrypoint.${stack}.sh"
 
