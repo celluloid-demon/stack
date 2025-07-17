@@ -63,9 +63,9 @@ doctor_host() {
 
 load_env() {
 
-    test_file .env
+    test_file ./modules/.env
 
-    . .env
+    . ./modules/.env
 
 }
 
