@@ -33,6 +33,8 @@ doctor_container_engine() {
     [ $CONTAINER_ENGINE = docker ] && test_command docker
     [ $CONTAINER_ENGINE = podman ] && test_command podman
 
+    true
+
 }
 
 doctor_docker() {
