@@ -10,12 +10,12 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - WEBUI_PORT=26683 # see: https://docs.linuxserver.io/images/docker-qbittorrent/#webui_port-variable
+      - WEBUI_PORT=16718 # see: https://docs.linuxserver.io/images/docker-qbittorrent/#webui_port-variable
+      - TORRENTING_PORT=6881
     # ports:
-    #   - 8080:8080
+    #   - 26683:26683
     network_mode: "service:gluetun"
     volumes:
       - ${QBITTORRENT_VOLUME_CONFIG}:/config
       - ${QBITTORRENT_VOLUME_DOWNLOADS}:/data/downloads # see: https://wiki.servarr.com/sonarr/system#docker-bad-remote-path-mapping
     restart: unless-stopped
-

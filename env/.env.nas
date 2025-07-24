@@ -1,20 +1,70 @@
 
-# Defaults
+##############################
+#                            #
+#          DEFAULTS          #
+#                            #
+##############################
 
-CACHE='/root/cache' # should be on ssd, but also be persistent across reboots unlike subfolders in /tmp (read: transcoding files, jellyfin, etc)
 CONTAINER_ENGINE=docker # possible values: docker, podman
 DOCKER_NETWORK_MACVLAN='homelab'
-DATA='/usr/local/opt/stack/data'
-# DB='/mnt/pool/db'
-MEDIA='/mnt/pool/media'
-PHOTOS='/mnt/pool/media/photos'
+POOL='/mnt/pool'
 PUID=3000 # 3000=jonathan@scale00 (3000 is the truenas default unprivileged user id)
 PGID=3000
 TZ='America/Los_Angeles' # see: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
+CACHE="${POOL}/cache"
+MEDIA="${POOL}/media"
+PHOTOS="${POOL}/photos"
+VOLUMES="${POOL}/volumes"
+
 STARR_CONFIG_ROOT="${MEDIA}/starr"
 
 STARR_VERSIONS_FILE="${STARR_CONFIG_ROOT}/versions.env"
+
+###########################
+#                         #
+#          STARR          #
+#                         #
+###########################
+
+# Gluetun
+
+# NOTE: The env_file in docker-compose.yml is for setting variables in a
+# container (just like the environment key). Those variables will NOT be
+# available in the docker compose file! .env is for docker compose, whcih
+# means it will be interpreted by docker compose and you can use the
+# variables in the yaml file.
+
+GLUETUN_ENV_FILE="${STARR_CONFIG_ROOT}/gluetun/password.env"
+
+# Prowlarr
+
+PROWLARR_VOLUME_CONFIG="${STARR_CONFIG_ROOT}/prowlarr"
+
+# QBittorrent
+
+QBITTORRENT_VOLUME_CONFIG="${STARR_CONFIG_ROOT}/qbittorrent"
+QBITTORRENT_VOLUME_DOWNLOADS="${MEDIA}/downloads"
+
+# Radarr
+
+RADARR_VOLUME_CONFIG="${STARR_CONFIG_ROOT}/radarr"
+RADARR_VOLUME_DATA="$MEDIA"
+
+# Recyclarr
+
+RECYCLARR_VOLUME_CONFIG="${STARR_CONFIG_ROOT}/recyclarr"
+
+# Sonarr
+
+SONARR_VOLUME_CONFIG="${STARR_CONFIG_ROOT}/sonarr"
+SONARR_VOLUME_DATA="$MEDIA"
+
+###########################
+#                         #
+#          OTHER          #
+#                         #
+###########################
 
 # Audiobookshelf
 
@@ -32,25 +82,15 @@ DAS_WFPK_OUTPUT_FILE_BASENAME='wfpk'
 DAS_WFPK_STREAM_URL='http://lpm.streamguys1.com/wfpk-web'
 DAS_WFPK_VOLUME_OUTPUT="${MEDIA}/radio/wfpk/raw"
 
-# Gluetun
-
-# NOTE: The env_file in docker-compose.yml is for setting variables in a
-# container (just like the environment key). Those variables will NOT be
-# available in the docker compose file! .env is for docker compose, whcih
-# means it will be interpreted by docker compose and you can use the
-# variables in the yaml file.
-
-GLUETUN_ENV_FILE="${STARR_CONFIG_ROOT}/gluetun/password.env"
-
 # Home Assistant
 
-HASS_VOLUME_CONFIG="${DB}/homeassistant/config"
+HASS_VOLUME_CONFIG="${VOLUMES}/homeassistant/config"
 
 # Homarr
 
-HOMARR_VOLUME_CONFIGS="${DB}/homarr/configs"
-HOMARR_VOLUME_DATA="${DB}/homarr/data"
-HOMARR_VOLUME_ICONS="${DB}/homarr/icons"
+HOMARR_VOLUME_CONFIGS="${VOLUMES}/homarr/configs"
+HOMARR_VOLUME_DATA="${VOLUMES}/homarr/data"
+HOMARR_VOLUME_ICONS="${VOLUMES}/homarr/icons"
 
 # Immich
 
@@ -78,7 +118,7 @@ DB_DATABASE_NAME=immich
 
 # iSponsorBlockTV
 
-ISBTV_VOLUME_DATA="${DB}/isponsorblocktv/data"
+ISBTV_VOLUME_DATA="${VOLUMES}/isponsorblocktv/data"
 
 # Jellyfin
 
@@ -100,18 +140,13 @@ JFM_VOLUME_MUSIC="${MEDIA}/music"
 KAVITA_VOLUME_CONFIG="${MEDIA}/kavita/config"
 KAVITA_VOLUME_BOOKS="${MEDIA}/books"
 
-# Mealie
-
-MEALIE_VOLUME_DATA="${DB}/mealie/data"
-MEALIE_VOLUME_PGDATA="${DB}/mealie/pgdata"
-
 # n8n
 
-N8N_ENV_FILE="${DB}/n8n/password.env"
-N8N_INIT_DATA="${DB}/n8n/init-data.sh"
-N8N_VOLUME_DATA="${DB}/n8n/data"
-N8N_VOLUME_DB="${DB}/n8n/db"
-N8N_VOLUME_REDIS="${DB}/n8n/redis"
+N8N_ENV_FILE="${VOLUMES}/n8n/password.env"
+N8N_INIT_DATA="${VOLUMES}/n8n/init-data.sh"
+N8N_VOLUME_DATA="${VOLUMES}/n8n/data"
+N8N_VOLUME_DB="${VOLUMES}/n8n/db"
+N8N_VOLUME_REDIS="${VOLUMES}/n8n/redis"
 
 # Navidrome
 
@@ -120,105 +155,58 @@ NAVIDROME_VOLUME_MUSIC="${MEDIA}/music"
 
 # Nextcloud
 
-NEXTCLOUD_VOLUME_CONFIG="${DB}/nextcloud"
+NEXTCLOUD_VOLUME_CONFIG="${VOLUMES}/nextcloud"
 NEXTCLOUD_VOLUME_DATA='/mnt/pool/nextcloud'
-NEXTCLOUD_VOLUME_DB="${DB}/nextcloud"
-
-# Nginx Proxy Manager
-
-NPM_VOLUME_CONFIG="${DB}/nginx-proxy-manager/config"
-NPM_VOLUME_LETSENCRYPT="${DB}/nginx-proxy-manager/letsencrypt"
+NEXTCLOUD_VOLUME_DB="${VOLUMES}/nextcloud"
 
 # Odoo
 
-ODOO_ENV_FILE="${DB}/odoo/password.env"
-ODOO_VOLUME_ADDONS="${DB}/odoo/addons"
-ODOO_VOLUME_CONFIG="${DB}/odoo/config"
-ODOO_VOLUME_PG_DATA="${DB}/odoo/data.pg"
-ODOO_VOLUME_WEB_DATA="${DB}/odoo/data.web"
+ODOO_ENV_FILE="${VOLUMES}/odoo/password.env"
+ODOO_VOLUME_ADDONS="${VOLUMES}/odoo/addons"
+ODOO_VOLUME_CONFIG="${VOLUMES}/odoo/config"
+ODOO_VOLUME_PG_DATA="${VOLUMES}/odoo/data.pg"
+ODOO_VOLUME_WEB_DATA="${VOLUMES}/odoo/data.web"
 
 # Paperless
 
 PAPERLESS_URL='https://paperless.sixducks.duckdns.org'
-PAPERLESS_VOLUME_CONSUME="${DB}/paperless/consume"
-PAPERLESS_VOLUME_DATA="${DB}/paperless/data"
-PAPERLESS_VOLUME_DB="${DB}/paperless/db"
-PAPERLESS_VOLUME_EXPORT="${DB}/paperless/export"
-PAPERLESS_VOLUME_MEDIA="${DB}/paperless/media"
-
-# Pihole
-
-PIHOLE_ENV_FILE="${DB}/pihole/password.env"
-PIHOLE_IP_ADDRESS='192.168.1.221'
-PIHOLE_VOLUME_CONFIG_PIHOLE="${DB}/pihole/config/pihole"
-PIHOLE_VOLUME_CONFIG_DNSMASQ="${DB}/pihole/config/dnsmasq"
-
-# Prowlarr
-
-PROWLARR_VOLUME_CONFIG="${STARR_CONFIG_ROOT}/prowlarr"
-
-# QBittorrent
-
-QBITTORRENT_VOLUME_CONFIG="${STARR_CONFIG_ROOT}/qbittorrent"
-QBITTORRENT_VOLUME_DOWNLOADS="${MEDIA}/downloads"
-
-# Radarr
-
-RADARR_VOLUME_CONFIG="${STARR_CONFIG_ROOT}/radarr"
-RADARR_VOLUME_DATA="$MEDIA"
-
-# Recyclarr
-
-RECYCLARR_VOLUME_CONFIG="${STARR_CONFIG_ROOT}/recyclarr"
+PAPERLESS_VOLUME_CONSUME="${VOLUMES}/paperless/consume"
+PAPERLESS_VOLUME_DATA="${VOLUMES}/paperless/data"
+PAPERLESS_VOLUME_DB="${VOLUMES}/paperless/db"
+PAPERLESS_VOLUME_EXPORT="${VOLUMES}/paperless/export"
+PAPERLESS_VOLUME_MEDIA="${VOLUMES}/paperless/media"
 
 # Resilio Sync
 
-RESILIO_VOLUME_CACHE="${DB}/resilio-sync/cache"
-RESILIO_VOLUME_CONFIG="${DB}/resilio-sync/config"
-RESILIO_VOLUME_DATA="${DB}/resilio-sync/shares"
-
-# Sonarr
-
-SONARR_VOLUME_CONFIG="${STARR_CONFIG_ROOT}/sonarr"
-SONARR_VOLUME_DATA="$MEDIA"
+RESILIO_VOLUME_CACHE="${VOLUMES}/resilio-sync/cache"
+RESILIO_VOLUME_CONFIG="${VOLUMES}/resilio-sync/config"
+RESILIO_VOLUME_DATA="${VOLUMES}/resilio-sync/shares"
 
 # Stirling PDF
 
-SP_VOLUME_TESSDATA="${DB}/stirling-pdf/tessdata"
-SP_VOLUME_EXTRA_CONFIGS="${DB}/stirling-pdf/extra-configs"
+SP_VOLUME_TESSDATA="${VOLUMES}/stirling-pdf/tessdata"
+SP_VOLUME_EXTRA_CONFIGS="${VOLUMES}/stirling-pdf/extra-configs"
 
 # Syncthing
 
-SYNCTHING_VOLUME_CONFIG="${DB}/syncthing/config"
-SYNCTHING_VOLUME_DATA="${DB}" # NOTE: preference is to match paths across container / host (for your own sanity)
+SYNCTHING_VOLUME_CONFIG="${VOLUMES}/syncthing/config"
+SYNCTHING_VOLUME_DATA="${VOLUMES}" # NOTE: preference is to match paths across container / host (for your own sanity)
 
 # Tamari
 
-TAMARI_VOLUME_APPDATA="${DB}/tamari/appdata"
-
-# tamari-gallery-dl
-
-TGL_FILE_CONFIG="${DB}/tamari/gallery-dl/gallery-dl.conf"
-TGL_VOLUME_DOWNLOADS="${DB}/tamari/gallery-dl/downloads"
-
-# Tandoor
-
-TANDOOR_ENV_FILE="${DB}/tandoor/password.env"
-TANDOOR_VOLUME_DATA="${DB}/tandoor/data"
-TANDOOR_VOLUME_MEDIA_FILES="${DB}/tandoor/mediafiles"
+TAMARI_VOLUME_APPDATA="${VOLUMES}/tamari/appdata"
 
 # TimeTagger
 
-TIMETAGGER_ENV_FILE="${DB}/timetagger/password.env"
+TIMETAGGER_ENV_FILE="${VOLUMES}/timetagger/password.env"
 TIMETAGGER_PORT=34315
-TIMETAGGER_VOLUME_DATA="${DB}/timetagger/data"
+TIMETAGGER_VOLUME_DATA="${VOLUMES}/timetagger/data"
 
 # Vikunja
 
-VIKUNJA_ENV_PASSWORDS="${DB}/vikunja/password.env"
-VIKUNJA_VOLUME_FILES="${DB}/vikunja/app/vikunja/files"
+VIKUNJA_ENV_PASSWORDS="${VOLUMES}/vikunja/password.env"
+VIKUNJA_VOLUME_FILES="${VOLUMES}/vikunja/app/vikunja/files"
 
 # Vikunja (db)
 
-VIKUNJA_DB_VOLUME_MYSQL="${DB}/vikunja/var/lib/mysql"
-
+VIKUNJA_DB_VOLUME_MYSQL="${VOLUMES}/vikunja/var/lib/mysql"
