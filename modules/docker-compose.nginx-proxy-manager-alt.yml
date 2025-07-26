@@ -1,0 +1,27 @@
+services:
+  nginx-proxy-manager-alt:
+    image: docker.io/jc21/nginx-proxy-manager:2.12.6
+    # image: docker.io/jc21/nginx-proxy-manager:2.11.3
+    container_name: nginx-proxy-manager-alt
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - DISABLE_IPV6=true
+    # network_mode: host
+    # ports:
+    #   - 42651:80   # Public HTTP Port
+    #   - 40314:443 # Public HTTPS Port
+    #   - 42250:81   # Admin Web Port
+    #   - 48724:445 # samba (stream for truenas-hosted samba shares)
+    ports:
+      - 80:80   # Public HTTP Port
+      - 443:443 # Public HTTPS Port
+      - 81:81   # Admin Web Port
+    volumes:
+      - ${NPM_ALT_VOLUME_CONFIG}:/data:z
+      - ${NPM_ALT_VOLUME_LETSENCRYPT}:/etc/letsencrypt:z
+    restart: unless-stopped
+
+# Default Administrator User
+# Email:    admin@example.com
+# Password: changeme
