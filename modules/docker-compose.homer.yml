@@ -1,4 +1,5 @@
 services:
+  # More info: https://homer-demo.netlify.app/
   homer:
     image: b4bz/homer:latest
     container_name: homer
