@@ -62,6 +62,15 @@ RECYCLARR_VOLUME_CONFIG="${STARR_CONFIG_ROOT}/recyclarr"
 SONARR_VOLUME_CONFIG="${STARR_CONFIG_ROOT}/sonarr"
 SONARR_VOLUME_DATA="$MEDIA"
 
+##############################
+#                            #
+#          FRESHRSS          #
+#                            #
+##############################
+
+FRESHRSS_VOLUME_DATA="${VOLUMES}/freshrss/data"
+FRESHRSS_VOLUME_EXTENSIONS="${VOLUMES}/freshrss/extensions"
+
 ###########################
 #                         #
 #          OTHER          #

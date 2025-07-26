@@ -1,0 +1,17 @@
+services:
+  freshrss:
+    image: freshrss/freshrss:latest
+    container_name: freshrss
+    environment:
+      - CRON_MIN=1,31
+      - TZ=${TZ}
+      # - TRUSTED_PROXY='172.16.0.1/12 192.168.0.1/16'
+    logging:
+      options:
+        max-size: 10m
+    ports:
+      - 26680:80
+    volumes:
+      - freshrss_data:/var/www/FreshRSS/data
+      - freshrss_extensions:/var/www/FreshRSS/extensions
+    restart: unless-stopped
