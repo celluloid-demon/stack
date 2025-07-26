@@ -6,7 +6,7 @@ services:
       - INIT_ASSETS=1 # default
     ports:
       - 8080:8080
-    user: 0:0 # 1000:1000
+    user: ${PUID}:${PGID} # 1000:1000
     volumes:
       - ${HOMER_VOLUME_ASSETS}:/www/assets:z
     restart: unless-stopped
