@@ -8,8 +8,10 @@
 CONTAINER_ENGINE=docker # possible values: docker, podman
 DOCKER_NETWORK_MACVLAN='homelab'
 POOL='/mnt/pool'
-PUID=3000 # 3000=jonathan@scale00 (3000 is the truenas default unprivileged user id)
+PUID=3000 # 3000=fam@nas (3000 is the truenas default unprivileged user id)
 PGID=3000
+MEDIA_PUID=3001
+MEDIA_PGID=3001
 TZ='America/Los_Angeles' # see: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 CACHE="${POOL}/cache"

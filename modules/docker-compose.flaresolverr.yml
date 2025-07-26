@@ -1,7 +1,6 @@
 services:
   flaresolverr:
     # DockerHub mirror flaresolverr/flaresolverr:latest
-    # image: ghcr.io/flaresolverr/flaresolverr:v3.3.21
     image: ghcr.io/flaresolverr/flaresolverr:${FLARESOLVERR_VERSION}
     container_name: flaresolverr
     depends_on:

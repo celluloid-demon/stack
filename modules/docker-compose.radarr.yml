@@ -1,13 +1,12 @@
 services:
   radarr:
-    # image: lscr.io/linuxserver/radarr:5.10.1-nightly
     image: lscr.io/linuxserver/radarr:${RADARR_VERSION}
     container_name: radarr
     depends_on:
       - gluetun
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
+      - PUID=${MEDIA_PUID}
+      - PGID=${MEDIA_PGID}
       - TZ=${TZ}
     ports:
       - 7878:7878

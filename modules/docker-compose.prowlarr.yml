@@ -6,8 +6,8 @@ services:
     depends_on:
       - gluetun
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
+      - PUID=${MEDIA_PUID}
+      - PGID=${MEDIA_PGID}
       - TZ=${TZ}
     ports:
       - 9696:9696

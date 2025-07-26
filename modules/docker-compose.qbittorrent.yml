@@ -7,8 +7,8 @@ services:
     depends_on:
       - gluetun
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
+      - PUID=${MEDIA_PUID}
+      - PGID=${MEDIA_PGID}
       - TZ=${TZ}
       - WEBUI_PORT=16718 # see: https://docs.linuxserver.io/images/docker-qbittorrent/#webui_port-variable
       - TORRENTING_PORT=6881

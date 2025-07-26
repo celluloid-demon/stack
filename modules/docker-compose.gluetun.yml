@@ -1,6 +1,5 @@
 services:
   gluetun:
-    # image: qmcgaw/gluetun:v3.39.0
     image: qmcgaw/gluetun:${GLUETUN_VERSION}
     container_name: gluetun
     cap_add:
@@ -16,15 +15,7 @@ services:
     ports:
       - 6881:6881
       - 6881:6881/udp
-      - 6767:6767 # bazarr
-      # - 8191:8191 # flaresolverr
-      - 8686:8686 # lidarr
-      - 8090:8090 # mylar3
-      # - 9696:9696 # prowlarr
       - 16718:16718 # qbittorrent (web UI)
-      - 6881:6881 # qbittorrent (torrenting port)
-      - 6881:6881/udp
-      # - 7878:7878 # radarr
-      - 8787:8787 # readarr
-      # - 8989:8989 # sonarr
+      # - 6881:6881 # qbittorrent (torrenting port)
+      # - 6881:6881/udp
     restart: unless-stopped
