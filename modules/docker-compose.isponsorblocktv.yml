@@ -3,9 +3,8 @@ services:
     # Configuration tool: https://github.com/dmunozv04/iSponsorBlockTV/wiki/Installation
     image: ghcr.io/dmunozv04/isponsorblocktv:latest
     container_name: isponsorblocktv
-    # environment:
-    #   - TZ=America/Los_Angeles
-    # network_mode: host
+    environment:
+      - TZ=${TZ}
     volumes:
-    - /mnt/pool/db/isponsorblocktv/data:/app/data
+    - ${ISBTV_VOLUME_DATA}:/app/data
     restart: unless-stopped

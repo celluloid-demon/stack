@@ -33,8 +33,6 @@ stack=$1
 [ -f  "modules/entrypoint.${stack}.sh" ] && . "modules/entrypoint.${stack}.sh"
 
 # Run docker-compose with hooks
-./hooks.sh ${stack} up begin && \
-
-    eval $CONTAINER_ENGINE compose --file modules/docker-compose.${stack}.yml --project-name ${stack} up --detach --remove-orphans && \
-
-./hooks.sh ${stack} up end
+[ -f "./entrypoint.hooks.sh"                ] && ./entrypoint.hooks.sh ${stack} up begin
+[ -f "modules/docker-compose.${stack}.yml"  ] && eval $CONTAINER_ENGINE compose --file modules/docker-compose.${stack}.yml --project-name ${stack} up --detach --remove-orphans
+[ -f "./entrypoint.hooks.sh"                ] && ./entrypoint.hooks.sh ${stack} up end

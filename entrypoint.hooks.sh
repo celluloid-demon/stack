@@ -33,10 +33,14 @@ doctor_container_engine() {
     [ $CONTAINER_ENGINE = docker ] && test_command docker
     [ $CONTAINER_ENGINE = podman ] && test_command podman
 
+    test_file "modules/.env"
+    test_file "modules/docker-compose.${STACK}.yml"
+
     true
 
 }
 
+# NOTE: DEPRECATED
 doctor_docker() {
 
     # NOTE: deprecated, here for legacy macvlan logic
@@ -56,16 +60,13 @@ doctor_docker() {
 
 doctor_hooks() {
 
-    # NOTE: Easier just to test for the docker-compose file for first
-    # positional parameter.
-
-    test_file  "modules/docker-compose.${STACK}.yml"
+    test_file ./modules/hooks.${STACK}.sh
     test_param "$OPERATION"     "up    down run"
     test_param "$SUB_OPERATION" "begin end"
 
 }
 
-doctor_host() {
+doctor_misc() {
 
     test_file  .allow
     test_allow $STACK
@@ -82,8 +83,6 @@ load_env() {
 
 source_hooks() {
 
-    test_file ./modules/hooks.${STACK}.sh
-
     . "./modules/hooks.${STACK}.sh"
 
 }
@@ -99,7 +98,7 @@ main() {
     load_env
     doctor_container_engine
     doctor_hooks
-    doctor_host
+    doctor_misc
     source_hooks
 
 }
