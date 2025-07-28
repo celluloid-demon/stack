@@ -12,6 +12,8 @@ PUID=3000 # 3000=fam@nas (3000 is the truenas default unprivileged user id)
 PGID=3000
 MEDIA_PUID=3001
 MEDIA_PGID=3001
+OPERATOR_PUID=3002
+OPERATOR_PGID=37
 TZ='America/Los_Angeles' # see: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 CACHE="${POOL}/cache"
@@ -70,6 +72,14 @@ SONARR_VOLUME_DATA="$MEDIA"
 
 FRESHRSS_VOLUME_DATA="${VOLUMES}/freshrss/data"
 FRESHRSS_VOLUME_EXTENSIONS="${VOLUMES}/freshrss/extensions"
+
+###########################
+#                         #
+#          GROCY          #
+#                         #
+###########################
+
+GROCY_VOLUME_CONFIG="${VOLUMES}/grocy"
 
 ###########################
 #                         #
