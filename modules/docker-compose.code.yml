@@ -1,14 +1,17 @@
 services:
-  code-server:
-    image: codercom/code-server:latest
-    container_name: code-server
+  code:
+    container_name: code
     environment:
-      - DOCKER_USER=0
-    user: 0:0
-    volumes:
-      - '/mnt/pool/config/code:/root/.config'
-      # - $PWD:/home/coder/project # add project dir here
+      - PUID=0
+      - PGID=0
+      - TZ=America/Los_Angeles
+      - PASSWORD=makomako06
+      - PROXY_DOMAIN=code.sixducks.org
+      - DEFAULT_WORKSPACE=/workspace
+    image: lscr.io/linuxserver/code-server:latest
     ports:
-      - 37747:8080
-    tty: true
-    stdin_open: true
+      - '8443:8443'
+    restart: unless-stopped
+    volumes:
+      - /mnt/pool/db/code:/config
+      - /mnt/pool/git/cluster:/workspace
