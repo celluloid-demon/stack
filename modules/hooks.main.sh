@@ -89,7 +89,7 @@ if [ $OPERATION = 'up' ] && [ $SUB_OPERATION = 'begin' ]; then
     # doctor_calibre_web
     # doctor_das_wfpk
     doctor_isponsorblocktv
-    # doctor_kavita
+    doctor_kavita
     # doctor_polaris
     # doctor_resilio_sync
     # doctor_silverbullet
