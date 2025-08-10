@@ -7,7 +7,7 @@
 
 CONTAINER_ENGINE=docker # possible values: docker, podman
 DOCKER_NETWORK_MACVLAN='homelab'
-POOL='/mnt/pool'
+POOL='/mnt/lake/pool.6d86b5884ec6e9d1de8a908766de61c5'
 PUID=3000 # 3000=fam@nas (3000 is the truenas default unprivileged user id)
 PGID=3000
 MEDIA_PUID=3001
