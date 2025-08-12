@@ -25,6 +25,21 @@ STARR_CONFIG_ROOT="${MEDIA}/starr"
 
 STARR_VERSIONS_FILE="${STARR_CONFIG_ROOT}/versions.env"
 
+############################
+#                          #
+#          GRAMPS          #
+#                          #
+############################
+
+GRAMPS_VOLUME_CACHE="${VOLUMES}/gramps/cache"
+GRAMPS_VOLUME_DB="${VOLUMES}/gramps/db"
+GRAMPS_VOLUME_INDEX="${VOLUMES}/gramps/index"
+GRAMPS_VOLUME_MEDIA="${VOLUMES}/gramps/media"
+GRAMPS_VOLUME_SECRET="${VOLUMES}/gramps/secret"
+GRAMPS_VOLUME_THUMB_CACHE="${VOLUMES}/gramps/thumb_cache"
+GRAMPS_VOLUME_TMP="${VOLUMES}/gramps/tmp"
+GRAMPS_VOLUME_USERS="${VOLUMES}/gramps/users"
+
 ###########################
 #                         #
 #          STARR          #
