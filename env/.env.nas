@@ -112,11 +112,11 @@ FRESHRSS_VOLUME_EXTENSIONS="${VOLUMES}/freshrss/extensions"
 
 GROCY_VOLUME_CONFIG="${VOLUMES}/grocy"
 
-###########################
-#                         #
-#          OTHER          #
-#                         #
-###########################
+############################
+#                          #
+#          LEGACY          #
+#                          #
+############################
 
 # Audiobookshelf
 
