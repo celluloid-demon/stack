@@ -12,6 +12,6 @@ services:
     ports:
       - 26680:80
     volumes:
-      - freshrss_data:/var/www/FreshRSS/data
-      - freshrss_extensions:/var/www/FreshRSS/extensions
+      - ${FRESHRSS_VOLUME_DATA}:/var/www/FreshRSS/data
+      - ${FRESHRSS_VOLUME_EXTENSIONS}:/var/www/FreshRSS/extensions
     restart: unless-stopped
