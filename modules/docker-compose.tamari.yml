@@ -1,6 +1,6 @@
 services:
     tamari:
-        image: alexbates/tamari:1.0
+        image: alexbates/tamari:1.3
         container_name: tamari
         ports:
             - 41964:4888
