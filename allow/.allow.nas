@@ -3,3 +3,4 @@ freshrss
 gramps
 grocy
 starr
+tamari

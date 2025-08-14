@@ -27,6 +27,14 @@ STARR_VERSIONS_FILE="${STARR_CONFIG_ROOT}/versions.env"
 
 ############################
 #                          #
+#          Tamari          #
+#                          #
+############################
+
+TAMARI_VOLUME_APPDATA="${VOLUMES}/tamari/appdata"
+
+############################
+#                          #
 #          GRAMPS          #
 #                          #
 ############################
@@ -227,10 +235,6 @@ SP_VOLUME_EXTRA_CONFIGS="${VOLUMES}/stirling-pdf/extra-configs"
 
 SYNCTHING_VOLUME_CONFIG="${VOLUMES}/syncthing/config"
 SYNCTHING_VOLUME_DATA="${VOLUMES}" # NOTE: preference is to match paths across container / host (for your own sanity)
-
-# Tamari
-
-TAMARI_VOLUME_APPDATA="${VOLUMES}/tamari/appdata"
 
 # TimeTagger
 

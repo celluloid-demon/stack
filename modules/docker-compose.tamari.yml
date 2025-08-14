@@ -5,5 +5,5 @@ services:
         ports:
             - 41964:4888
         volumes:
-            - /mnt/pool/db/tamari/appdata:/app/appdata
+            - ${TAMARI_VOLUME_APPDATA}:/app/appdata
         restart: unless-stopped
