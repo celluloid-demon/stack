@@ -25,6 +25,14 @@ STARR_CONFIG_ROOT="${MEDIA}/starr"
 
 STARR_VERSIONS_FILE="${STARR_CONFIG_ROOT}/versions.env"
 
+#####################################
+#                                   #
+#          iSponsorBlockTV          #
+#                                   #
+#####################################
+
+ISBTV_VOLUME_DATA="${VOLUMES}/isponsorblocktv/data"
+
 ############################
 #                          #
 #          Tamari          #
@@ -159,10 +167,6 @@ DB_PASSWORD=postgres
 ###################################################################################
 DB_USERNAME=postgres
 DB_DATABASE_NAME=immich
-
-# iSponsorBlockTV
-
-ISBTV_VOLUME_DATA="${VOLUMES}/isponsorblocktv/data"
 
 # Jellyfin
 
