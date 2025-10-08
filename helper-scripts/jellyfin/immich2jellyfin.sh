@@ -8,7 +8,7 @@
 #   jellyfin-sync.sh /path/to/source /path/to/destination
 #
 # Dependencies (at least one of):
-#   - heif-convert  (from libheif)
+#   - heif-convert  (from 'libheif' on ubuntu)
 #   - magick convert (ImageMagick 7+)
 #
 # The script will:
