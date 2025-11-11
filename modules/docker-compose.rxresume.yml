@@ -8,7 +8,7 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ${RXRESUME_VOLUME_DB}:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
@@ -25,9 +25,9 @@ services:
     restart: unless-stopped
     command: server /data
     ports:
-      - "9000:9000"
+      - "${RXRESUME_PORT_STORAGE}:9000" # WARNING: minio connectivity breaks when internal port is changed (STORAGE_PORT not being respected?)
     volumes:
-      - minio_data:/data
+      - ${RXRESUME_VOLUME_STORAGE}:/data
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
@@ -49,23 +49,23 @@ services:
     image: amruthpillai/reactive-resume:latest
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "${RXRESUME_PORT_APP}:${RXRESUME_PORT_APP}"
     depends_on:
       - postgres
       - minio
       - chrome
     environment:
       # -- Environment Variables --
-      PORT: 3000
+      PORT: ${RXRESUME_PORT_APP}
       NODE_ENV: production
 
       # -- URLs --
-      PUBLIC_URL: http://192.168.8.101:3000
-      STORAGE_URL: http://192.168.8.101:9000/default
+      PUBLIC_URL: ${RXRESUME_URL_PUBLIC}
+      STORAGE_URL: ${RXRESUME_URL_STORAGE}
 
       # -- Printer (Chrome) --
       CHROME_TOKEN: chrome_token
-      CHROME_URL: ws://chrome:3000
+      CHROME_URL: ws://chrome:${RXRESUME_PORT_APP}
 
       # -- Database (Postgres) --
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/postgres
@@ -99,24 +99,20 @@ services:
       # -- GitHub (Optional) --
       # GITHUB_CLIENT_ID: github_client_id
       # GITHUB_CLIENT_SECRET: github_client_secret
-      # GITHUB_CALLBACK_URL: http://localhost:3000/api/auth/github/callback
+      # GITHUB_CALLBACK_URL: http://localhost:${RXRESUME_PORT_APP}/api/auth/github/callback
 
       # -- Google (Optional) --
       # GOOGLE_CLIENT_ID: google_client_id
       # GOOGLE_CLIENT_SECRET: google_client_secret
-      # GOOGLE_CALLBACK_URL: http://localhost:3000/api/auth/google/callback
+      # GOOGLE_CALLBACK_URL: http://localhost:${RXRESUME_PORT_APP}/api/auth/google/callback
 
       # -- OpenID (Optional) --
       # VITE_OPENID_NAME: OpenID
       # OPENID_AUTHORIZATION_URL:
-      # OPENID_CALLBACK_URL: http://localhost:3000/api/auth/openid/callback
+      # OPENID_CALLBACK_URL: http://localhost:${RXRESUME_PORT_APP}/api/auth/openid/callback
       # OPENID_CLIENT_ID:
       # OPENID_CLIENT_SECRET:
       # OPENID_ISSUER:
       # OPENID_SCOPE: openid profile email
       # OPENID_TOKEN_URL:
       # OPENID_USER_INFO_URL:
-
-volumes:
-  minio_data:
-  postgres_data:
