@@ -56,6 +56,22 @@ GRAMPS_VOLUME_THUMB_CACHE="${VOLUMES}/gramps/thumb_cache"
 GRAMPS_VOLUME_TMP="${VOLUMES}/gramps/tmp"
 GRAMPS_VOLUME_USERS="${VOLUMES}/gramps/users"
 
+##############################
+#                            #
+#          RXRESUME          #
+#                            #
+##############################
+
+RXRESUME_IP=192.168.8.101
+
+RXRESUME_PORT_APP=35687
+RXRESUME_PORT_STORAGE=18902
+RXRESUME_VOLUME_DB="${VOLUMES}/rxresume/db"
+RXRESUME_VOLUME_STORAGE="${VOLUMES}/rxresume/storage"
+
+RXRESUME_URL_PUBLIC="http://${RXRESUME_IP}:${RXRESUME_PORT_APP}"
+RXRESUME_URL_STORAGE="http://${RXRESUME_IP}:${RXRESUME_PORT_STORAGE}/default"
+
 ###########################
 #                         #
 #          STARR          #
@@ -111,6 +127,17 @@ FRESHRSS_VOLUME_EXTENSIONS="${VOLUMES}/freshrss/extensions"
 ###########################
 
 GROCY_VOLUME_CONFIG="${VOLUMES}/grocy"
+
+##########################
+#                        #
+#          WGER          #
+#                        #
+##########################
+
+WGER_VOLUME_BEAT="${VOLUMES}/wger/beat"
+WGER_VOLUME_DB="${VOLUMES}/wger/db"
+WGER_VOLUME_MEDIA="${VOLUMES}/wger/media"
+WGER_VOLUME_STATIC="${VOLUMES}/wger/static"
 
 ############################
 #                          #

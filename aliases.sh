@@ -7,6 +7,7 @@
 [ $stack = 'jfm'       ] && stack='jellyfin-music'
 [ $stack = 'proxy'     ] && stack='nginx-proxy-manager'
 [ $stack = 'proxy-alt' ] && stack='nginx-proxy-manager-alt'
+[ $stack = 'resume'    ] && stack='rxresume'
 [ $stack = 'ts'        ] && stack='tailscale'
 
 true
