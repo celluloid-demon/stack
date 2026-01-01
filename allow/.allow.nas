@@ -2,6 +2,7 @@ main
 freshrss
 gramps
 grocy
+netdata
 rxresume
 starr
 tamari

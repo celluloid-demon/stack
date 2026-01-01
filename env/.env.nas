@@ -56,6 +56,16 @@ GRAMPS_VOLUME_THUMB_CACHE="${VOLUMES}/gramps/thumb_cache"
 GRAMPS_VOLUME_TMP="${VOLUMES}/gramps/tmp"
 GRAMPS_VOLUME_USERS="${VOLUMES}/gramps/users"
 
+#############################
+#                           #
+#          NETDATA          #
+#                           #
+#############################
+
+NETDATA_VOLUME_CACHE="${CACHE}/netdata" # should be on ssd
+NETDATA_VOLUME_CONFIG="${VOLUMES}/netdata/config"
+NETDATA_VOLUME_LIB="${VOLUMES}/netdata/lib"
+
 ##############################
 #                            #
 #          RXRESUME          #
