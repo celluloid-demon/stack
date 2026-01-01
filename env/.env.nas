@@ -5,6 +5,7 @@
 #                            #
 ##############################
 
+CACHE="/mnt/cache"
 CONTAINER_ENGINE=docker # possible values: docker, podman
 DOCKER_NETWORK_MACVLAN='homelab'
 POOL='/mnt/lake/pool.6d86b5884ec6e9d1de8a908766de61c5'
@@ -16,7 +17,6 @@ OPERATOR_PUID=3002
 OPERATOR_PGID=37
 TZ='America/Los_Angeles' # see: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
-CACHE="${POOL}/cache"
 MEDIA="${POOL}/media"
 PHOTOS="${POOL}/photos"
 VOLUMES="${POOL}/volumes"

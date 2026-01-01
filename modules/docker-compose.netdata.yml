@@ -1,4 +1,3 @@
-version: '3'
 services:
   netdata:
     image: netdata/netdata:stable
@@ -12,9 +11,9 @@ services:
     security_opt:
       - apparmor:unconfined
     volumes:
+      - ${NETDATA_VOLUME_CACHE}:/var/cache/netdata
       - ${NETDATA_VOLUME_CONFIG}:/etc/netdata
       - ${NETDATA_VOLUME_LIB}:/var/lib/netdata
-      - ${NETDATA_VOLUME_CACHE}:/var/cache/netdata
       - /:/host/root:ro,rslave # Host mount points monitoring.
       - /etc/passwd:/host/etc/passwd:ro # Monitoring of host system resource usage by each user and user group.
       - /etc/group:/host/etc/group:ro # Monitoring of host system resource usage by each user and user group.
@@ -25,5 +24,5 @@ services:
       - /var/log:/host/var/log:ro # Web servers logs tailing.
       - /var/run/docker.sock:/var/run/docker.sock:ro # Docker Engine and containers monitoring.
       - /run/dbus:/run/dbus:ro # Systemd-list-units function: information about all systemd units, including their active state, description, whether they are enabled, and more.
-    ports:
-      - 19999:19999
+    # ports:
+    #   - 19999:19999
