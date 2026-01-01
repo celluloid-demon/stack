@@ -66,6 +66,14 @@ NETDATA_VOLUME_CACHE="${CACHE}/netdata" # should be on ssd
 NETDATA_VOLUME_CONFIG="${VOLUMES}/netdata/config"
 NETDATA_VOLUME_LIB="${VOLUMES}/netdata/lib"
 
+############################
+#                          #
+#          NETMON          #
+#                          #
+############################
+
+NETMON_VOLUME_CONFIG="${VOLUMES}/netmon/config"
+
 ##############################
 #                            #
 #          RXRESUME          #

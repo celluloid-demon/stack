@@ -1,0 +1,16 @@
+services:
+    cadvisor:
+        image: ghcr.io/google/cadvisor
+        container_name: cadvisor
+        restart: unless-stopped
+        devices:
+            - /dev/kmsg
+        privileged: true
+        ports:
+            - '55032:8080'
+        volumes:
+            - '/dev/disk/:/dev/disk:ro'
+            - '/var/lib/docker/:/var/lib/docker:ro'
+            - '/sys:/sys:ro'
+            - '/var/run:/var/run:ro'
+            - '/:/rootfs:ro'
