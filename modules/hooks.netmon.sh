@@ -1,7 +1,8 @@
 
 doctor_netmon() {
 
-    local placeholder=
+    test_dir "${NETMON_PROMETHEUS_VOLUME_CONFIG}"
+    test_dir "${NETMON_PROMETHEUS_VOLUME_DATA}"
 
 }
 

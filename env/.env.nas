@@ -72,7 +72,8 @@ NETDATA_VOLUME_LIB="${VOLUMES}/netdata/lib"
 #                          #
 ############################
 
-NETMON_VOLUME_CONFIG="${VOLUMES}/netmon/config"
+NETMON_PROMETHEUS_VOLUME_CONFIG="${VOLUMES}/netmon/prometheus/config"
+NETMON_PROMETHEUS_VOLUME_DATA="${VOLUMES}/netmon/prometheus/data"
 
 ##############################
 #                            #

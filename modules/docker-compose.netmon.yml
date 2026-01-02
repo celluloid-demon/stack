@@ -14,3 +14,13 @@ services:
             - '/sys:/sys:ro'
             - '/var/run:/var/run:ro'
             - '/:/rootfs:ro'
+
+    prometheus:
+        image: prom/prometheus
+        container_name: prometheus
+        restart: unless-stopped
+        volumes:
+            - "${NETMON_PROMETHEUS_VOLUME_CONFIG}:/etc/prometheus"
+            - "${NETMON_PROMETHEUS_VOLUME_DATA}:/prometheus"
+        ports:
+            - '36245:9090'
