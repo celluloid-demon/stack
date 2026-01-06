@@ -3,6 +3,7 @@ freshrss
 gramps
 grocy
 netmon
+opcut
 rxresume
 starr
 tamari

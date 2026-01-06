@@ -1,0 +1,6 @@
+services:
+  opcut:
+    image: celluloiddemon/opcut
+    container_name: opcut
+    ports:
+      - '50595:8080'
