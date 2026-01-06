@@ -1,11 +1,17 @@
 
 doctor_netmon() {
 
+    # Prometheus volumes
+
     test_dir "${NETMON_PROMETHEUS_VOLUME_CONFIG}"
     test_dir "${NETMON_PROMETHEUS_VOLUME_DATA}"
 
     test_owner "${NETMON_PROMETHEUS_VOLUME_CONFIG}" 65534 65534
     test_owner "${NETMON_PROMETHEUS_VOLUME_DATA}" 65534 65534
+
+    # Grafana volumes
+
+    test_dir "${NETMON_GRAFANA_VOLUME_DATA}"
 
 }
 

@@ -26,3 +26,15 @@ services:
             - "${NETMON_PROMETHEUS_VOLUME_DATA}:/prometheus"
         ports:
             - '36245:9090'
+
+    grafana:
+        image: grafana/grafana-enterprise
+        container_name: grafana
+        user: ${OP_PUID}:${OP_PGID}
+        depends_on:
+        - prometheus
+        restart: unless-stopped
+        volumes:
+            - "${NETMON_GRAFANA_VOLUME_DATA}:/var/lib/grafana"
+        ports:
+        - '9042:3000'

@@ -15,6 +15,8 @@ MEDIA_PUID=3001
 MEDIA_PGID=3001
 OPERATOR_PUID=3002
 OPERATOR_PGID=37
+OP_PUID=3006
+OP_PGID=3006
 TZ='America/Los_Angeles' # see: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 MEDIA="${POOL}/media"
@@ -74,6 +76,7 @@ NETDATA_VOLUME_LIB="${VOLUMES}/netdata/lib"
 
 NETMON_PROMETHEUS_VOLUME_CONFIG="${VOLUMES}/netmon/prometheus/config"
 NETMON_PROMETHEUS_VOLUME_DATA="${VOLUMES}/netmon/prometheus/data"
+NETMON_GRAFANA_VOLUME_DATA="${VOLUMES}/netmon/grafana"
 
 ##############################
 #                            #
