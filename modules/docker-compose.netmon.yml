@@ -19,6 +19,8 @@ services:
         image: prom/prometheus
         container_name: prometheus
         restart: unless-stopped
+        depends_on:
+        - cadvisor
         volumes:
             - "${NETMON_PROMETHEUS_VOLUME_CONFIG}:/etc/prometheus"
             - "${NETMON_PROMETHEUS_VOLUME_DATA}:/prometheus"
