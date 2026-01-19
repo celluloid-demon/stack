@@ -76,10 +76,15 @@ NETDATA_VOLUME_LIB="${VOLUMES}/netdata/lib"
 #                              #
 ################################
 
+MONITORING_ALLOY_FILE_CONFIG="${VOLUMES}/monitoring/alloy/config/config.alloy"
+MONITORING_ALLOY_VOLUME_DATA="${VOLUMES}/monitoring/alloy/data"
+
 MONITORING_LOKI_VOLUME_CONFIG="${VOLUMES}/monitoring/loki/config"
 MONITORING_LOKI_VOLUME_DATA="${VOLUMES}/monitoring/loki/data"
-# MONITORING_PROMETHEUS_VOLUME_CONFIG="${VOLUMES}/monitoring/prometheus/config"
-# MONITORING_PROMETHEUS_VOLUME_DATA="${VOLUMES}/monitoring/prometheus/data"
+
+MONITORING_PROMETHEUS_VOLUME_CONFIG="${VOLUMES}/monitoring/prometheus/config"
+MONITORING_PROMETHEUS_VOLUME_DATA="${VOLUMES}/monitoring/prometheus/data"
+
 # MONITORING_GRAFANA_VOLUME_DATA="${VOLUMES}/monitoring/grafana"
 
 ##############################

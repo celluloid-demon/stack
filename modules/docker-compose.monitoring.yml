@@ -1,13 +1,51 @@
 services:
+    alloy:
+        image: docker.io/grafana/alloy:v1.12.2
+        container_name: alloy
+        restart: unless-stopped
+        hostname: alloy # WARNING: When alloy runs in a container, you should set the container hostname to a unique value to identify the instance in your monitoring backend. Otherwise it defaults to the container ID.
+        ports:
+            - "21418:12345"
+        volumes:
+            - ${MONITORING_ALLOY_VOLUME_DATA}:/alloy/data
+            - ${MONITORING_ALLOY_FILE_CONFIG}:/etc/alloy/config.alloy:ro
+            - /:/rootfs:ro
+            - /sys:/sys:ro
+            - /run:/run:ro
+            - /var/log:/var/log:ro
+            - /var/lib/docker/:/var/lib/docker/:ro
+            - /run/udev/data:/run/udev/data:ro
+
     loki:
         image: docker.io/grafana/loki:3.6.3
+        container_name: loki
         restart: unless-stopped
+        depends_on:
+          - alloy
         command: "-config.file=/etc/loki/config.yaml"
         ports:
         - "32432:3100"
         volumes:
         - "${MONITORING_LOKI_VOLUME_CONFIG}:/etc/loki:ro"
         - "${MONITORING_LOKI_VOLUME_DATA}:/loki:rw"
+
+    prometheus:
+        image: docker.io/prom/prometheus:v3.9.1
+        container_name: prometheus
+        restart: unless-stopped
+        command:
+            - --config.file=/etc/prometheus/prometheus.yaml
+            - --storage.tsdb.retention.time=15d
+            - --web.enable-remote-write-receiver
+        ports:
+            - "36245:9090"
+        volumes:
+            - "${MONITORING_PROMETHEUS_VOLUME_CONFIG}:/etc/prometheus"
+            - "${MONITORING_PROMETHEUS_VOLUME_DATA}:/prometheus"
+        depends_on:
+          - alloy
+        # - node_exporter
+        # - cadvisor
 
     # cadvisor:
     #     image: ghcr.io/google/cadvisor
@@ -38,19 +76,6 @@ services:
     #     volumes:
     #     - '/:/host:ro,rslave'
     #     # - "${GLOBAL_TEXTFILE_COLLECTOR_DIR}:/host/${GLOBAL_TEXTFILE_COLLECTOR_DIR}:ro" # todo rslave (above) is resursive?
-
-    # prometheus:
-    #     image: prom/prometheus
-    #     container_name: prometheus
-    #     restart: unless-stopped
-    #     depends_on:
-    #     - cadvisor
-    #     - node_exporter
-    #     volumes:
-    #         - "${NETMON_PROMETHEUS_VOLUME_CONFIG}:/etc/prometheus"
-    #         - "${NETMON_PROMETHEUS_VOLUME_DATA}:/prometheus"
-    #     ports:
-    #         - '36245:9090'
 
     # grafana:
     #     image: grafana/grafana-enterprise
