@@ -4,11 +4,16 @@ services:
         container_name: alloy
         restart: unless-stopped
         hostname: alloy # WARNING: When alloy runs in a container, you should set the container hostname to a unique value to identify the instance in your monitoring backend. Otherwise it defaults to the container ID.
+        command:
+            - run
+            - --server.http.listen-addr=0.0.0.0:12345
+            - --storage.path=/var/lib/alloy/data
+            - /etc/alloy/config.alloy
         ports:
             - "21418:12345"
         volumes:
-            - ${MONITORING_ALLOY_VOLUME_DATA}:/alloy/data
             - ${MONITORING_ALLOY_FILE_CONFIG}:/etc/alloy/config.alloy:ro
+            - ${MONITORING_ALLOY_VOLUME_DATA}:/var/lib/alloy/data
             - /:/rootfs:ro
             - /sys:/sys:ro
             - /run:/run:ro
