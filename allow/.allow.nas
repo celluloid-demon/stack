@@ -2,7 +2,7 @@ main
 freshrss
 gramps
 grocy
-netmon
+monitoring
 opcut
 rxresume
 starr

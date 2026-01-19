@@ -1,0 +1,65 @@
+services:
+    loki:
+        image: docker.io/grafana/loki:3.6.3
+        restart: unless-stopped
+        command: "-config.file=/etc/loki/config.yaml"
+        ports:
+        - "32432:3100"
+        volumes:
+        - "${MONITORING_LOKI_VOLUME_CONFIG}:/etc/loki:ro"
+        - "${MONITORING_LOKI_VOLUME_DATA}:/loki:rw"
+
+    # cadvisor:
+    #     image: ghcr.io/google/cadvisor
+    #     container_name: cadvisor
+    #     restart: unless-stopped
+    #     devices:
+    #         - /dev/kmsg
+    #     privileged: true
+    #     ports:
+    #         - '55032:8080'
+    #     volumes:
+    #         - '/dev/disk/:/dev/disk:ro'
+    #         - '/var/lib/docker/:/var/lib/docker:ro'
+    #         - '/sys:/sys:ro'
+    #         - '/var/run:/var/run:ro'
+    #         - '/:/rootfs:ro'
+
+    # # For textfile collector example scripts: https://github.com/prometheus-community/node-exporter-textfile-collector-scripts
+    # node_exporter:
+    #     image: quay.io/prometheus/node-exporter
+    #     container_name: node_exporter
+    #     command:
+    #     - '--path.rootfs=/host'
+    #     - "--collector.textfile.directory=/host/${GLOBAL_TEXTFILE_COLLECTOR_DIR}"
+    #     network_mode: host # The node_exporter listens on HTTP port 9100 by default. See the --help output for more options.
+    #     pid: host
+    #     restart: unless-stopped
+    #     volumes:
+    #     - '/:/host:ro,rslave'
+    #     # - "${GLOBAL_TEXTFILE_COLLECTOR_DIR}:/host/${GLOBAL_TEXTFILE_COLLECTOR_DIR}:ro" # todo rslave (above) is resursive?
+
+    # prometheus:
+    #     image: prom/prometheus
+    #     container_name: prometheus
+    #     restart: unless-stopped
+    #     depends_on:
+    #     - cadvisor
+    #     - node_exporter
+    #     volumes:
+    #         - "${NETMON_PROMETHEUS_VOLUME_CONFIG}:/etc/prometheus"
+    #         - "${NETMON_PROMETHEUS_VOLUME_DATA}:/prometheus"
+    #     ports:
+    #         - '36245:9090'
+
+    # grafana:
+    #     image: grafana/grafana-enterprise
+    #     container_name: grafana
+    #     user: ${OP_PUID}:${OP_PGID}
+    #     depends_on:
+    #     - prometheus
+    #     restart: unless-stopped
+    #     volumes:
+    #         - "${NETMON_GRAFANA_VOLUME_DATA}:/var/lib/grafana"
+    #     ports:
+    #     - '9042:3000'

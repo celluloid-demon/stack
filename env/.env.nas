@@ -8,6 +8,7 @@
 CACHE="/mnt/cache"
 CONTAINER_ENGINE=docker # possible values: docker, podman
 DOCKER_NETWORK_MACVLAN='homelab'
+GLOBAL_ENV='/etc/stack/global.env' # NOTE: /usr/etc is readonly on truenas scale for some reason
 POOL='/mnt/lake/pool.6d86b5884ec6e9d1de8a908766de61c5'
 PUID=3000 # 3000=fam@nas (3000 is the truenas default unprivileged user id)
 PGID=3000
@@ -17,6 +18,7 @@ OPERATOR_PUID=3002
 OPERATOR_PGID=37
 OP_PUID=3006
 OP_PGID=3006
+# TEXTFILE_COLLECTOR_DIR='/var/lib/node_exporter/textfile_collector' # DEPRECATED: use GLOBAL_ENV
 TZ='America/Los_Angeles' # see: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 MEDIA="${POOL}/media"
@@ -68,15 +70,17 @@ NETDATA_VOLUME_CACHE="${CACHE}/netdata" # should be on ssd
 NETDATA_VOLUME_CONFIG="${VOLUMES}/netdata/config"
 NETDATA_VOLUME_LIB="${VOLUMES}/netdata/lib"
 
-############################
-#                          #
-#          NETMON          #
-#                          #
-############################
+################################
+#                              #
+#          MONITORING          #
+#                              #
+################################
 
-NETMON_PROMETHEUS_VOLUME_CONFIG="${VOLUMES}/netmon/prometheus/config"
-NETMON_PROMETHEUS_VOLUME_DATA="${VOLUMES}/netmon/prometheus/data"
-NETMON_GRAFANA_VOLUME_DATA="${VOLUMES}/netmon/grafana"
+MONITORING_LOKI_VOLUME_CONFIG="${VOLUMES}/monitoring/loki/config"
+MONITORING_LOKI_VOLUME_DATA="${VOLUMES}/monitoring/loki/data"
+# MONITORING_PROMETHEUS_VOLUME_CONFIG="${VOLUMES}/monitoring/prometheus/config"
+# MONITORING_PROMETHEUS_VOLUME_DATA="${VOLUMES}/monitoring/prometheus/data"
+# MONITORING_GRAFANA_VOLUME_DATA="${VOLUMES}/monitoring/grafana"
 
 ##############################
 #                            #

@@ -75,13 +75,15 @@ doctor_misc() {
 
 load_env() {
 
-    test_file ./modules/.env
+    # Step 1: Load the local env file - this is the source of truth for stack config AS WELL AS where the global env file path is defined
+    test_file ./modules/.env && . ./modules/.env
 
-    . ./modules/.env
+    # Step 2: Load the system-level env file (flashed from the stack repo)
+    test_file "$GLOBAL_ENV"  && . "$GLOBAL_ENV"  # WARNING: Must be loaded after ./modules/.env
 
 }
 
-source_hooks() {
+run_hooks() {
 
     . "./modules/hooks.${STACK}.sh"
 
@@ -99,7 +101,7 @@ main() {
     doctor_container_engine
     doctor_hooks
     doctor_misc
-    source_hooks
+    run_hooks
 
 }
 
