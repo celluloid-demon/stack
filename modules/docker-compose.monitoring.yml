@@ -82,14 +82,15 @@ services:
     #     - '/:/host:ro,rslave'
     #     # - "${GLOBAL_TEXTFILE_COLLECTOR_DIR}:/host/${GLOBAL_TEXTFILE_COLLECTOR_DIR}:ro" # todo rslave (above) is resursive?
 
-    # grafana:
-    #     image: grafana/grafana-enterprise
-    #     container_name: grafana
-    #     user: ${OP_PUID}:${OP_PGID}
-    #     depends_on:
-    #     - prometheus
-    #     restart: unless-stopped
-    #     volumes:
-    #         - "${NETMON_GRAFANA_VOLUME_DATA}:/var/lib/grafana"
-    #     ports:
-    #     - '9042:3000'
+    grafana:
+        image: docker.io/grafana/grafana-oss:12.3.1
+        container_name: grafana
+        user: ${OP_PUID}:${OP_PGID}
+        depends_on:
+        - prometheus
+        - loki
+        restart: unless-stopped
+        volumes:
+        - "${MONITORING_GRAFANA_VOLUME_DATA}:/var/lib/grafana"
+        ports:
+        - '9042:3000'

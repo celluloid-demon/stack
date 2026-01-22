@@ -85,7 +85,7 @@ MONITORING_LOKI_VOLUME_DATA="${VOLUMES}/monitoring/loki/data"
 MONITORING_PROMETHEUS_VOLUME_CONFIG="${VOLUMES}/monitoring/prometheus/config"
 MONITORING_PROMETHEUS_VOLUME_DATA="${VOLUMES}/monitoring/prometheus/data"
 
-# MONITORING_GRAFANA_VOLUME_DATA="${VOLUMES}/monitoring/grafana"
+MONITORING_GRAFANA_VOLUME_DATA="${VOLUMES}/monitoring/grafana"
 
 ##############################
 #                            #

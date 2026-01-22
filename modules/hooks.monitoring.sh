@@ -25,7 +25,7 @@ doctor_monitoring() {
 
     # Grafana volumes
 
-    # test_dir "${MONITORING_GRAFANA_VOLUME_DATA}"
+    test_dir "${MONITORING_GRAFANA_VOLUME_DATA}"
 
 }
 
