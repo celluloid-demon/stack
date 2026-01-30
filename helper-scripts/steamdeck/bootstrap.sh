@@ -1,5 +1,33 @@
 #!/bin/bash
 
+# Bootstrap script for Steam Deck (SteamOS) setup and configuration.
+
+# Usage: bootstrap.sh
+
+# Exit on error
+set -e
+
+# Load environment variables
+source "$(dirname "$0")/.env"
+
+# Declare constants
+readonly APPLICATIONS="${HOME}/Applications"
+readonly PROGRAM="$1"
+
+# Define flags
+FLAG_did_tweak_cpu=0
+FLAG_did_tweak_dragon=0
+FLAG_did_tweak_io_scheduler=0
+FLAG_did_tweak_memory=0
+FLAG_did_tweak_watchdog=0
+FLAG_did_tweak_mglru=0
+FLAG_discord_installed=0
+FLAG_emudeck_installed=0
+FLAG_kvm_configured=0
+FLAG_password_set=0
+FLAG_yt_dlp_installed=0
+FLAG_restart_required=0
+
 from_pacman_install_packages() {
 
     func="from_pacman_install_packages"
@@ -174,9 +202,9 @@ from_flathub_install_packages() {
 
 }
 
-set_password() {
+set_root_password() {
 
-    func="set_password"
+    func="set_root_password"
 
     [ $DEBUG -eq 1 ] && echo $func
 
@@ -490,7 +518,7 @@ EOF
 
 }
 
-configure-kvm() {
+configure_kvm() {
 
     func="placeholder"
 
@@ -515,7 +543,7 @@ configure-kvm() {
 
 }
 
-check-kvm-config() {
+check_kvm_config() {
 
     func="placeholder"
 
@@ -533,7 +561,7 @@ check-kvm-config() {
 
 }
 
-check-emudeck() {
+check_emudeck() {
 
     func="placeholder"
 
@@ -549,7 +577,7 @@ check-emudeck() {
 
 }
 
-from-web-get-emudeck-installer() {
+from_web_get_emudeck_installer() {
 
     func="placeholder"
 
@@ -642,3 +670,44 @@ from_repo_install_yt_dlp() {
     fi
 
 }
+
+main() {
+
+    install_steamos_tweak_mglru
+    install_steamos_tweak_watchdog
+    install_steamos_tweak_memory
+    install_steamos_tweak_io_scheduler
+    install_steamos_tweak_dragon
+    install_steamos_tweak_cpu
+
+    from_pacman_install_packages
+    from_flathub_install_packages
+
+    from_repo_install_yt_dlp
+    from_web_install_discord
+    from_web_get_emudeck_installer
+
+    check_emudeck
+
+    check_kvm_config
+    configure_kvm
+
+    ################################
+    #                              #
+    #          PRE-FLIGHT          #
+    #                              #
+    ################################
+
+    [ ! -f "$(dirname "$0")/.env" ] && echo "ERROR: .env file not found, exiting..." && exit 1
+
+    ##############################
+    #                            #
+    #          PROGRAMS          #
+    #                            #
+    ##############################
+
+    [ $PROGRAM = 1 ] && set_root_password
+
+}
+
+main "$@"
