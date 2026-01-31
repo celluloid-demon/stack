@@ -730,13 +730,13 @@ from_repo_install_tailscale() {
 
         git clone "$_repo" "${GIT}/deck-tailscale"
 
+        sudo -i
+
         cd "${GIT}/deck-tailscale"
 
-        sudo bash tailscale.sh # install Tailscale (or update the existing installation)
+        bash tailscale.sh # install Tailscale (or update the existing installation)
 
         source /etc/profile.d/tailscale.sh # put the binaries in your path
-
-        sudo tailscale set --operator=$USER # allow tailscale to run without root
 
         tailscale up --qr --operator=deck --ssh # generate a login QR code to bring it into your network
 
