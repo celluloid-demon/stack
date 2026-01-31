@@ -59,7 +59,8 @@ from_pacman_install_packages() {
 
         # NOTE: Arch doesn't use service scripts, so 'null' is the answer to your question. However, since you want to use vmware, it needs to put it's scripts somewhere, and /etc/init.d is as good a place as any.
 
-        PACKAGES_OFFICIAL="byobu krfb tldr tree"
+        # PACKAGES_OFFICIAL="byobu krfb tldr tree"
+        PACKAGES_OFFICIAL="byobu"
         PACKAGES_AUR="base-devel go"
         # PACKAGES_VMWARE="dkms libaio gcr fuse2 gtkmm linux-neptune-headers ncurses libcanberra pcsclite"
 
@@ -75,7 +76,8 @@ from_pacman_install_packages() {
         # PACKAGES_KVM="dnsmasq libvirt qemu-base virt-manager"
         # PACKAGES_KVM_TPM="swtpm"
 
-        sudo pacman --needed --noconfirm -Syu $PACKAGES_OFFICIAL $PACKAGES_AUR
+        # sudo pacman --needed --noconfirm -Syu $PACKAGES_OFFICIAL $PACKAGES_AUR
+        sudo pacman --needed --noconfirm -Syu $PACKAGES_OFFICIAL
 
         sudo steamos-readonly enable
 
