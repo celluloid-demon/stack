@@ -158,6 +158,8 @@ from_flathub_install_packages() {
 
     FLATPAKS_KDE="
 
+    org.fkoehler.KTailctl
+
     org.kde.kdenlive
     org.kde.krita
     org.kde.kstars
