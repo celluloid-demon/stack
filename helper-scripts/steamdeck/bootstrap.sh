@@ -738,7 +738,8 @@ from_repo_install_tailscale() {
 
         source /etc/profile.d/tailscale.sh # put the binaries in your path
 
-        tailscale up --qr --operator=deck --ssh # generate a login QR code to bring it into your network
+        # tailscale up --qr --operator=deck --ssh
+        tailscale up --qr --operator=deck # generate a login QR code to bring it into your network
 
     fi
 
