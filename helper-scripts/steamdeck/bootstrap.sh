@@ -736,6 +736,8 @@ from_repo_install_tailscale() {
 
         source /etc/profile.d/tailscale.sh # put the binaries in your path
 
+        sudo tailscale set --operator=$USER # allow tailscale to run without root
+
         tailscale up --qr --operator=deck --ssh # generate a login QR code to bring it into your network
 
     fi
