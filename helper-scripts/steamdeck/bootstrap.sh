@@ -8,7 +8,18 @@
 set -e
 
 # Load environment variables
-source "$(dirname "$0")/.env"
+if [ -f "$(dirname "$0")/.env" ]; then
+
+    source "$(dirname "$0")/.env"
+
+else
+
+    echo
+    echo "  [ERROR] .env file not found, exiting..."
+    echo
+    exit 1
+
+fi
 
 # Declare constants
 readonly APPLICATIONS="${HOME}/Applications"
@@ -732,21 +743,6 @@ from_repo_install_tailscale() {
 }
 
 main() {
-
-    ################################
-    #                              #
-    #          PRE-FLIGHT          #
-    #                              #
-    ################################
-
-    if [ ! -f "$(dirname "$0")/.env" ]; then
-    
-        echo
-        echo "  [ERROR] .env file not found, exiting..."
-        echo
-        exit 1
-
-    fi
 
     #################################
     #                               #
