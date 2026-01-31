@@ -732,7 +732,7 @@ from_repo_install_tailscale() {
 
         cd "${GIT}/deck-tailscale"
 
-        sudo bash install.sh # install Tailscale (or update the existing installation)
+        sudo bash tailscale.sh # install Tailscale (or update the existing installation)
 
         source /etc/profile.d/tailscale.sh # put the binaries in your path
 
