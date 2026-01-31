@@ -46,9 +46,9 @@ from_pacman_install_packages() {
 
         # NOTE: Arch doesn't use service scripts, so 'null' is the answer to your question. However, since you want to use vmware, it needs to put it's scripts somewhere, and /etc/init.d is as good a place as any.
 
-        PACKAGES="byobu krfb tldr"
+        PACKAGES_OFFICIAL="byobu krfb tldr tree"
         PACKAGES_AUR="base-devel go"
-        PACKAGES_VMWARE="dkms libaio gcr fuse2 gtkmm linux-neptune-headers ncurses libcanberra pcsclite"
+        # PACKAGES_VMWARE="dkms libaio gcr fuse2 gtkmm linux-neptune-headers ncurses libcanberra pcsclite"
 
         # NOTE: The vmware-workstation PKGBUILD contains instructions on how to avoid the package having a dependency on vmware-keymaps.
 
@@ -59,10 +59,10 @@ from_pacman_install_packages() {
         # WARNING: source:
         # WARNING: https://www.reddit.com/r/SteamDeck/comments/y6uudu/installing_kernel_headers/
 
-    #     PACKAGES_KVM="dnsmasq libvirt qemu-base virt-manager"
-    #     PACKAGES_KVM_TPM="swtpm"
+        # PACKAGES_KVM="dnsmasq libvirt qemu-base virt-manager"
+        # PACKAGES_KVM_TPM="swtpm"
 
-        sudo pacman --needed --noconfirm -Syu $PACKAGES $PACKAGES_AUR $PACKAGES_VMWARE
+        sudo pacman --needed --noconfirm -Syu $PACKAGES_OFFICIAL $PACKAGES_AUR
 
         sudo steamos-readonly enable
 
@@ -92,25 +92,36 @@ from_flathub_install_packages() {
 
     FLATPAKS_COMMON="
 
-    com.github.flxzt.rnote
-    com.github.jeromerobert.pdfarranger
-    com.github.tchx84.Flatseal
+    com.discordapp.Discord
     com.google.Chrome
-    com.toolstack.Folio
 
     de.haeckerfelix.Shortwave
     fr.handbrake.ghb
     io.mpv.Mpv
-    io.podman_desktop.PodmanDesktop
     net.ankiweb.Anki
     net.mediaarea.MediaInfo
 
     org.audacityteam.Audacity
     org.bunkus.mkvtoolnix-gui
-    org.gnome.Lollypop
     org.libreoffice.LibreOffice
     org.qbittorrent.qBittorrent
 
+    "
+
+    FLATPAKS_COMMON_DEPRECATED="
+    
+    com.github.flxzt.rnote
+    com.github.jeromerobert.pdfarranger
+    com.github.tchx84.Flatseal
+    com.toolstack.Folio
+    org.gnome.Lollypop
+    
+    "
+
+    FLATPAKS_CONTAINER="
+    
+    io.podman_desktop.PodmanDesktop
+    
     "
 
     FLATPAKS_VIRT="
@@ -121,11 +132,16 @@ from_flathub_install_packages() {
 
     FLATPAKS_GAMING="
 
-    com.valvesoftware.SteamLink
     net.davidotek.pupgui2
+    org.wesnoth.Wesnoth/x86_64/stable
+
+    "
+
+    FLATPAKS_GAMING_DEPRECATED="
+
+    com.valvesoftware.SteamLink
     net.lutris.Lutris
     org.openmw.OpenMW
-    org.wesnoth.Wesnoth/x86_64/stable
 
     "
 
@@ -190,8 +206,7 @@ from_flathub_install_packages() {
                                         $FLATPAKS_GAMING \
                                         $FLATPAKS_GRAPHICS \
                                         $FLATPAKS_KDE \
-                                        $FLATPAKS_STEAMOS_ONLY \
-                                        $FLATPAKS_VIRT
+                                        $FLATPAKS_STEAMOS_ONLY
 
     elif [ $OS = UBUNTU_WSL ]; then
 
@@ -242,6 +257,8 @@ set_root_password() {
 
 }
 
+# WARNING: Deprecated as of SteamOS 3.7 - uses AMD pstate driver instead.
+
 install_steamos_tweak_cpu() {
 
     func="install_steamos_tweak_cpu"
@@ -250,9 +267,9 @@ install_steamos_tweak_cpu() {
 
     if [ $OS = STEAMOS ]; then
 
-        service_file="/etc/systemd/system/cpu_performance.service"
+        local _service_file="/etc/systemd/system/cpu_performance.service"
 
-        if [ -f "$service_file" ]; then
+        if [ -f "$_service_file" ]; then
 
             FLAG_did_tweak_cpu=1
 
@@ -260,7 +277,7 @@ install_steamos_tweak_cpu() {
 
     fi
 
-    # Unfortunately, even the newest (at the time of writing) SteamOS 3.5 release still ships with a CPU governor called schedutil, which is less than desirable if you want a rather even & consistent frame-pacing, because of the erratic downclocking behavior it has become famous for in Linux enthusiast circles.
+    # Unfortunately, even the newest (at the time of writing) SteamOS 3.5 / 3.6 release still ships with a CPU governor called schedutil, which is less than desirable if you want a rather even & consistent frame-pacing, because of the erratic downclocking behavior it has become famous for in Linux enthusiast circles.
 
     # On the other hand, the performance governor does exactly what it says on the tin:
 
@@ -305,9 +322,9 @@ install_steamos_tweak_dragon() {
 
     if [ $OS = STEAMOS ]; then
 
-        grub_config=$(cat /etc/default/grub)
+        local _grub_config=$(cat /etc/default/grub)
 
-        if grep -q "mitigations=off" <<< "$grub_config"; then
+        if grep -q "mitigations=off" <<< "$_grub_config"; then
 
             FLAG_did_tweak_dragon=1
 
@@ -449,9 +466,9 @@ install_steamos_tweak_watchdog() {
 
     if [ $OS = STEAMOS ]; then
 
-        grub_config=$(cat /etc/default/grub)
+        local _grub_config=$(cat /etc/default/grub)
 
-        if grep -q "nowatchdog nmi_watchdog=0" <<< "$grub_config"; then
+        if grep -q "nowatchdog nmi_watchdog=0" <<< "$_grub_config"; then
 
             FLAG_did_tweak_watchdog=1
 
@@ -579,7 +596,7 @@ check_emudeck() {
 
 from_web_get_emudeck_installer() {
 
-    func="placeholder"
+    func="from_web_get_emudeck_installer"
 
     [ $DEBUG -eq 1 ] && echo $func
 
@@ -653,9 +670,9 @@ from_repo_install_yt_dlp() {
 
     if [ $FLAG_yt_dlp_installed -eq 1 ]; then
 
-        do_nothing=
+        local _do_nothing=
 
-    elif [ $OS = FEDORA_WSL ] || [ $OS = UBUNTU_WSL ]; then
+    elif [ $OS = FEDORA_WSL ] || [ $OS = STEAMOS ] || [ $OS = UBUNTU_WSL ]; then
 
         url="https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp"
 
@@ -664,28 +681,14 @@ from_repo_install_yt_dlp() {
         curl -L "$url" -o "${HOME}/.local/bin/yt-dlp"
 
         chmod a+rx "${HOME}/.local/bin/yt-dlp"
-
-        # To update run: `yt-dlp -U`
+        
+        # NOTE: To update, run: `yt-dlp -U`
 
     fi
 
 }
 
 main() {
-
-    install_steamos_tweak_mglru
-    install_steamos_tweak_watchdog
-    install_steamos_tweak_memory
-    install_steamos_tweak_io_scheduler
-    install_steamos_tweak_dragon
-    install_steamos_tweak_cpu
-
-    from_pacman_install_packages
-    from_flathub_install_packages
-
-    from_repo_install_yt_dlp
-    from_web_install_discord
-    from_web_get_emudeck_installer
 
     check_emudeck
 
@@ -698,7 +701,14 @@ main() {
     #                              #
     ################################
 
-    [ ! -f "$(dirname "$0")/.env" ] && echo "ERROR: .env file not found, exiting..." && exit 1
+    if [ ! -f "$(dirname "$0")/.env" ]; then
+    
+        echo
+        echo "  [ERROR] .env file not found, exiting..."
+        echo
+        exit 1
+
+    fi
 
     ##############################
     #                            #
@@ -707,6 +717,28 @@ main() {
     ##############################
 
     [ $PROGRAM = 1 ] && set_root_password
+
+    [ $PROGRAM = 2 ] && install_steamos_tweak_io_scheduler  # still good as of steamos 3.7
+    [ $PROGRAM = 3 ] && install_steamos_tweak_memory        # (same)
+    [ $PROGRAM = 4 ] && install_steamos_tweak_watchdog
+    # [ $PROGRAM = 99 ] && install_steamos_tweak_cpu        # NOTE: DEPRECATED AS OF STEAMOS 3.7
+    # [ $PROGRAM = 99 ] && install_steamos_tweak_mglru      # NOTE: (same)
+    # [ $PROGRAM = 99 ] && install_steamos_tweak_dragon     # WARNING: FOR OFFLINE MODE ONLY
+
+    [ $PROGRAM = 5 ] && from_pacman_install_packages
+    [ $PROGRAM = 6 ] && from_flathub_install_packages
+
+    [ $PROGRAM = 7 ] && from_repo_install_yt_dlp
+    [ $PROGRAM = 8 ] && from_web_get_emudeck_installer
+    # [ $PROGRAM = 9 ] && from_web_install_discord          # NOTE: Deprecated in favor of flatpak version (just easier to maintain)
+
+    if [ $FLAG_restart_required -eq 1 ]; then
+
+        echo
+        echo "  [WARNING] Some changes require a system restart!"
+        echo
+
+    fi
 
 }
 
