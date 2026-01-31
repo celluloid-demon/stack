@@ -766,9 +766,10 @@ main() {
     [ $PROGRAM = 5 ] && from_pacman_install_packages
     [ $PROGRAM = 6 ] && from_flathub_install_packages
 
-    [ $PROGRAM = 7 ] && from_repo_install_yt_dlp
-    [ $PROGRAM = 8 ] && from_web_get_emudeck_installer
-    # [ $PROGRAM = 9 ] && from_web_install_discord          # NOTE: Deprecated in favor of flatpak version (just easier to maintain)
+    [ $PROGRAM = 7 ] && from_repo_install_tailscale
+    [ $PROGRAM = 8 ] && from_repo_install_yt_dlp
+    [ $PROGRAM = 9 ] && from_web_get_emudeck_installer
+    # [ $PROGRAM = 10 ] && from_web_install_discord         # NOTE: Deprecated in favor of flatpak version (just easier to maintain)
 
     if [ $FLAG_restart_required -eq 1 ]; then
 
