@@ -12,6 +12,7 @@ source "$(dirname "$0")/.env"
 
 # Declare constants
 readonly APPLICATIONS="${HOME}/Applications"
+readonly GIT="${HOME}/git"
 readonly PROGRAM="$1"
 
 # Define flags
@@ -27,6 +28,7 @@ FLAG_kvm_configured=0
 FLAG_password_set=0
 FLAG_yt_dlp_installed=0
 FLAG_restart_required=0
+FLAG_tailscale_installed=0
 
 from_pacman_install_packages() {
 
@@ -676,15 +678,52 @@ from_repo_install_yt_dlp() {
 
     elif [ $OS = FEDORA_WSL ] || [ $OS = STEAMOS ] || [ $OS = UBUNTU_WSL ]; then
 
-        url="https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp"
+        local _url="https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp"
 
         mkdir -p "${HOME}/.local/bin"
 
-        curl -L "$url" -o "${HOME}/.local/bin/yt-dlp"
-
+        curl -L "$_url" -o "${HOME}/.local/bin/yt-dlp"
         chmod a+rx "${HOME}/.local/bin/yt-dlp"
         
         # NOTE: To update, run: `yt-dlp -U`
+
+    fi
+
+}
+
+from_repo_install_tailscale() {
+
+    func="from_repo_install_tailscale"
+
+    [ $DEBUG -eq 1 ] && echo $func
+
+    set +e
+
+    if which tailscale; then
+
+        FLAG_tailscale_installed=1
+
+    fi
+
+    set -e
+
+    if [ $FLAG_tailscale_installed -eq 1 ]; then
+
+        local _do_nothing=
+
+    elif [ $OS = STEAMOS ]; then
+
+        local _repo="https://github.com/tailscale-dev/deck-tailscale.git"
+
+        git clone "$_repo" "${GIT}/deck-tailscale"
+
+        cd "${GIT}/deck-tailscale"
+
+        sudo bash install.sh # install Tailscale (or update the existing installation)
+
+        source /etc/profile.d/tailscale.sh # put the binaries in your path
+
+        tailscale up --qr --operator=deck --ssh # generate a login QR code to bring it into your network
 
     fi
 
