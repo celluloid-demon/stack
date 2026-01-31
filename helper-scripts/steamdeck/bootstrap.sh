@@ -754,7 +754,7 @@ main() {
 
     [ $PROGRAM = 2 ] && install_steamos_tweak_io_scheduler  # still good as of steamos 3.7
     [ $PROGRAM = 3 ] && install_steamos_tweak_memory        # (same)
-    [ $PROGRAM = 4 ] && install_steamos_tweak_watchdog
+    [ $PROGRAM = 4 ] && install_steamos_tweak_watchdog      # (same)
     # [ $PROGRAM = 99 ] && install_steamos_tweak_cpu        # NOTE: DEPRECATED AS OF STEAMOS 3.7
     # [ $PROGRAM = 99 ] && install_steamos_tweak_mglru      # NOTE: (same)
     # [ $PROGRAM = 99 ] && install_steamos_tweak_dragon     # WARNING: FOR OFFLINE MODE ONLY
