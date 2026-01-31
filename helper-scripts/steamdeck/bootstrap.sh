@@ -578,21 +578,23 @@ check_kvm_config() {
 
 }
 
-check_emudeck() {
+# DEPRECATED
 
-    func="placeholder"
+# check_emudeck() {
 
-    [ $DEBUG -eq 1 ] && echo $func
+#     func="placeholder"
 
-    emudeck="EmuDeck.desktop"
+#     [ $DEBUG -eq 1 ] && echo $func
 
-    if [ -f "${APPLICATIONS}/EmuDeck/${emudeck}" ]; then
+#     emudeck="EmuDeck.desktop"
 
-        FLAG_emudeck_installed=1
+#     if [ -f "${APPLICATIONS}/EmuDeck/${emudeck}" ]; then
 
-    fi
+#         FLAG_emudeck_installed=1
 
-}
+#     fi
+
+# }
 
 from_web_get_emudeck_installer() {
 
@@ -690,11 +692,6 @@ from_repo_install_yt_dlp() {
 
 main() {
 
-    check_emudeck
-
-    check_kvm_config
-    configure_kvm
-
     ################################
     #                              #
     #          PRE-FLIGHT          #
@@ -710,11 +707,11 @@ main() {
 
     fi
 
-    ##############################
-    #                            #
-    #          PROGRAMS          #
-    #                            #
-    ##############################
+    #################################
+    #                               #
+    #          RUN PROGRAM          #
+    #                               #
+    #################################
 
     [ $PROGRAM = 1 ] && set_root_password
 
