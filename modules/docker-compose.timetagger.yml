@@ -17,11 +17,11 @@ services:
       - TIMETAGGER_DATADIR=/opt/_timetagger
       - TIMETAGGER_LOG_LEVEL=info
       # - TIMETAGGER_CREDENTIALS=test:$$2a$$08$$0CD1NFiIbancwWsu3se1v.RNR/b7YeZd71yg3cZ/3whGlyU6Iny5i  # test:test
-      - TZ=America/Los_Angeles
+      - TZ=${TZ}
     env_file:
-      - /mnt/pool/db/timetagger/password.env
+      - "${TIMETAGGER_ENV_FILE}"
     ports:
       - 34315:80
     volumes:
-      - /mnt/pool/db/timetagger/data:/opt/_timetagger
+      - "${TIMETAGGER_VOLUME_DATA}:/opt/_timetagger"
     restart: unless-stopped

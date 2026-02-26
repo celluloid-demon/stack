@@ -29,6 +29,15 @@ STARR_CONFIG_ROOT="${MEDIA}/starr"
 
 STARR_VERSIONS_FILE="${STARR_CONFIG_ROOT}/versions.env"
 
+################################
+#                              #
+#          TIMETAGGER          #
+#                              #
+################################
+
+TIMETAGGER_ENV_FILE="${VOLUMES}/timetagger/password.env"
+TIMETAGGER_VOLUME_DATA="${VOLUMES}/timetagger/data"
+
 #####################################
 #                                   #
 #          iSponsorBlockTV          #
@@ -297,12 +306,6 @@ SP_VOLUME_EXTRA_CONFIGS="${VOLUMES}/stirling-pdf/extra-configs"
 
 SYNCTHING_VOLUME_CONFIG="${VOLUMES}/syncthing/config"
 SYNCTHING_VOLUME_DATA="${VOLUMES}" # NOTE: preference is to match paths across container / host (for your own sanity)
-
-# TimeTagger
-
-TIMETAGGER_ENV_FILE="${VOLUMES}/timetagger/password.env"
-TIMETAGGER_PORT=34315
-TIMETAGGER_VOLUME_DATA="${VOLUMES}/timetagger/data"
 
 # Vikunja
 
