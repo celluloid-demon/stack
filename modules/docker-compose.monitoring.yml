@@ -94,3 +94,30 @@ services:
         - "${MONITORING_GRAFANA_VOLUME_DATA}:/var/lib/grafana"
         ports:
         - '9042:3000'
+        environment:
+          # BEGIN AUTHENTIK CONFIG
+          GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
+          GF_AUTH_GENERIC_OAUTH_NAME: "authentik"
+          GF_AUTH_GENERIC_OAUTH_CLIENT_ID__FILE: "/run/secrets/GF_AUTH_GENERIC_OAUTH_CLIENT_ID"
+          GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET__FILE: "/run/secrets/GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET"
+          GF_AUTH_GENERIC_OAUTH_SCOPES: "openid profile email"
+          GF_AUTH_GENERIC_OAUTH_AUTH_URL: "${SSO_DOMAIN_HTTPS}/application/o/authorize/"
+          GF_AUTH_GENERIC_OAUTH_TOKEN_URL: "${SSO_DOMAIN_HTTPS}/application/o/token/"
+          GF_AUTH_GENERIC_OAUTH_API_URL: "${SSO_DOMAIN_HTTPS}/application/o/userinfo/"
+          GF_AUTH_SIGNOUT_REDIRECT_URL: "${SSO_DOMAIN_HTTPS}/application/o/${SSO_SLUG_MONITORING}/end-session/"
+          # Optionally enable auto-login (bypasses Grafana login screen)
+          GF_AUTH_OAUTH_AUTO_LOGIN: "true"
+          # Optionally map user groups to Grafana roles
+          GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH: "contains(groups[*], 'Grafana Admins') && 'Admin' || contains(groups[*], 'Grafana Editors') && 'Editor' || 'Viewer'"
+          # Required if Grafana is running behind a reverse proxy
+          GF_SERVER_ROOT_URL: "https://monitoring.sexyninjapirates.net" # no trailing slash in example authentik config
+          # END AUTHENTIK CONFIG
+        secrets:
+          - GF_AUTH_GENERIC_OAUTH_CLIENT_ID
+          - GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
+
+secrets:
+    GF_AUTH_GENERIC_OAUTH_CLIENT_ID:
+        file: "${SECRETS}/monitoring.grafana/GF_AUTH_GENERIC_OAUTH_CLIENT_ID"
+    GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET:
+        file: "${SECRETS}/monitoring.grafana/GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET"

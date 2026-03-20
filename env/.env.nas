@@ -8,7 +8,7 @@
 CACHE="/mnt/cache"
 CONTAINER_ENGINE=docker # possible values: docker, podman
 DOCKER_NETWORK_MACVLAN='homelab'
-GLOBAL_ENV='/etc/stack/global.env' # NOTE: /usr/etc is readonly on truenas scale for some reason
+GLOBAL_ENV='/etc/stack/global.env' # NOTE: /usr/etc on truenas scale is readonly for some reason
 POOL='/mnt/lake/pool.6d86b5884ec6e9d1de8a908766de61c5'
 PUID=3000 # 3000=fam@nas (3000 is the truenas default unprivileged user id)
 PGID=3000
@@ -18,11 +18,14 @@ OPERATOR_PUID=3002
 OPERATOR_PGID=37
 OP_PUID=3006
 OP_PGID=3006
+SSO_DOMAIN_HTTPS='https://login.sexyninjapirates.net' # no trailing slash
+SSO_SLUG_MONITORING='monitoring'
 # TEXTFILE_COLLECTOR_DIR='/var/lib/node_exporter/textfile_collector' # DEPRECATED: use GLOBAL_ENV
 TZ='America/Los_Angeles' # see: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 MEDIA="${POOL}/media"
 PHOTOS="${POOL}/photos"
+SECRETS="${POOL}/secrets"
 VOLUMES="${POOL}/volumes"
 
 STARR_CONFIG_ROOT="${MEDIA}/starr"
